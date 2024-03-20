@@ -2,6 +2,11 @@
 
 DoDare is a unique app that turns everyday tasks into an exciting adventure. With DoDare, users can create tasks based on their personal goals and interests, with rewards for completing tasks and penalties for not completing them. This boosts motivation and helps the user stay on track to achieve their goals. To use the app, you need a desire to improve your life by setting and achieving new goals every day.
 
+# Collaborators
+- Denys Yarkin
+- Denis Drobin
+- Sofia Khokhlova
+
 # Features:
 
 - **Personalized tasks:** Users can create their tasks, and define their description, and the number of points. This allows each user to tailor the application to their needs and goals.
