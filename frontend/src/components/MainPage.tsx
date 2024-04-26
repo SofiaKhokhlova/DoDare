@@ -1,5 +1,6 @@
 import '../css/mainPage.css';
 import { useNavigate} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 
 function MainPage() {
     const nav = useNavigate();
@@ -15,6 +16,14 @@ function MainPage() {
     function about() {
         nav('/main');
     }
+
+	const [message, setMessage] = useState('');
+	useEffect(() => {
+        fetch('http://localhost:8080/api/test')
+            .then(response => response.text())
+            .then(message => setMessage(message))
+            .catch(err => console.error('Error fetching data:', err));
+    }, []);
 
     return (
         <div id="main-page">
@@ -40,6 +49,7 @@ function MainPage() {
                         on track to achieve their goals. To use the app,
                         you need a desire to improve your life by setting
                         and achieving new goals every day.</p>
+						<p>{message}</p>
                 </div>
                 <div className="characters">
                     <img src="/character1.png" alt="" />
