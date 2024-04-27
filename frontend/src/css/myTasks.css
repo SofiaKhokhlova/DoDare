@@ -1,15 +1,22 @@
 .my-tasks-page {
+    display: flex;
     background-color: #DAC3E8;
-    height: 1080px;
-    width: 1920px;
+    height: 53vw;
+    width: 99.1vw;
     font-family: "Ruluko", sans-serif;
 }
 
 header {
     height: 91px;
+    width: 100%;
     top: 0;
-    margin: 0 0;
+    margin: 0;
     background-color: #7251B5;
+    display: inline-flex;
+    justify-content: space-between;
+    padding: 0;
+    position: absolute;
+    z-index: 1;
 }
 
 .logo-title-container {
@@ -31,7 +38,110 @@ header {
     color: rgba(255, 255, 255, 0.8);
 }
 
+.profile-header {
+    width: 400px;
+    height: 100%;
+    margin-right: 56px;
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #FFFF;
+    font-size: 25px;
+}
+
+.profile-header img {
+    height: 34px;
+    width: 40px;
+}
+
+.profile-header p.point {
+    margin-left: -11px;
+}
+
+.profile-header p.user {
+    margin-left: 65px;
+    margin-right: 43px;
+}
+
 .profile-photo {
     background-color: #DAC3E8;
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+}
 
+.sidebar {
+    margin-top: 91px;
+    display: flexbox;
+    background-color: #5A189A;
+    height: calc(53vw - 91px);
+    width: 337px;
+    z-index: 0;
+    position: relative;
+}
+
+.sidebar::after {
+    content: ' ';
+    background-image: url('/background.png');
+    opacity: 0.15;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 337px;
+    height: calc(53vw - 91px);
+    z-index: -1;
+}
+
+.menu {
+    margin-top: 58px;
+    margin-left: 14px;
+    font-size: 35px;
+}
+
+.my-tasks, .groups, .store, .stats, .inventory {
+    width: 264px;
+    height: 55px;
+    display: inline-flex;
+    margin-bottom: 10px;
+}
+
+.my-tasks a, .groups a, .store a, .stats a, .inventory a{
+    margin: 6px 0 0 23px;
+    width: 145px;
+    text-decoration: none;
+    color: #FFFF;
+}
+
+.my-tasks {
+    height: 51px;
+    border-radius: 30px;
+    border: 2px solid #FFFF;
+}
+
+.my-tasks img, .groups img, .store img, .stats img, .inventory img {
+    height: 35px;
+    width: 35px;
+    margin: 11px 0 0 15px;
+}
+
+.log-out {
+    margin: 0 0 0 29px;
+    position: absolute;
+    bottom: 66px;
+    width: 264px;
+    height: 55px;
+    display: inline-flex;
+}
+
+.log-out img {
+    height: 35px;
+    width: 35px;
+}
+
+.log-out a {
+    margin: 0 0 0 23px;
+    font-size: 35px;
+    color: #FFFF;
+    text-decoration: none;
 }

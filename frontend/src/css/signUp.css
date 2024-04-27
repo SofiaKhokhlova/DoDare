@@ -6,10 +6,9 @@
     margin: 0;
     top: 0;
     left: 0;
-    height: 1080px;
-    width: 1920px;
+    height: 53vw;
+    width: 99vw;
     position: relative;
-    overflow-x: hidden;
     z-index: 0;
   }
   
@@ -22,18 +21,23 @@
     left: 0;
     bottom: 0;
     right: 0;
-    width: 100vw;
-    height: 100%;
+    height: 53vw;
+    width: 99vw;
     z-index: -1;
-  }
+}
+
+.empty-space-sign-up {
+    height: 32px;
+}
 
 .header {
     background-color: #7251B5;
     height: 139px;
     width: 1778px;
-    display: inline-flex;
+    display: flex;
     justify-content: space-between;
-    margin: 32px 71px 0 71px;
+    margin-left: auto;
+    margin-right: auto;
     align-items: center;
     border-radius: 81px;
     font-size: 30px;

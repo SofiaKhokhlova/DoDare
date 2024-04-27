@@ -56,7 +56,7 @@ function SignIn() {
         setErrors(errorsCopy);
 
         if (isValid) {
-            nav('main');
+            nav('/my-tasks');
         }
 
     }
@@ -64,7 +64,8 @@ function SignIn() {
     return (
         <>
             <div className="sign-in-page">
-                <div className="header">
+                <div className="empty-space-sign-in"></div>
+                <div className="header-sign-in">
                     <a href='' id="about" onClick={about}>About</a>
                     <div className="logo-title">
                         <img src="/logo.png" alt="logo" />

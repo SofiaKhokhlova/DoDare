@@ -18,7 +18,8 @@ function MainPage() {
 
     return (
         <div id="main-page">
-            <div className="header">
+            <div className="empty-space"></div>
+            <div className="header-main">
                 <a href='' id="about" onClick={about}>About</a>
                 <div className="logo-title">
                     <img src="/logo.png" alt="logo" />

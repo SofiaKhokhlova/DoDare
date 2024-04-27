@@ -85,6 +85,7 @@ function SignUp() {
     return (
         <>
             <div className="sign-up-page">
+                <div className="empty-space-sign-up"></div>
                 <div className="header">
                     <a href='' id="about" onClick={about}>About</a>
                     <div className="logo-title">
