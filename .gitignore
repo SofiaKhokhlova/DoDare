@@ -60,3 +60,6 @@ frontend/*.njsproj
 frontend/*.sln
 frontend/*.sw?
 
+# application.properties may contain some sensitive information
+src/main/resources/application.properties
+
