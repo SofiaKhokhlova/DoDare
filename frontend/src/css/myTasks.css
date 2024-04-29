@@ -122,7 +122,7 @@ header {
 .my-tasks img, .groups img, .store img, .stats img, .inventory img {
     height: 35px;
     width: 35px;
-    margin: 11px 0 0 15px;
+    margin: 9px 0 0 15px;
 }
 
 .log-out {
@@ -145,3 +145,129 @@ header {
     color: #FFFF;
     text-decoration: none;
 }
+
+.tasks-container {
+    height: 712px;
+    width: 747px;
+    margin: 150px 0 0 114px;
+}
+
+.task-overflow {
+    height: 712px;
+    overflow-y: auto;
+}
+
+.task-overflow::-webkit-scrollbar {
+    width: 7px; 
+}
+
+.task-overflow::-webkit-scrollbar-track {
+    background: #C6ABD7; 
+    border-radius: 8px;
+}
+
+.task-overflow::-webkit-scrollbar-thumb {
+    background-color: #7251B5; 
+    border-radius: 8px; 
+}
+
+.your-tasks {
+    margin: 0;
+    width: 654px;
+    color: #5A189A;
+    font-size: 50px;
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+
+.tasks-container .task {
+    display: flex; 
+    height: 64px;
+    width: 646px;
+    background-color: #CAA1E4;
+    margin-bottom: 17px;
+    border-radius: 8px;
+    border-left: 2px solid #5A189A;
+    border-right: 2px solid #5A189A;
+}
+
+
+
+.task .task-title {
+    height: 25px;
+    width: 280px;
+    color: #4E1686;
+    font-size: 22px;
+    margin: 8px 0 0 19px; 
+}
+
+.task .task-content {
+    width: 311px;
+    display: flex;
+    align-items: center; 
+}
+
+.task .task-deadline {
+    color: #4E1686;
+    font-size: 14px;
+    margin: 7px 0 8px 20px; 
+    height: 16px;
+}
+
+.task .task-reward {
+    color: #5A189A;
+    font-size: 25px;
+    margin-left: 8px;
+}
+
+.task img {
+    height: 27px;
+    width: 32px; 
+}
+
+.task input {
+    margin-left: 215px;
+    height: 33px;
+    width: 33px;
+}
+
+.status {
+    display: none;
+}
+
+.status + label {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: #CAA1E4;
+    border: 2px solid #5A189A;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-left: 215px;
+}
+
+.status:checked + label {
+    background-color: #CAA1E4;
+}
+
+.status + label::after {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 10px;
+    height: 5px;
+    border-left: 2px solid #5A189A;
+    border-bottom: 2px solid #5A189A;
+    transform: rotate(-45deg);
+    opacity: 0; 
+    transition: opacity 0.2s ease-in-out;
+}
+
+.status:checked + label::after {
+    opacity: 1;
+}
+
+
