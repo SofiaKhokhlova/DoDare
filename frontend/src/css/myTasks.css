@@ -1,13 +1,11 @@
 .my-tasks-page {
     display: flex;
     background-color: #DAC3E8;
-    height: 53vw;
-    width: 99.1vw;
+    width: 100vw;
     font-family: "Ruluko", sans-serif;
 }
 
 header {
-    height: 91px;
     width: 100%;
     top: 0;
     margin: 0;
@@ -20,62 +18,54 @@ header {
 }
 
 .logo-title-container {
-    width: 398px;
+    width: calc((398/1920) * 100vw);
     height: 100%;
     display: inline-flex;
 }
 
 .logo-title-container img {
-    width: 94px;
-    height: 94px;
-    margin-left: 9px;
+    width: calc((80/1920) * 100vw);
+    margin-left: calc((9/1920) * 100vw);
 }
 
 .logo-title-container p {
     font-family: "Stylish", serif;
-    font-size: 50px;
-    margin: 15px 0 0 0;
     color: rgba(255, 255, 255, 0.8);
 }
 
 .profile-header {
-    width: 400px;
+    width: calc((400/1920) * 100vw);
     height: 100%;
-    margin-right: 56px;
+    margin-right: calc((56/1920) * 100vw);
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
     color: #FFFF;
-    font-size: 25px;
 }
 
 .profile-header img {
-    height: 34px;
-    width: 40px;
+    width: calc((35/1920) * 100vw);
 }
 
 .profile-header p.point {
-    margin-left: -11px;
+    margin-left: calc((-11/1920) * 100vw);
 }
 
 .profile-header p.user {
-    margin-left: 65px;
-    margin-right: 43px;
+    margin-left: calc((65/1920) * 100vw);
+    margin-right: calc((43/1920) * 100vw);
 }
 
 .profile-photo {
     background-color: #DAC3E8;
-    height: 60px;
-    width: 60px;
+    width: calc((50/1920) * 100vw);
     border-radius: 50%;
 }
 
 .sidebar {
-    margin-top: 91px;
     display: flexbox;
     background-color: #5A189A;
-    height: calc(53vw - 91px);
-    width: 337px;
+    width: calc((337/1920) * 100vw);
     z-index: 0;
     position: relative;
 }
@@ -88,77 +78,62 @@ header {
     left: 0;
     bottom: 0;
     right: 0;
-    width: 337px;
-    height: calc(53vw - 91px);
+    width: 100%;
+    height: 100%;
     z-index: -1;
 }
 
 .menu {
-    margin-top: 58px;
-    margin-left: 14px;
-    font-size: 35px;
+    margin-left: calc((14/1920) * 100vw);
 }
 
 .my-tasks, .groups, .store, .stats, .inventory {
-    width: 264px;
-    height: 55px;
+    width: calc((264/1920) * 100vw);
     display: inline-flex;
-    margin-bottom: 10px;
 }
 
 .my-tasks a, .groups a, .store a, .stats a, .inventory a{
-    margin: 6px 0 0 23px;
-    width: 145px;
+    width: calc((145/1920) * 100vw);
     text-decoration: none;
     color: #FFFF;
 }
 
 .my-tasks {
-    height: 51px;
     border-radius: 30px;
     border: 2px solid #FFFF;
 }
 
 .my-tasks img, .groups img, .store img, .stats img, .inventory img {
-    height: 35px;
-    width: 35px;
-    margin: 9px 0 0 15px;
+    width: calc((30/1920) * 100vw);
 }
 
 .log-out {
-    margin: 0 0 0 29px;
+    margin: 0 0 0 calc((29/1920) * 100vw);
     position: absolute;
-    bottom: 66px;
-    width: 264px;
-    height: 55px;
+    width: calc((264/1920) * 100vw);
     display: inline-flex;
 }
 
 .log-out img {
-    height: 35px;
-    width: 35px;
+    width: calc((35/1920) * 100vw);
 }
 
 .log-out a {
-    margin: 0 0 0 23px;
-    font-size: 35px;
+    margin: 0 0 0 calc((23/1920) * 100vw);
     color: #FFFF;
     text-decoration: none;
 }
 
 .tasks-container {
-    height: 712px;
-    width: 747px;
-    margin: 150px 0 0 114px;
+    width: calc((747/1920) * 100vw);
 }
 
 .task-overflow {
-    height: 712px;
     overflow-y: auto;
 }
 
 .task-overflow::-webkit-scrollbar {
-    width: 7px; 
+    width: calc((7/1920) * 100vw);
 }
 
 .task-overflow::-webkit-scrollbar-track {
@@ -173,63 +148,48 @@ header {
 
 .your-tasks {
     margin: 0;
-    width: 654px;
+    width: calc((654/1920) * 100vw);
     color: #5A189A;
-    font-size: 50px;
     text-align: center;
-    margin-bottom: 32px;
 }
 
 
 .tasks-container .task {
-    display: flex; 
-    height: 64px;
-    width: 646px;
+    display: flex;
+    width: calc((646/1920) * 100vw);
     background-color: #CAA1E4;
-    margin-bottom: 17px;
     border-radius: 8px;
     border-left: 2px solid #5A189A;
     border-right: 2px solid #5A189A;
 }
 
-
-
 .task .task-title {
-    height: 25px;
-    width: 280px;
+    width: calc((280/1920) * 100vw);
     color: #4E1686;
-    font-size: 22px;
-    margin: 8px 0 0 19px; 
 }
 
 .task .task-content {
-    width: 311px;
+    width: calc((311/1920) * 100vw);
     display: flex;
     align-items: center; 
 }
 
 .task .task-deadline {
     color: #4E1686;
-    font-size: 14px;
-    margin: 7px 0 8px 20px; 
-    height: 16px;
 }
 
 .task .task-reward {
     color: #5A189A;
-    font-size: 25px;
-    margin-left: 8px;
+    margin-left: calc((8/1920) * 100vw);
 }
 
 .task img {
-    height: 27px;
-    width: 32px; 
+    width: calc((27/1920) * 100vw);
 }
 
 .task input {
-    margin-left: 215px;
-    height: 33px;
-    width: 33px;
+    margin-left: calc((215/1920) * 100vw);
+    width: calc((33/1920) * 100vw);
 }
 
 .status {
@@ -239,13 +199,13 @@ header {
 .status + label {
     position: relative;
     display: inline-block;
-    width: 20px;
-    height: 20px;
+    width: calc((21/1920) * 100vw);
+    /*height: 20px;*/
     background-color: #CAA1E4;
     border: 2px solid #5A189A;
     border-radius: 3px;
     cursor: pointer;
-    margin-left: 215px;
+    margin-left: calc((215/1920) * 100vw);
 }
 
 .status:checked + label {
@@ -255,12 +215,12 @@ header {
 .status + label::after {
     content: "";
     position: absolute;
-    top: 4px;
-    left: 4px;
-    width: 10px;
-    height: 5px;
-    border-left: 2px solid #5A189A;
-    border-bottom: 2px solid #5A189A;
+    top: calc((5/1080) * 47.44vw);
+    left: calc((2.3/1920) * 100vw);
+    width: calc((14/1920) * 100vw);
+    height: calc((7/1080) * 47.44vw);
+    border-left: calc((2/1920) * 100vw) solid #5A189A;
+    border-bottom: calc((2/1920) * 100vw) solid #5A189A;
     transform: rotate(-45deg);
     opacity: 0; 
     transition: opacity 0.2s ease-in-out;
