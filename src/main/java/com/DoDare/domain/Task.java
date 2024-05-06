@@ -3,6 +3,8 @@ package com.DoDare.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.Date;
+
 @Entity
 @Table(name = "tasks")
 @Getter
@@ -16,9 +18,9 @@ public class Task {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String title;
 
-    @Column(nullable = false)
+    @Column
     private String description;
 
     @Column(nullable = false)
@@ -26,4 +28,12 @@ public class Task {
 
     @Column(nullable = false)
     private Long reward;
+
+    @Column
+    private Date deadline;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
+
 }
