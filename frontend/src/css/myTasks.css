@@ -157,7 +157,6 @@ header {
 .tasks-container .task {
     display: flex;
     width: calc((646/1920) * 100vw);
-    background-color: #CAA1E4;
     border-radius: 8px;
     border-left: 2px solid #5A189A;
     border-right: 2px solid #5A189A;
@@ -180,6 +179,7 @@ header {
 
 .task .task-reward {
     color: #5A189A;
+    width: calc((23/1920) * 100vw);
     margin-left: calc((8/1920) * 100vw);
 }
 
@@ -230,4 +230,48 @@ header {
     opacity: 1;
 }
 
+.new-task {
+    width: calc((475/1920) * 100vw);
+    margin-left: calc((146/1920 * 100vw));
+}
 
+.new-task-form-name {
+    margin: 0;
+    text-align: center;
+    color: #5A189A;
+}
+
+.new-task-title, .new-task-description, .new-task-reward, .new-task-deadline {
+    width: calc((475/1920) * 100vw);
+}
+
+.new-task-title input, .new-task-description textarea, .new-task-reward input, .new-task-deadline input {
+    border-top: 0;
+    border-bottom: 0;
+    border-left: 2px solid #7251B5;
+    border-right: 2px solid #7251B5;
+    background-color: rgb(198, 171, 215);
+    width: calc((458/1920) * 100vw);
+    border-radius: 8px;
+    font-family: "Ruluko", sans-serif;
+    padding-left: calc((17/1920) * 100vw);
+    color: #E8E8E8;
+}
+
+.new-task-title input::placeholder, .new-task-description textarea::placeholder, .new-task-reward input::placeholder, .new-task-deadline input::placeholder{
+    color: #E8E8E8;
+}
+
+.new-task-deadline input {
+    padding-right: calc((17/1920) * 100vw);
+    width: calc((441/1920) * 100vw);;
+}
+
+.add-task {
+    width: calc((475/1920) * 100vw);
+    background-color: #5A189A;
+    color: #FFFFFF;
+    border-radius: 15px;
+    border: 0;
+    font-family: "Ruluko", sans-serif;
+}

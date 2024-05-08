@@ -124,16 +124,13 @@
     border-right: 1px solid #7251B5;
     background-color: rgba(208, 151, 254, 0.5);
     padding-left: calc((42/1920) * 100vw);
+    border-radius: 10px;
+    width: calc((508/1920) * 100vw);
+    font-family: "Ruluko", sans-serif;
 }
 
 .user-name input::placeholder, .email input::placeholder, .password-up input::placeholder, .confirm-password input::placeholder {
     color: rgba(255, 255, 255, 0.56);
-}
-
-.user-name input, .email input, .password-up input, .confirm-password input{
-    border-radius: 10px;
-    width: calc((508/1920) * 100vw);
-    font-family: "Ruluko", sans-serif;
 }
 
 .submit-sign-up {
