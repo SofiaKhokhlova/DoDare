@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useState, SyntheticEvent } from "react";
+import { useState, SyntheticEvent, useEffect } from "react";
 import '../css/signUp.css';
 
 function SignUp() {
@@ -15,6 +15,20 @@ function SignUp() {
         password: "",
         confirmPassword: ""
     });
+
+    const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowHeight(window.innerHeight);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     const nav = useNavigate();
 
@@ -84,25 +98,77 @@ function SignUp() {
 
     return (
         <>
-            <div className="sign-up-page">
-                <div className="empty-space-sign-up"></div>
-                <div className="header">
+            <div className="sign-up-page"
+                 style={{
+                     height: `${windowHeight}px`
+            }}>
+                <div className="empty-space-sign-up"
+                     style={{
+                         height: `calc((32/1080) * ${windowHeight}px)`
+                }}></div>
+                <div className="header"
+                     style={{
+                         height: `calc((139/1080) * ${windowHeight}px)`,
+                         width: `calc((1778/1920) * 100vw)`,
+                         fontSize: `calc((30/1080) * ${windowHeight}px)`
+                    }}>
+
                     <a href='' id="about" onClick={about}>About</a>
-                    <div className="logo-title">
-                        <img src="/logo.png" alt="logo" />
-                        <p>DODARE</p>
+                    <div className="logo-title"
+                         style={{
+                             height: `calc((139/1080) * ${windowHeight}px)`
+                         }}>
+                        <img src="/logo.png" alt="logo"
+                             style={{
+                                 height: `calc((139/1080) * ${windowHeight}px)`
+                             }}/>
+                        <p
+                            style={{
+                                fontSize: `calc((50/1080) * 47.44vw)`,
+                                marginTop: `calc((36/1080) * ${windowHeight}px)`
+                        }}>
+                            DODARE</p>
                     </div>
                     <div className="buttons">
-                        <button className='sign-in' onClick={signIn}>Sign In</button>
-                        <button className='sign-up' onClick={signUp}>Sign Up</button>
+                        <button className='sign-in' onClick={signIn}
+                                style={{
+                                    height: `calc((74/1080) * ${windowHeight}px)`,
+                                    fontSize: `calc((30/1080) * ${windowHeight}px)`
+                                }}>
+                            Sign In</button>
+                        <button className='sign-up' onClick={signUp}
+                                style={{
+                                    height: `calc((74/1080) * ${windowHeight}px)`,
+                                    fontSize: `calc((30/1080) * ${windowHeight}px)`
+                        }}>
+                            Sign Up</button>
                     </div>
                 </div>
 
-                <div className="sign-up-container">
-                    <p>Sign Up</p>
-                    <form>
-                        <div className="user-name">
+                <div className="sign-up-container"
+                     style={{
+                         height: `calc((648/1080) * ${windowHeight}px)`,
+                         margin: `calc((70/1080) * ${windowHeight}px) auto`
+                     }}>
+                    <p
+                        style={{
+                            fontSize: `calc((60/1080) * ${windowHeight}px)`,
+                            paddingTop: `calc((16/1080) * ${windowHeight}px`
+                    }}>
+                        Sign Up</p>
+                    <form
+                        style={{
+                            marginTop: `calc((32/1080) * ${windowHeight}px)`
+                        }}>
+                        <div className="user-name"
+                             style={{
+                                 marginBottom: `calc((32/1080) * ${windowHeight}px)`
+                             }}>
                             <input
+                                style={{
+                                    fontSize: `calc((20/1080) * ${windowHeight}px)`,
+                                    height: `calc((57/1080) * ${windowHeight}px)`
+                                }}
                                 type="text"
                                 placeholder='User Name'
                                 name='userName'
@@ -112,8 +178,15 @@ function SignUp() {
                             />
                             {errors.userName && <div className="invalid-feedback">{errors.userName}</div>}
                         </div>
-                        <div className="email">
+                        <div className="email"
+                             style={{
+                                 marginBottom: `calc((32/1080) * ${windowHeight}px)`
+                             }}>
                             <input
+                                style={{
+                                    fontSize: `calc((20/1080) * ${windowHeight}px)`,
+                                    height: `calc((57/1080) * ${windowHeight}px)`
+                                }}
                                 type="text"
                                 placeholder='Email'
                                 name='email'
@@ -123,8 +196,15 @@ function SignUp() {
                             />
                             {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                         </div>
-                        <div className="password-up">
+                        <div className="password-up"
+                             style={{
+                                 marginBottom: `calc((32/1080) * ${windowHeight}px)`
+                             }}>
                             <input
+                                style={{
+                                    fontSize: `calc((20/1080) * ${windowHeight}px)`,
+                                    height: `calc((57/1080) * ${windowHeight}px)`
+                                }}
                                 type="password"
                                 placeholder='Password'
                                 name='password'
@@ -134,8 +214,15 @@ function SignUp() {
                             />
                             {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                         </div>
-                        <div className="confirm-password">
+                        <div className="confirm-password"
+                             style={{
+                                 marginBottom: `calc((56/1080) * ${windowHeight}px)`
+                             }}>
                             <input
+                                style={{
+                                    fontSize: `calc((20/1080) * ${windowHeight}px)`,
+                                    height: `calc((57/1080) * ${windowHeight}px)`
+                                }}
                                 type="password"
                                 placeholder='Confirm password'
                                 name='ConfirmPassword'
@@ -146,7 +233,14 @@ function SignUp() {
                             {errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
                         </div>
                         <div className="button-sign-up">
-                            <button className='submit-sign-up' onClick={(event: SyntheticEvent) => validateForm(event)}>Sign Up</button>
+                            <button
+                                style={{
+                                    fontSize: `calc((20/1080) * ${windowHeight}px)`,
+                                    height: `calc((57/1080) * ${windowHeight}px)`
+                                }}
+                                className='submit-sign-up'
+                                onClick={(event: SyntheticEvent) => validateForm(event)}>
+                                    Sign Up</button>
                         </div>
                     </form>
                 </div>
