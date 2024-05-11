@@ -35,7 +35,7 @@ function MainPage() {
 
 	const [message, setMessage] = useState('');
 	useEffect(() => {
-        fetch('http://localhost:8080/api/test')
+        fetch('http://localhost:8080/hello')
             .then(response => response.text())
             .then(message => setMessage(message))
             .catch(err => console.error('Error fetching data:', err));

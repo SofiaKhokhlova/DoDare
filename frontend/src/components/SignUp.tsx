@@ -93,7 +93,10 @@ function SignUp() {
         setErrors(errorsCopy);
 
         if (isValid){
-            const user = {userName, email, password};
+            const user = {
+                name: userName,
+                email: email,
+                password: password};
             register(user)
                 .then(response => {
                     const { id, name, email, token } = response.data;
