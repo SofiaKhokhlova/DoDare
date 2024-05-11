@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, SyntheticEvent, useEffect } from "react";
 import '../css/signUp.css';
-import register from "../service/UserService.ts";
+import { register } from "../service/UserService.ts";
 
 function SignUp() {
     const [userName, setUserName] = useState('');
