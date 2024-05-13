@@ -1,10 +1,21 @@
 import '../css/myTasks.css';
 import {useState, useEffect, ChangeEvent, MouseEventHandler} from 'react';
+import {useNavigate} from "react-router-dom";
 
 function MyTasks() {
     const [windowHeight, setWindowHeight] = useState(window.innerHeight);
     const [selectedTask, setSelectedTask] = useState<TaskList | null>(null);
     const [points, setPoints] = useState(0);
+    const nav = useNavigate();
+    const userName = localStorage.getItem('userName');
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem('accessToken');
+
+        if (!accessToken) {
+            nav('/sign-in');
+        }
+    }, [nav]);
 
 
     useEffect(() => {
@@ -214,6 +225,11 @@ function MyTasks() {
         setTasks(updatedTasks);
     }
 
+    function handleLogOut() {
+        localStorage.clear();
+        nav('/main');
+    }
+
     return (
         <>
             <div className="my-tasks-page"
@@ -245,7 +261,7 @@ function MyTasks() {
                                  height: `calc((34/1080) * ${windowHeight}px)`
                         }} />
                         <p className='point'>{points}</p>
-                        <p className='user'>user_name</p>
+                        <p className='user'>{userName}</p>
                         <a className='profile-photo' href=""
                            style={{
                                height: `calc((60/1080) * ${windowHeight}px)`
@@ -355,7 +371,7 @@ function MyTasks() {
                         <a href=""
                            style={{
                                fontSize:`calc((35/1080) * ${windowHeight}px)`
-                        }}>
+                        }} onClick={handleLogOut}>
                             Log out</a>
                     </div>
                 </div>

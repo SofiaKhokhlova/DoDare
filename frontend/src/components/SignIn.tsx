@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, SyntheticEvent, useEffect } from "react";
 import '../css/signIn.css';
+import {login} from "../service/UserService.ts";
 
 function SignIn() {
     const [email, setEmail] = useState('');
@@ -70,7 +71,19 @@ function SignIn() {
         setErrors(errorsCopy);
 
         if (isValid) {
-            nav('/my-tasks');
+            const user = {email, password};
+            login(user)
+                .then(response => {
+                    const { id, name, email, token } = response.data;
+                    localStorage.setItem('userId', id);
+                    localStorage.setItem('userName', name);
+                    localStorage.setItem('userEmail', email);
+                    localStorage.setItem('accessToken', token);
+                    nav('/my-tasks');
+                })
+                .catch(error => {
+                    console.error(error);
+                });
         }
 
     }
