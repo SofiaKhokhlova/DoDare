@@ -1,0 +1,153 @@
+.main-user-page {
+    display: grid;
+    background-color: #DAC3E8;
+    width: 100%;
+    height: 100%;
+    font-family: "Ruluko", sans-serif;
+    grid-template-columns: 17.552vw 1fr;
+    grid-template-rows: 8.426vh 1fr;
+    grid-template-areas:
+                "header header"
+                "sidebar info";
+
+}
+
+header {
+    grid-area: header;
+    width: 100%;
+    height: 8.426vh;
+    top: 0;
+    margin: 0;
+    background-color: #7251B5;
+    display: inline-flex;
+    justify-content: space-between;
+    padding: 0;
+    position: absolute;
+    z-index: 1;
+}
+
+.logo-title-container {
+    width: calc((398/1920) * 100vw);
+    height: 100%;
+    display: inline-flex;
+}
+
+.logo-title-container img {
+    width: calc((80/1920) * 100vw);
+    margin-left: calc((9/1920) * 100vw);
+}
+
+.logo-title-container p {
+    font-family: "Stylish", serif;
+    margin-top: 3%;
+    margin-left: 0.1vw;
+    font-size: 4.63vh;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.profile-header {
+    width: calc((400/1920) * 100vw);
+    height: 100%;
+    margin-right: calc((56/1920) * 100vw);
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #FFFF;
+}
+
+.profile-header img {
+    width: calc((35/1920) * 100vw);
+}
+
+.profile-header p.point {
+    margin-left: calc((-11/1920) * 100vw);
+    font-size: 2.315vh;
+}
+
+.profile-header p.user {
+    margin-left: calc((65/1920) * 100vw);
+    margin-right: calc((43/1920) * 100vw);
+    font-size: 2.315vh;
+}
+
+.profile-photo {
+    background-color: #DAC3E8;
+    height: 5.556vh;
+    width: 2.55vw;
+    border-radius: 50%;
+}
+
+.sidebar {
+    grid-area: sidebar;
+    background-color: #5A189A;
+    width: calc((337/1920) * 100vw);
+    z-index: 0;
+    position: relative;
+}
+
+.sidebar::after {
+    content: ' ';
+    background-image: url('/background.png');
+    opacity: 0.15;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.menu {
+    margin-left: calc((14/1920) * 100vw);
+    margin-top: 5.37vh;
+    font-size: 3.241vh;
+}
+
+.my-tasks, .groups, .store, .stats, .inventory {
+    width: calc((264/1920) * 100vw);
+    display: inline-flex;
+    height: 4.722vh;
+    margin-bottom: 0.926vh;
+}
+
+.my-tasks a, .groups a, .store a, .stats a, .inventory a{
+    width: calc((145/1920) * 100vw);
+    text-decoration: none;
+    color: #FFFF;
+    margin: 0.556vh 0 0 2.13vh;
+}
+
+.my-tasks img, .groups img, .store img, .stats img, .inventory img {
+    width: calc((30/1920) * 100vw);
+    height: 3.241vh;
+    margin: 0.833vh 0 0 1.389vh;
+}
+
+.log-out {
+    margin: 0 0 0 calc((29/1920) * 100vw);
+    position: absolute;
+    width: calc((264/1920) * 100vw);
+    display: inline-flex;
+    bottom: 5.093vh;
+    height: 5.093vh;
+}
+
+.log-out img {
+    width: calc((35/1920) * 100vw);
+    height: 3.241vh;
+}
+
+.log-out a {
+    margin: 0 0 0 calc((23/1920) * 100vw);
+    color: #FFFF;
+    text-decoration: none;
+    font-size: 3.241vh;
+}
+
+.components-area {
+    grid-area: info;
+    display: flex;
+    justify-content: center;
+
+}

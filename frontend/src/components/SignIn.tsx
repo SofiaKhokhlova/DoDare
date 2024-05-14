@@ -24,7 +24,7 @@ function SignIn() {
     }
 
     function about() {
-        nav('/main');
+        nav('/');
     }
 
     function validateForm(event: SyntheticEvent) {
@@ -65,7 +65,7 @@ function SignIn() {
                     localStorage.setItem('userName', name);
                     localStorage.setItem('userEmail', email);
                     localStorage.setItem('accessToken', token);
-                    nav('/my-tasks');
+                    nav('/main');
                 })
                 .catch(error => {
                     console.error(error);

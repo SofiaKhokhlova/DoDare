@@ -28,7 +28,7 @@ function SignUp() {
     }
 
     function about() {
-        nav('/main');
+        nav('/');
     }
 
     function validateForm(event: SyntheticEvent) {

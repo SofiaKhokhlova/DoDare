@@ -1,8 +1,8 @@
-import '../css/mainPage.css';
+import '../css/aboutPage.css';
 import { useNavigate} from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-function MainPage() {
+function AboutPage() {
 
     const nav = useNavigate();
 
@@ -15,7 +15,7 @@ function MainPage() {
     }
 
     function about() {
-        nav('/main');
+        nav('/');
     }
 
 	const [message, setMessage] = useState('');
@@ -62,4 +62,4 @@ function MainPage() {
     );
 }
 
-export default MainPage;
+export default AboutPage;
