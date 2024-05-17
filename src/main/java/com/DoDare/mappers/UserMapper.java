@@ -2,14 +2,15 @@ package com.DoDare.mappers;
 
 import com.DoDare.domain.User;
 import com.DoDare.dto.SignUpDto;
-import com.DoDare.dto.UserDto;
+import com.DoDare.dto.UserDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    UserDto toUserDto(User user);
+    UserDTO toUserDto(User user);
+    User UserDtotoUser(UserDTO user);
 
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "points", constant = "0L")

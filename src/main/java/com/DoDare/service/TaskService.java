@@ -1,9 +1,12 @@
 package com.DoDare.service;
 
 import com.DoDare.domain.Task;
+import com.DoDare.domain.User;
 import com.DoDare.dto.TaskDTO;
+import com.DoDare.exceptions.AppException;
 import com.DoDare.mappers.TaskMapper;
 import com.DoDare.repo.TaskRepository;
+import com.DoDare.repo.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +25,7 @@ import java.util.stream.Collectors;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
     private final TaskMapper taskMapper;
 
 
@@ -31,8 +35,10 @@ public class TaskService {
         return taskMapper.taskToTaskDTO(savedTask);
     }
 
-    public List<TaskDTO> getAllUsersTasks(Long userId) {
-        Optional<List<Task>> optionalTasks = taskRepository.findByUser_Id(userId);
+    public List<TaskDTO> getAllUsersTasks(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
+        Optional<List<Task>> optionalTasks = taskRepository.findByUser_Id(user.getId());
         return optionalTasks
                 .orElseGet(List::of)
                 .stream()

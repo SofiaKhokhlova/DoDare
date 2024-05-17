@@ -1,9 +1,14 @@
 package com.DoDare.controller;
 
 import com.DoDare.dto.TaskDTO;
+import com.DoDare.dto.UserDTO;
 import com.DoDare.service.TaskService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
@@ -21,9 +26,9 @@ public class TaskController {
         return ResponseEntity.ok(createdTask);
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<TaskDTO>> getAllUsersTasks(@PathVariable Long userId) {
-        List<TaskDTO> tasks = taskService.getAllUsersTasks(userId);
+    @GetMapping
+    public ResponseEntity<List<TaskDTO>> getUserTasks(@AuthenticationPrincipal UserDetails userDetails) {
+        List<TaskDTO> tasks = taskService.getAllUsersTasks(userDetails.getUsername());
         return ResponseEntity.ok(tasks);
     }
 
