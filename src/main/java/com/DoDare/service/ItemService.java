@@ -49,24 +49,15 @@ public class ItemService {
     private Optional<String> saveItemImage(MultipartFile image, ItemType type) {
         // TODO: this is shit, needs to be rewritten
         String baseUploadDir = "E:\\University\\DoDare\\src\\main\\resources\\static\\images";
-        String itemTypePath = "";
-        if (type == ItemType.HEAD) {
-            itemTypePath = "hat";
-        }
-        else if (type == ItemType.BODY) {
-            itemTypePath = "body";
-        }
-        else {
-            itemTypePath = "legs";
-        }
-        File directory = new File(baseUploadDir + File.separator + itemTypePath);
+
+        File directory = new File(baseUploadDir + File.separator);
         if (!directory.exists()) {
             directory.mkdirs();
         }
 
         String fullFilePath = "";
         try {
-            fullFilePath = baseUploadDir + File.separator +  itemTypePath + File.separator + image.getOriginalFilename();
+            fullFilePath = baseUploadDir + File.separator  + image.getOriginalFilename();
             File uploadFile = new File(fullFilePath);
             image.transferTo(uploadFile);
         } catch (IOException e) {
@@ -80,17 +71,6 @@ public class ItemService {
     private String buildImageLink(ItemDto itemDto) {
         // TODO: needs to be imported as environmental variable or from application.properties
         String url = "http://localhost:8080/images";
-
-        // TODO: needs to be rewritten
-        if (itemDto.getType() == ItemType.HEAD) {
-            url += "/hat";
-        }
-        else if (itemDto.getType() == ItemType.BODY) {
-            url += "/body";
-        }
-        else {
-            url += "/legs";
-        }
 
         // TODO: I don't like how it looks like
         url += "/" + extractOriginalFileName(itemDto.getFilePath());

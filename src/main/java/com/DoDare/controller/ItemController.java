@@ -1,7 +1,6 @@
 package com.DoDare.controller;
 
 import com.DoDare.dto.ItemDto;
-import com.DoDare.dto.TaskDTO;
 import com.DoDare.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +21,9 @@ public class ItemController {
             @RequestPart("image") MultipartFile image,
             @RequestPart("data") ItemDto itemDto) {
         Optional<ItemDto> createdTaskOptional = itemService.createItem(image, itemDto);
-        if (createdTaskOptional.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        ItemDto createdItem = createdTaskOptional.orElseThrow();
-
-        return ResponseEntity.ok(createdItem);
+        return createdTaskOptional
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @GetMapping("/get/{itemId}")
