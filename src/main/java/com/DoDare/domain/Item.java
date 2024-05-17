@@ -20,7 +20,7 @@ public class Item {
     private String description;
 
     @Column(nullable = false)
-    private String filePath;
+    private String fileName;
 
     @Column(nullable = false)
     @Enumerated(EnumType.ORDINAL)

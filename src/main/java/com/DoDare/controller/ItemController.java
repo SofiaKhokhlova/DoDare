@@ -30,7 +30,7 @@ public class ItemController {
     public ResponseEntity<ItemDto> getItem(@PathVariable Long itemId) {
         Optional<ItemDto> itemDtoOptional = itemService.getItem(itemId);
 
-        // TODO: we should not send filePath here
+        // TODO: we should not send fileName here
         return itemDtoOptional
                 .map(ResponseEntity::ok)
                 // TODO: not sure if it's a correct error code

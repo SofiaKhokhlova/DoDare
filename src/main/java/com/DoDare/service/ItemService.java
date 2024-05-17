@@ -28,7 +28,10 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
 
-    private boolean deleteImageFile(String imageFilePath) {
+    private boolean deleteImageFile(String imageFileName) {
+        // TODO: this is shit, needs to be rewritten
+        String baseUploadDir = "E:\\University\\DoDare\\src\\main\\resources\\static\\images";
+        String imageFilePath = baseUploadDir + File.separator + imageFileName;
         Path filePath = Paths.get(imageFilePath);
         try {
             Files.delete(filePath);
@@ -39,25 +42,25 @@ public class ItemService {
         return true;
     }
 
-    private String extractOriginalFileName(String imageFilePath) {
+    private String extractFileName(String imageFilePath) {
         // TODO: It stinks
         String pattern = Pattern.quote(System.getProperty("file.separator"));
         String[] parts = imageFilePath.split(pattern);
         return parts[parts.length - 1];
     }
 
-    private Optional<String> saveItemImage(MultipartFile image, ItemType type) {
+    // returns image file path
+    private Optional<String> saveItemImage(MultipartFile image) {
         // TODO: this is shit, needs to be rewritten
         String baseUploadDir = "E:\\University\\DoDare\\src\\main\\resources\\static\\images";
-
-        File directory = new File(baseUploadDir + File.separator);
+        File directory = new File(baseUploadDir);
         if (!directory.exists()) {
             directory.mkdirs();
         }
 
         String fullFilePath = "";
         try {
-            fullFilePath = baseUploadDir + File.separator  + image.getOriginalFilename();
+            fullFilePath = baseUploadDir + File.separator + image.getOriginalFilename();
             File uploadFile = new File(fullFilePath);
             image.transferTo(uploadFile);
         } catch (IOException e) {
@@ -68,27 +71,25 @@ public class ItemService {
         return Optional.of(fullFilePath);
     }
 
-    private String buildImageLink(ItemDto itemDto) {
-        // TODO: needs to be imported as environmental variable or from application.properties
-        String url = "http://localhost:8080/images";
-
-        // TODO: I don't like how it looks like
-        url += "/" + extractOriginalFileName(itemDto.getFilePath());
-
-        return url;
-    }
+//    private String buildImageLink(ItemDto itemDto) {
+//        // TODO: needs to be imported as environmental variable or from application.properties
+//        String url = "http://localhost:8080/images";
+//
+//        // TODO: I don't like how it looks like
+//        url += "/" + extractOriginalFileName(itemDto.getFilePath());
+//
+//        return url;
+//    }
 
     public Optional<ItemDto> createItem(MultipartFile image, ItemDto itemDto) {
-        Optional<String> savedImagePathOptional = saveItemImage(image, itemDto.getType());
+        Optional<String> savedImagePathOptional = saveItemImage(image);
 
         Optional<ItemDto> savedItemDtoOptional = savedImagePathOptional.flatMap((String filePath) -> {
-            itemDto.setFilePath(filePath);
+            itemDto.setFileName(extractFileName(filePath));
             Item item = itemMapper.itemDtoToItem(itemDto);
             Item savedItem = itemRepository.save(item);
             return Optional.of(savedItem);
-        }).flatMap((Item item) -> {
-            return Optional.of(itemMapper.itemToItemDto(item));
-        });
+        }).flatMap((Item item) -> Optional.of(itemMapper.itemToItemDto(item)));
 
         return savedItemDtoOptional;
     }
@@ -103,11 +104,7 @@ public class ItemService {
         // TODO: can be simplified
         Optional<ItemDto> itemDtoOptional = itemRepository
                 .findById(id)
-                .flatMap((Item item) -> Optional.of(itemMapper.itemToItemDto(item)))
-                .flatMap((ItemDto itemDto) -> {
-                    itemDto.setImageUrl(buildImageLink(itemDto));
-                    return Optional.of(itemDto);
-                });
+                .flatMap((Item item) -> Optional.of(itemMapper.itemToItemDto(item)));
         return itemDtoOptional;
     }
 
@@ -124,20 +121,21 @@ public class ItemService {
         }
 
         ItemDto itemDto = itemDtoOptional.get();
-        deleteImageFile(itemDto.getFilePath());
-        Optional<String> filePathOptional = saveItemImage(image, itemDto.getType());
+        deleteImageFile(itemDto.getFileName());
+
+        Optional<String> filePathOptional = saveItemImage(image);
         if (filePathOptional.isEmpty()) {
             return Optional.empty();
         }
+
+        // TODO: I don't like that we have the same logic in createItem and updateItem
         String filePath = filePathOptional.get();
-        itemDto.setFilePath(filePath);
+        itemDto.setFileName(extractFileName(filePath));
 
         Item item = itemMapper.itemDtoToItem(itemDto);
         Item savedItem = itemRepository.save(item);
 
-        // TODO: I really want to rewrite it to store the url in the DB alongside the file path
         ItemDto savedItemDto = itemMapper.itemToItemDto(savedItem);
-        savedItemDto.setImageUrl(buildImageLink(savedItemDto));
 
         return Optional.of(savedItemDto);
     }
@@ -152,7 +150,7 @@ public class ItemService {
         if (oldItemDtoOptional.isEmpty()) {
             return Optional.empty();
         }
-        newItemDto.setFilePath(oldItemDtoOptional.get().getFilePath());
+        newItemDto.setFileName(oldItemDtoOptional.get().getFileName());
         newItemDto.setId(itemId);
 
         Item newItem = itemMapper.itemDtoToItem(newItemDto);
@@ -160,7 +158,6 @@ public class ItemService {
 
         // TODO: I really want to rewrite it to store the url in the DB alongside the file path
         ItemDto savedItemDto = itemMapper.itemToItemDto(savedItem);
-        savedItemDto.setImageUrl(buildImageLink(savedItemDto));
         return Optional.of(savedItemDto);
     }
 }
