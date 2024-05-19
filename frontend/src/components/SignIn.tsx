@@ -65,7 +65,7 @@ function SignIn() {
                     localStorage.setItem('userName', name);
                     localStorage.setItem('userEmail', email);
                     localStorage.setItem('accessToken', token);
-                    nav('/main');
+                    nav('/user');
                 })
                 .catch(error => {
                     console.error(error);

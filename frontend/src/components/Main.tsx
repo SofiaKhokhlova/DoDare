@@ -1,6 +1,6 @@
 import '../css/main.css';
-import React, {useState, useEffect} from 'react';
-import {useNavigate} from "react-router-dom";
+import {useState, useEffect} from 'react';
+import {Link, Navigate, Route, Routes, useLocation, useNavigate} from "react-router-dom";
 import MyTask from "./MyTask.tsx";
 import GroupsComponent from "./Groups.tsx";
 import StoreComponent from "./Store.tsx";
@@ -10,26 +10,25 @@ import InventoryComponent from "./Inventory.tsx";
 function Main() {
     const [points, setPoints] = useState(0);
     const nav = useNavigate();
-    const [selectedSection, setSelectedSection] = useState('MyTasks');
     const userName = localStorage.getItem('userName');
+    const location = useLocation();
 
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');
 
-        if (!accessToken) {
+        if (!accessToken)
             nav('/sign-in');
-        }
-    }, [nav]);
+
+        if (location.pathname === "/user")
+            nav("/user/my-tasks", {replace: true});
+    }, [nav, location.pathname]);
 
     const handleLogOut = () => {
         localStorage.clear();
         nav('/');
     }
 
-    const handleSection = (event: React.MouseEvent<HTMLAnchorElement>, SectionName: string) => {
-        event.preventDefault();
-        setSelectedSection(SectionName);
-    }
+    const selectedSection = location.pathname.split("/").pop() || "my-tasks";
 
     return (
         <>
@@ -50,43 +49,43 @@ function Main() {
                     <div className="menu">
                         <div className="my-tasks"
                              style={{
-                                 border: selectedSection === 'MyTasks' ? `2px solid #FFFF` : "transparent",
-                                 borderRadius: selectedSection === 'MyTasks' ? `30px` : "transparent",
-                                 height: selectedSection === 'MyTasks' ? '4.722vh': '5.093vh'}}>
+                                 border: selectedSection === 'my-tasks' ? `2px solid #FFFF` : "transparent",
+                                 borderRadius: selectedSection === 'my-tasks' ? `30px` : "transparent",
+                                 height: selectedSection === 'my-tasks' ? '4.722vh': '5.093vh'}}>
                             <img src="/mytask-icon.png" alt="mytask" />
-                            <a href="my-task" onClick={(event) => handleSection(event, 'MyTasks')}>My tasks</a>
+                            <Link to={"my-tasks"}>My Tasks</Link>
                         </div>
                         <div className="groups"
                              style={{
-                                 border: selectedSection === 'Groups' ? `2px solid #FFFF` : "transparent",
-                                 borderRadius: selectedSection === 'Groups' ? `30px` : "transparent",
-                                 height: selectedSection === 'Groups' ? '4.722vh': '5.093vh'}}>
+                                 border: selectedSection === 'groups' ? `2px solid #FFFF` : "transparent",
+                                 borderRadius: selectedSection === 'groups' ? `30px` : "transparent",
+                                 height: selectedSection === 'groups' ? '4.722vh': '5.093vh'}}>
                             <img src="/groups-icon.png" alt="groups" />
-                            <a href="groups" onClick={(event) => handleSection(event, 'Groups')}>Groups</a>
+                            <Link to={"groups"}>Groups</Link>
                         </div>
                         <div className="store"
                              style={{
-                                 border: selectedSection === 'Store' ? `2px solid #FFFF` : "transparent",
-                                 borderRadius: selectedSection === 'Store' ? `30px` : "transparent",
-                                 height: selectedSection === 'Store' ? '4.722vh': '5.093vh'}}>
+                                 border: selectedSection === 'store' ? `2px solid #FFFF` : "transparent",
+                                 borderRadius: selectedSection === 'store' ? `30px` : "transparent",
+                                 height: selectedSection === 'store' ? '4.722vh': '5.093vh'}}>
                             <img src="/store-icon.png" alt="store" />
-                            <a href="store" onClick={(event) => handleSection(event, 'Store')}>Store</a>
+                            <Link to={"store"}>Store</Link>
                         </div>
                         <div className="stats"
                              style={{
-                                 border: selectedSection === 'Stats' ? `2px solid #FFFF` : "transparent",
-                                 borderRadius: selectedSection === 'Stats' ? `30px` : "transparent",
-                                 height: selectedSection === 'Stats' ? '4.722vh': '5.093vh'}}>
+                                 border: selectedSection === 'stats' ? `2px solid #FFFF` : "transparent",
+                                 borderRadius: selectedSection === 'stats' ? `30px` : "transparent",
+                                 height: selectedSection === 'stats' ? '4.722vh': '5.093vh'}}>
                             <img src="/stats-icon.png" alt="stats" />
-                            <a href="stats" onClick={(event) => handleSection(event, 'Stats')}>Statistics</a>
+                            <Link to={"stats"}>Statistics</Link>
                         </div>
                         <div className="inventory"
                              style={{
-                                 border: selectedSection === 'Inventory' ? `2px solid #FFFF` : "transparent",
-                                 borderRadius: selectedSection === 'Inventory' ? `30px` : "transparent",
-                                 height: selectedSection === 'Inventory' ? '4.722vh': '5.093vh'}}>
+                                 border: selectedSection === 'inventory' ? `2px solid #FFFF` : "transparent",
+                                 borderRadius: selectedSection === 'inventory' ? `30px` : "transparent",
+                                 height: selectedSection === 'inventory' ? '4.722vh': '5.093vh'}}>
                             <img src="/inventory-icon.png" alt="inventory" />
-                            <a href="inventory" onClick={(event) => handleSection(event, 'Inventory')}>Inventory</a>
+                            <Link to={"inventory"}>Inventory</Link>
                         </div>
                     </div>
                     <div className="log-out">
@@ -95,11 +94,14 @@ function Main() {
                     </div>
                 </div>
                 <div className="components-area">
-                    {selectedSection === 'MyTasks' && <MyTask />}
-                    {selectedSection === 'Groups' && <GroupsComponent />}
-                    {selectedSection === 'Store' && <StoreComponent />}
-                    {selectedSection === 'Stats' && <StatsComponent />}
-                    {selectedSection === 'Inventory' && <InventoryComponent />}
+                    <Routes>
+                        <Route path="my-tasks" element={<MyTask />} />
+                        <Route path="groups" element={<GroupsComponent />} />
+                        <Route path="store" element={<StoreComponent />} />
+                        <Route path="stats" element={<StatsComponent />} />
+                        <Route path="inventory" element={<InventoryComponent />} />
+                        <Route path="/" element={<Navigate to="my-task" replace />} />
+                    </Routes>
                 </div>
             </div>
         </>

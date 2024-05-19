@@ -37,7 +37,7 @@ class App extends React.Component {
               <Route path='/sign-in' element = {<SignIn />}></Route>
               <Route  path='/sign-up' element = {<SignUp />}></Route>
                 {token ? (
-                    <Route path="/main" element={<Main />} />
+                    <Route path="/user/*" element={<Main />} />
                 ) : (
                     <Route path='/' element = {<AboutPage />} />
                 )}

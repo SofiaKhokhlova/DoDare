@@ -199,7 +199,7 @@ function MyTask () {
         }
     }
 
-    const handleDeleteTask = (event: React.MouseEvent<HTMLButtonElement>, taskId: number) => {
+    const handleDeleteTask = (event: MouseEvent<HTMLButtonElement>, taskId: number) => {
         event.preventDefault();
         const updatedTasks = tasks.filter(task => task.id !== taskId);
 
@@ -274,7 +274,7 @@ function MyTask () {
 
     const handelCancelChangingTask: MouseEventHandler<HTMLAnchorElement> = (event) => {
         event.preventDefault();
-        setVisibility('NewTask')
+        setVisibility('NewTask');
     }
 
     return(
