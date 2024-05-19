@@ -1,6 +1,8 @@
 package com.DoDare.config;
 
-import com.DoDare.dto.UserDto;
+import com.DoDare.domain.User;
+import com.DoDare.dto.UserDTO;
+import com.DoDare.mappers.UserMapper;
 import com.DoDare.service.UserService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -14,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 
@@ -26,6 +27,7 @@ public class UserAuthProvider {
     private String secretKey;
 
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @PostConstruct
     protected void init() {
@@ -48,7 +50,7 @@ public class UserAuthProvider {
 
         DecodedJWT decoded = verifier.verify(token);
 
-        UserDto user = userService.findByEmail(decoded.getIssuer());
+        User user = userMapper.UserDtotoUser(userService.findByEmail(decoded.getIssuer()));
 
         return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
     }

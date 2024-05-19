@@ -1,9 +1,12 @@
 package com.DoDare.service;
 
 import com.DoDare.domain.Task;
+import com.DoDare.domain.User;
 import com.DoDare.dto.TaskDTO;
+import com.DoDare.exceptions.AppException;
 import com.DoDare.mappers.TaskMapper;
 import com.DoDare.repo.TaskRepository;
+import com.DoDare.repo.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,17 +25,22 @@ import java.util.stream.Collectors;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
     private final TaskMapper taskMapper;
 
 
-    public TaskDTO createTask(TaskDTO taskDTO) {
+    public TaskDTO createTask(TaskDTO taskDTO, String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
         Task task = taskMapper.taskDTOToTask(taskDTO);
+        task.setUser(optionalUser.get());
         Task savedTask = taskRepository.save(task);
         return taskMapper.taskToTaskDTO(savedTask);
     }
 
-    public List<TaskDTO> getAllUsersTasks(Long userId) {
-        Optional<List<Task>> optionalTasks = taskRepository.findByUser_Id(userId);
+    public List<TaskDTO> getAllUsersTasks(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
+        Optional<List<Task>> optionalTasks = taskRepository.findByUser_Id(user.getId());
         return optionalTasks
                 .orElseGet(List::of)
                 .stream()
@@ -40,17 +48,21 @@ public class TaskService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<TaskDTO> getTask(Long taskId) {
-        Optional<Task> optionalTask = taskRepository.findById(taskId);
+    public Optional<TaskDTO> getTask(Long taskId, String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        Optional<Task> optionalTask = taskRepository.findByIdAndUser(taskId, optionalUser.get());
         return optionalTask.map(taskMapper::taskToTaskDTO);
     }
 
-    public TaskDTO updateTask(Long taskId, TaskDTO taskDTO) {
-        Optional<Task> optionalTask = taskRepository.findById(taskId);
+    public TaskDTO updateTask(Long taskId, TaskDTO taskDTO, String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        User user = optionalUser.get();
+        Optional<Task> optionalTask = taskRepository.findByIdAndUser(taskId, user);
         if (optionalTask.isPresent()) {
             Task task = optionalTask.get();
             task = taskMapper.taskDTOToTask(taskDTO);
             task.setId(taskId);
+            task.setUser(optionalUser.get());
             Task savedTask = taskRepository.save(task);
             return taskMapper.taskToTaskDTO(savedTask);
         } else {
@@ -58,7 +70,10 @@ public class TaskService {
         }
     }
 
-    public void deleteTask(Long taskId) {
-        taskRepository.deleteById(taskId);
+    public void deleteTask(Long taskId, String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        User user = optionalUser.get();
+        Optional<Task> optionalTask = taskRepository.findByIdAndUser(taskId, user);
+        optionalTask.ifPresent(taskRepository::delete);
     }
 }

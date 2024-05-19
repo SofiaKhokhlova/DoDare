@@ -17,5 +17,4 @@ public class TaskDTO {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", shape = JsonFormat.Shape.STRING)
     private LocalDateTime deadline;
-    private Long userId;
 }
