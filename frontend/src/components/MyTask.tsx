@@ -1,7 +1,44 @@
 import {ChangeEvent, MouseEventHandler, useEffect, useState} from "react";
 import '../css/myTask.css';
+import {createTask, deleteTask, getAllTasks, updateTask} from "../service/TasksService.ts";
 
 function MyTask () {
+    type TaskList = {
+        id: number;
+        title: string;
+        description: string;
+        status: number;
+        reward: number;
+        deadline: string;
+        userId: number;
+    };
+
+    const [tasks, setTasks] = useState<TaskList[]>([]);
+
+    const sortTasks = (tasks: TaskList[]): TaskList[] => {
+        return [...tasks].sort((a, b) => {
+            if (a.status === 1 && b.status !== 1) {
+                return 1;
+            } else if (a.status !== 1 && b.status === 1) {
+                return -1;
+            } else {
+                return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+            }
+        });
+    };
+
+    useEffect(() => {
+        getAllTasks(localStorage.getItem("accessToken"))
+            .then(response => {
+                console.log(localStorage.getItem("accessToken"));
+                const sortedTasks = sortTasks(response.data);
+                setTasks(sortedTasks);
+            })
+            .catch(error => {
+                console.error(error);
+            })
+    }, []);
+
     const [selectedTask, setSelectedTask] = useState<TaskList | null>(null);
     const [visibility, setVisibility] = useState('NewTask');
     const [changedTask, setChangedTask] = useState<TaskList | null>(null);
@@ -14,124 +51,20 @@ function MyTask () {
                 description: selectedTask.description,
                 status: selectedTask.status,
                 reward: selectedTask.reward,
-                deadline: selectedTask.deadline
+                deadline: selectedTask.deadline,
+                userId: selectedTask.userId
             });
         }
     }, [selectedTask]);
 
-    type TaskList = {
-        id: number;
-        title: string;
-        description: string;
-        status: string;
-        reward: number;
-        deadline: string;
-    };
-
-    const [tasks, setTasks] = useState<TaskList[]>([
-        {
-            id: 1,
-            title: 'Complete React project',
-            description: 'Build a full-fledged React application with TypeScript.',
-            status: 'not done',
-            reward: 10,
-            deadline: '2024-05-15'
-        },
-        {
-            id: 2,
-            title: 'Write weekly blog post',
-            description: 'Create an engaging blog post on the latest web development trends.',
-            status: 'not done',
-            reward: 50,
-            deadline: '2024-05-01'
-        },
-        {
-            id: 3,
-            title: 'Exercise for 30 minutes',
-            description: 'Do a workout session for improving fitness.',
-            status: 'not done',
-            reward: 20,
-            deadline: '2024-04-30'
-        },
-        {
-            id: 4,
-            title: 'Read a book chapter',
-            description: 'Read a chapter of a new book to expand knowledge.',
-            status: 'not done',
-            reward: 30,
-            deadline: '2024-05-10'
-        },
-        {
-            id: 5,
-            title: 'Learn TypeScript basics',
-            description: 'Study TypeScript fundamentals and practice with examples.',
-            status: 'not done',
-            reward: 80,
-            deadline: '2024-05-20'
-        },
-        {
-            id: 6,
-            title: 'Cook a new recipe',
-            description: 'Try out a new recipe for dinner.',
-            status: 'not done',
-            reward: 40,
-            deadline: '2024-05-05'
-        },
-        {
-            id: 7,
-            title: 'Practice meditation',
-            description: 'Spend 10 minutes meditating for relaxation.',
-            status: 'not done',
-            reward: 15,
-            deadline: '2024-04-28'
-        },
-        {
-            id: 8,
-            title: 'Create presentation slides',
-            description: 'Prepare slides for an upcoming project presentation.',
-            status: 'not done',
-            reward: 70,
-            deadline: '2024-05-12'
-        },
-        {
-            id: 9,
-            title: 'Explore new coding libraries',
-            description: 'Research and experiment with new coding libraries.',
-            status: 'not done',
-            reward: 60,
-            deadline: '2024-05-08'
-        },
-        {
-            id: 10,
-            title: 'Take a nature walk',
-            description: 'Enjoy outdoor time with a peaceful nature walk.',
-            status: 'not done',
-            reward: 25,
-            deadline: '2024-04-25'
-        }
-    ]);
-
-    useEffect(() => {
-        const sortedTasks = [...tasks].sort((a, b) => {
-            if (a.status === 'done' && b.status !== 'done') {
-                return 1;
-            } else if (a.status !== 'done' && b.status === 'done') {
-                return -1;
-            } else {
-                return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
-            }
-        });
-
-        setTasks(sortedTasks);
-    }, []);
-
     const [newTask, setNewTask] = useState<TaskList> ({
-        id: 0,
+        id: Math.floor(Math.random() * (100000 - 3 + 1)) + 3,
         title: "",
         description: "",
-        status: "not done",
+        status: 0,
         reward: 0,
-        deadline: ""
+        deadline: "",
+        userId: parseInt(localStorage.getItem("userId"))
     });
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -144,7 +77,6 @@ function MyTask () {
 
     const handleInputTaskChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = event.target;
-
         setChangedTask((prevTask) => ({
             ...prevTask,
             [name]: value
@@ -155,37 +87,24 @@ function MyTask () {
     const handleAddTask: MouseEventHandler<HTMLButtonElement> = (event) => {
         event.preventDefault();
         if (newTask.title && newTask.description && newTask.deadline && newTask.reward > 0) {
-            const updatedTask: TaskList = {
-                id: tasks.length + 1,
-                title: newTask.title,
-                description: newTask.description,
-                status: 'not done',
-                reward: parseInt(String(newTask.reward), 10),
-                deadline: newTask.deadline
-            };
-
-            const updatedTasks = [...tasks, updatedTask];
-
-            updatedTasks.sort((a, b) => {
-                if (a.status === 'done' && b.status !== 'done') {
-                    return 1;
-                } else if (a.status !== 'done' && b.status === 'done') {
-                    return -1;
-                } else {
-                    return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
-                }
-            });
-
-            setTasks(updatedTasks);
-
-            setNewTask({
-                id: 0,
-                title: '',
-                description: '',
-                status: 'not done',
-                reward: 0,
-                deadline: ''
-            });
+            createTask(newTask, localStorage.getItem("accessToken"))
+                .then(response => {
+                    const updatedTasks = sortTasks([...tasks, response.data]);
+                    setTasks(updatedTasks);
+                    setNewTask({
+                        id: Math.floor(Math.random() * (100000 - 3 + 1)) + 3,
+                        title: '',
+                        description: '',
+                        status: 0,
+                        reward: 0,
+                        deadline: '',
+                        userId: parseInt(localStorage.getItem("userId"))
+                    });
+                })
+                .catch(error => {
+                    console.error(error);
+                    console.log(localStorage.getItem("accessToken"));
+                });
         } else {
             alert('Please fill out all fields to add a new task.');
         }
@@ -201,14 +120,21 @@ function MyTask () {
 
     const handleDeleteTask = (event: MouseEvent<HTMLButtonElement>, taskId: number) => {
         event.preventDefault();
-        const updatedTasks = tasks.filter(task => task.id !== taskId);
 
-        setTasks(updatedTasks);
+        deleteTask(taskId, localStorage.getItem("accessToken"))
+            .then(() => {
+                const updatedTasks = tasks.filter(task => task.id !== taskId);
+                setTasks(updatedTasks);
 
-        if (selectedTask && selectedTask.id === taskId) {
-            setSelectedTask(null);
-        }
-        setVisibility('NewTask');
+                if (selectedTask && selectedTask.id === taskId) {
+                    setSelectedTask(null);
+                }
+
+                setVisibility('NewTask');
+            })
+            .catch(error => {
+                console.error(error);
+            });
     };
 
     const handleChangeInfo = () => {
@@ -217,64 +143,53 @@ function MyTask () {
 
     const handleSaveChangedTask: MouseEventHandler<HTMLButtonElement> = (event) => {
         event.preventDefault();
-        const updatedTasks = tasks.map((task) => {
-            if (task.id === selectedTask?.id) {
-                // Обновляем поля измененного задания
-                return {
-                    ...task,
-                    title: changedTask.title,
-                    description: changedTask.description,
-                    reward: parseInt(String(changedTask.reward), 10),
-                    deadline: changedTask.deadline
-                };
-            }
-            return task;
-        });
+        if (!changedTask) return;
 
-        updatedTasks.sort((a, b) => {
-            if (a.status === 'done' && b.status !== 'done') {
-                return 1;
-            } else if (a.status !== 'done' && b.status === 'done') {
-                return -1;
-            } else {
-                return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
-            }
-        });
+        const updatedTask = {
+            ...changedTask,
+            reward: parseInt(String(changedTask.reward), 10)
+        };
 
-        setTasks(updatedTasks);
-
-        setSelectedTask(null);
-        setVisibility('NewTask');
-    }
+        updateTask(selectedTask.id, updatedTask, localStorage.getItem("accessToken"))
+            .then(response => {
+                const updatedTasks = tasks.map(task => task.id === updatedTask.id ? response.data : task);
+                setTasks(sortTasks(updatedTasks));
+                setSelectedTask(null);
+                setVisibility('NewTask');
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    };
 
     const handleTaskStatus = (taskId: number) => {
-        const updatedTasks = tasks.map((task) => {
-            if (task.id === taskId) {
-                if (task.status === 'not done') {
-                    task.status = 'done'
-                    //setPoints(points + task.reward);
-                }
-                //task.status = task.status === 'done' ? 'not done' : 'done';
-            }
-            return task;
-        });
+        const taskToUpdate = tasks.find(task => task.id === taskId);
+        if (!taskToUpdate) return;
 
-        updatedTasks.sort((a, b) => {
-            if (a.status === 'done' && b.status !== 'done') {
-                return 1;
-            } else if (a.status !== 'done' && b.status === 'done') {
-                return -1;
-            } else {
-                return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
-            }
-        });
+        const newStatus = taskToUpdate.status === 0 ? 1 : 0;
 
-        setTasks(updatedTasks);
-    }
+        updateTask(taskId, { ...taskToUpdate, status: newStatus }, localStorage.getItem("accessToken"))
+            .then(response => {
+                console.log(response.data);
+                setTasks(prevTasks => {
+                    const updatedTasks = prevTasks.map(task => task.id === taskId ? response.data : task);
+                    return sortTasks(updatedTasks);
+                });
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    };
 
     const handelCancelChangingTask: MouseEventHandler<HTMLAnchorElement> = (event) => {
         event.preventDefault();
         setVisibility('NewTask');
+    }
+
+    const handleCancelTaskInfo: MouseEventHandler<HTMLAnchorElement> = (event) => {
+        event.preventDefault();
+        setVisibility('NewTask');
+        setSelectedTask(null);
     }
 
     return(
@@ -283,7 +198,12 @@ function MyTask () {
                 <div className="tasks-container">
                     <p className='your-tasks'>Your tasks</p>
                     <div className="task-overflow">
-                        {tasks.map((task) => (
+                        {tasks.length === 0 ?
+                            (<p className="no-tasks">
+                                You have no tasks.
+                                <br/>Create your task in the form on the right.
+                            </p>)
+                            :(tasks.map((task) => (
                             <div key={task.id} className="task" onClick={() => {handleTaskClick(task.id)}}
                                  style={{backgroundColor: selectedTask && selectedTask.id === task.id ? '#C588EA' : '#CAA1E4'}}>
                                 <div className="title-deadline">
@@ -297,14 +217,14 @@ function MyTask () {
                                         id={`taskCheckbox_${task.id}`}
                                         className='status'
                                         type="checkbox"
-                                        checked={task.status === 'done'}
+                                        checked={task.status === 1}
                                         onChange={() => handleTaskStatus(task.id)}
                                     />
                                     <label htmlFor={`taskCheckbox_${task.id}`} style={{backgroundColor: selectedTask && selectedTask.id === task.id ? '#C588EA' : '#CAA1E4'}}>
                                     </label>
                                 </div>
                             </div>
-                        ))}
+                        )))}
                     </div>
                 </div>
 
@@ -339,7 +259,7 @@ function MyTask () {
                         </div>
                         <div className="new-task-deadline">
                             <input
-                                type="date"
+                                type="datetime-local"
                                 placeholder="Deadline"
                                 name="deadline"
                                 value={newTask.deadline}
@@ -365,6 +285,7 @@ function MyTask () {
                         <p>{selectedTask.deadline}</p>
                     </div>
                     <button className="change-info" onClick={handleChangeInfo}>Change</button>
+                    <a href="" className="cancel-task-info" onClick={handleCancelTaskInfo}>Cancel</a>
                 </div> }
 
                 { visibility === 'TaskChange' && <div className="task-change">
@@ -398,7 +319,7 @@ function MyTask () {
                         </div>
                         <div className="task-change-deadline">
                             <input
-                                type="date"
+                                type="datetime-local"
                                 placeholder="Deadline"
                                 name="deadline"
                                 value={changedTask.deadline}

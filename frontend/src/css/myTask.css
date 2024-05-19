@@ -250,3 +250,20 @@
     color: #5A189A;
     font-size: 2.593vh;
 }
+
+.no-tasks {
+    color: rgb(90, 24, 154);
+    font-family: Ruluko, sans-serif;
+    font-size: 3.5vh;
+    width: calc((646/1920) * 100vw);
+    text-align: center;
+}
+
+.cancel-task-info {
+    display: flex;
+    width: calc((480/1920) * 100vw);
+    justify-content: center;
+    font-size: 2.593vh;
+    margin-top: 2vh;
+    text-decoration: none;
+}
