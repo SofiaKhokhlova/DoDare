@@ -60,9 +60,7 @@ public class TaskService {
         Optional<Task> optionalTask = taskRepository.findByIdAndUser(taskId, user);
         if (optionalTask.isPresent()) {
             Task task = optionalTask.get();
-            task = taskMapper.taskDTOToTask(taskDTO);
-            task.setId(taskId);
-            task.setUser(optionalUser.get());
+            taskMapper.updateTaskFromDTO(taskDTO, task);
             Task savedTask = taskRepository.save(task);
             return taskMapper.taskToTaskDTO(savedTask);
         } else {
