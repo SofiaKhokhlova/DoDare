@@ -1,12 +1,12 @@
 package com.DoDare.service;
 
 import com.DoDare.domain.Item;
-import com.DoDare.enums.ItemType;
 import com.DoDare.mappers.ItemMapper;
 import com.DoDare.repo.ItemRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.DoDare.dto.ItemDto;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +19,12 @@ import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+
+// D.Yarkin:
+// Generally, I completely don't like the implementation of ItemService and ItemDto. The problem is that we should store
+// image url and image file path in ItemDto in sake of convenience, but at the same time it doesn't make any sense to
+// send a user a file path. Also, it's pointless to store an image url in the database, so currently it's set via
+// ItemMapper, which seems to be a pretty shitty solution.
 @Service
 @Slf4j
 @Transactional(rollbackOn = Exception.class)
@@ -29,9 +35,7 @@ public class ItemService {
     private final ItemMapper itemMapper;
 
     private boolean deleteImageFile(String imageFileName) {
-        // TODO: this is shit, needs to be rewritten
-        String baseUploadDir = "E:\\University\\DoDare\\src\\main\\resources\\static\\images";
-        String imageFilePath = baseUploadDir + File.separator + imageFileName;
+        String imageFilePath = PropertyService.getItemsImagesDir() + File.separator + imageFileName;
         Path filePath = Paths.get(imageFilePath);
         try {
             Files.delete(filePath);
@@ -42,6 +46,9 @@ public class ItemService {
         return true;
     }
 
+    // D.Yarkin:
+    // the whole workaround with extractFileName is made for the case if we decide to rename images when
+    // they are uploaded. I really wish to get rid of it asap if we will never have such case
     private String extractFileName(String imageFilePath) {
         // TODO: It stinks
         String pattern = Pattern.quote(System.getProperty("file.separator"));
@@ -51,16 +58,14 @@ public class ItemService {
 
     // returns image file path
     private Optional<String> saveItemImage(MultipartFile image) {
-        // TODO: this is shit, needs to be rewritten
-        String baseUploadDir = "E:\\University\\DoDare\\src\\main\\resources\\static\\images";
-        File directory = new File(baseUploadDir);
+        File directory = new File(PropertyService.getItemsImagesDir());
         if (!directory.exists()) {
             directory.mkdirs();
         }
 
         String fullFilePath = "";
         try {
-            fullFilePath = baseUploadDir + File.separator + image.getOriginalFilename();
+            fullFilePath = PropertyService.getItemsImagesDir() + File.separator + image.getOriginalFilename();
             File uploadFile = new File(fullFilePath);
             image.transferTo(uploadFile);
         } catch (IOException e) {
@@ -71,27 +76,14 @@ public class ItemService {
         return Optional.of(fullFilePath);
     }
 
-//    private String buildImageLink(ItemDto itemDto) {
-//        // TODO: needs to be imported as environmental variable or from application.properties
-//        String url = "http://localhost:8080/images";
-//
-//        // TODO: I don't like how it looks like
-//        url += "/" + extractOriginalFileName(itemDto.getFilePath());
-//
-//        return url;
-//    }
-
     public Optional<ItemDto> createItem(MultipartFile image, ItemDto itemDto) {
         Optional<String> savedImagePathOptional = saveItemImage(image);
-
-        Optional<ItemDto> savedItemDtoOptional = savedImagePathOptional.flatMap((String filePath) -> {
+        return savedImagePathOptional.flatMap((String filePath) -> {
             itemDto.setFileName(extractFileName(filePath));
             Item item = itemMapper.itemDtoToItem(itemDto);
             Item savedItem = itemRepository.save(item);
             return Optional.of(savedItem);
         }).flatMap((Item item) -> Optional.of(itemMapper.itemToItemDto(item)));
-
-        return savedItemDtoOptional;
     }
 
     public void deleteItem(Long itemId) {
@@ -101,11 +93,9 @@ public class ItemService {
     }
 
     public Optional<ItemDto> getItem(Long id) {
-        // TODO: can be simplified
-        Optional<ItemDto> itemDtoOptional = itemRepository
+        return itemRepository
                 .findById(id)
                 .flatMap((Item item) -> Optional.of(itemMapper.itemToItemDto(item)));
-        return itemDtoOptional;
     }
 
     // TODO:
@@ -140,9 +130,6 @@ public class ItemService {
         return Optional.of(savedItemDto);
     }
 
-    // TODO: if item's type was changed we need to transfer corresponding
-    //  image to another folder. Probably we shouldn't store images
-    //  in separate folders at all?
     public Optional<ItemDto> updateItemInfo(Long itemId, ItemDto newItemDto) {
         Optional<ItemDto> oldItemDtoOptional = itemRepository
                 .findById(itemId)
@@ -156,7 +143,6 @@ public class ItemService {
         Item newItem = itemMapper.itemDtoToItem(newItemDto);
         Item savedItem = itemRepository.save(newItem);
 
-        // TODO: I really want to rewrite it to store the url in the DB alongside the file path
         ItemDto savedItemDto = itemMapper.itemToItemDto(savedItem);
         return Optional.of(savedItemDto);
     }
