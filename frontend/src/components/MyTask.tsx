@@ -30,7 +30,6 @@ function MyTask () {
     useEffect(() => {
         getAllTasks(localStorage.getItem("accessToken"))
             .then(response => {
-                console.log(localStorage.getItem("accessToken"));
                 const sortedTasks = sortTasks(response.data);
                 setTasks(sortedTasks);
             })
@@ -170,7 +169,6 @@ function MyTask () {
 
         updateTask(taskId, { ...taskToUpdate, status: newStatus }, localStorage.getItem("accessToken"))
             .then(response => {
-                console.log(response.data);
                 setTasks(prevTasks => {
                     const updatedTasks = prevTasks.map(task => task.id === taskId ? response.data : task);
                     return sortTasks(updatedTasks);

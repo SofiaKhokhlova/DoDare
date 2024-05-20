@@ -1,9 +1,31 @@
+import "../css/inventory.css";
+
 function InventoryComponent () {
     return(
         <>
-            <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-                <img src="/waiting1.png" style={{color: `#4E1686`, width: '100px', height: '100px'}}/>
-                <h1 style={{color: `#4E1686`, fontFamily: '"Ruluko", sans-serif'}}>In process...</h1>
+            <div className="inventory-component">
+                <p className="inventory-title">Your inventory</p>
+                <div className="character-block"></div>
+                <div className="items-container">
+                    <p className="item-title">Hats</p>
+                    <div className="item-content">
+                        {Array.from({ length: 5 }).map((_, index) => (
+                            <div key={index} className="item"></div>
+                        ))}
+                    </div>
+                    <p className="item-title">Jackets</p>
+                    <div className="item-content">
+                        {Array.from({ length: 5 }).map((_, index) => (
+                            <div key={index} className="item"></div>
+                        ))}
+                    </div>
+                    <p className="item-title">Trousers</p>
+                    <div className="item-content">
+                        {Array.from({ length: 5 }).map((_, index) => (
+                            <div key={index} className="item"></div>
+                        ))}
+                    </div>
+                </div>
             </div>
         </>
     );
