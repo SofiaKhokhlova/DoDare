@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useState, SyntheticEvent, useEffect } from "react";
+import { useState, SyntheticEvent} from "react";
 import '../css/signIn.css';
 import {login} from "../service/UserService.ts";
 
@@ -13,20 +13,6 @@ function SignIn() {
         password: ""
     });
 
-    const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-
-    useEffect(() => {
-        const handleResize = () => {
-            setWindowHeight(window.innerHeight);
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-
     const nav = useNavigate();
 
     function signIn() {
@@ -38,7 +24,7 @@ function SignIn() {
     }
 
     function about() {
-        nav('/main');
+        nav('/');
     }
 
     function validateForm(event: SyntheticEvent) {
@@ -79,85 +65,35 @@ function SignIn() {
                     localStorage.setItem('userName', name);
                     localStorage.setItem('userEmail', email);
                     localStorage.setItem('accessToken', token);
-                    nav('/my-tasks');
+                    nav('/user');
                 })
                 .catch(error => {
                     console.error(error);
                 });
         }
-
     }
 
     return (
         <>
-            <div className="sign-in-page"
-                 style={{
-                     height: `${windowHeight}px`
-                }}>
-                <div className="empty-space-sign-in"></div>
-                <div className="header-sign-in"
-                     style={{
-                        height: `calc((139/1080) * ${windowHeight}px)`,
-                        width: `calc((1778/1920) * 100vw)`,
-                        fontSize: `calc((30/1080) * ${windowHeight}px)`
-                    }}>
+            <div className="sign-in-page">
+                <div className="header-sign-in">
 
                     <a href='' id="about" onClick={about}>About</a>
-                    <div className="logo-title"
-                         style={{
-                             height: `calc((139/1080) * ${windowHeight}px)`
-                         }}>
-                        <img src="/logo.png" alt="logo"
-                             style={{
-                                 height: `calc((139/1080) * ${windowHeight}px)`
-                             }}/>
-                        <p
-                            style={{
-                                fontSize: `calc((50/1080) * 47.44vw)`,
-                                marginTop: `calc((36/1080) * ${windowHeight}px)`
-                        }}>
-                            DODARE</p>
+                    <div className="logo-title">
+                        <img src="/logo.png" alt="logo"/>
+                        <p>DODARE</p>
                     </div>
                     <div className="buttons">
-                        <button className='sign-in' onClick={signIn}
-                                style={{
-                                    height: `calc((74/1080) * ${windowHeight}px)`,
-                                    fontSize: `calc((30/1080) * ${windowHeight}px)`
-                        }}>
-                            Sign In</button>
-                        <button className='sign-up' onClick={signUp}
-                                style={{
-                                    height: `calc((74/1080) * ${windowHeight}px)`,
-                                    fontSize: `calc((30/1080) * ${windowHeight}px)`
-                        }}>
-                            Sign Up</button>
+                        <button className='sign-in' onClick={signIn}>Sign In</button>
+                        <button className='sign-up' onClick={signUp}>Sign Up</button>
                     </div>
                 </div>
 
-                <div className="sign-in-container"
-                     style={{
-                         height: `calc((476/1080) * ${windowHeight}px)`,
-                         margin: `calc((70/1080) * ${windowHeight}px) auto`
-                }}>
-                    <p
-                        style={{
-                            fontSize: `calc((60/1080) * ${windowHeight}px)`,
-                            paddingTop: `calc((16/1080) * ${windowHeight}px)`
-                    }}>
-                        Sign In</p>
-                    <form
-                        style={{
-                            marginTop: `calc((32/1080) * ${windowHeight}px)`
-                    }}>
-                        <div className="email"
-                             style={{
-                                 marginBottom: `calc((32/1080) * ${windowHeight}px)`
-                        }}>
+                <div className="sign-in-container">
+                    <p>Sign In</p>
+                    <form>
+                        <div className="email">
                             <input
-                                style={{
-                                    fontSize: `calc((20/1080) * ${windowHeight}px)` ,
-                                    height: `calc((57/1080) * ${windowHeight}px)`
-                                }}
                                 type="text"
                                 placeholder='Email'
                                 name='email'
@@ -169,10 +105,6 @@ function SignIn() {
                         </div>
                         <div className="password">
                             <input
-                                style={{
-                                    fontSize: `calc((20/1080) * ${windowHeight}px)`,
-                                    height: `calc((57/1080) * ${windowHeight}px)`
-                                }}
                                 type="password"
                                 placeholder='Password'
                                 name='password'
@@ -185,13 +117,7 @@ function SignIn() {
                         <div className="button-sign-in">
                             <button
                                 className='submit-sign-in'
-                                onClick={(event: SyntheticEvent) => validateForm(event)}
-                                style={{
-                                    marginTop: `calc((56/1080) * ${windowHeight}px)`,
-                                    fontSize: `calc((20/1080) * ${windowHeight}px)`,
-                                    height: `calc((57/1080) * ${windowHeight}px)`
-                                }}>
-                                Sign In</button>
+                                onClick={(event: SyntheticEvent) => validateForm(event)}>Sign In</button>
                         </div>
                     </form>
                 </div>

@@ -1,9 +1,9 @@
 import React from 'react';
-import MainPage from './components/MainPage.tsx';
+import AboutPage from './components/AboutPage.tsx';
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import SignIn from './components/SignIn.tsx';
 import SignUp from './components/SignUp.tsx';
-import MyTasks from './components/MyTasks.tsx';
+import Main from './components/Main.tsx';
 
 class App extends React.Component {
     constructor(props: any) {
@@ -33,13 +33,13 @@ class App extends React.Component {
           <>
             <BrowserRouter>
             <Routes>
-              <Route path='/main' element = {<MainPage />}></Route>
+              <Route path='/' element = {<AboutPage />}></Route>
               <Route path='/sign-in' element = {<SignIn />}></Route>
               <Route  path='/sign-up' element = {<SignUp />}></Route>
                 {token ? (
-                    <Route path="/my-tasks" element={<MyTasks />} />
+                    <Route path="/user/*" element={<Main />} />
                 ) : (
-                    <Route path='/main' element = {<MainPage />} />
+                    <Route path='/' element = {<AboutPage />} />
                 )}
             </Routes>
             </BrowserRouter>

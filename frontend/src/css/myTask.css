@@ -1,0 +1,269 @@
+.tasks {
+    height: 100%;
+    width: 100%;
+    display: inline-flex;
+}
+
+.tasks-container {
+    width: calc((747/1920) * 100vw);
+    height: 65.926vh;
+    margin: 5.463vh 0 0 5.938vw;
+}
+
+.task-overflow {
+    overflow-y: auto;
+    height: 65.926vh;
+}
+
+.task-overflow::-webkit-scrollbar {
+    width: calc((7/1920) * 100vw);
+}
+
+.task-overflow::-webkit-scrollbar-track {
+    background: #C6ABD7;
+    border-radius: 8px;
+}
+
+.task-overflow::-webkit-scrollbar-thumb {
+    background-color: #7251B5;
+    border-radius: 8px;
+}
+
+.your-tasks {
+    margin: 0 0 2.963vh 0;
+    width: calc((654/1920) * 100vw);
+    color: #5A189A;
+    text-align: center;
+    font-size: 4.63vh;
+}
+
+
+.tasks-container .task {
+    display: flex;
+    width: calc((646/1920) * 100vw);
+    height: 5.926vh;
+    margin-bottom: 1.574vh;
+    border-radius: 8px;
+    border-left: 2px solid #5A189A;
+    border-right: 2px solid #5A189A;
+}
+
+.task .task-title {
+    width: calc((280/1920) * 100vw);
+    color: #4E1686;
+    height: 2.315vh;
+    font-size: 2.037vh;
+    margin: 0.741vh 0 0 0.99vw;
+}
+
+.task .task-content {
+    width: calc((311/1920) * 100vw);
+    display: flex;
+    align-items: center;
+}
+
+.task .task-deadline {
+    color: #4E1686;
+    font-size: 1.296vh;
+    margin: 0.648vh 0 0.741vh 1.042vw;
+    height: 1.481vh;
+}
+
+.task .task-reward {
+    color: #5A189A;
+    width: calc((23/1920) * 100vw);
+    margin-left: calc((8/1920) * 100vw);
+    font-size: 2.315vh;
+}
+
+.task img {
+    width: calc((27/1920) * 100vw);
+    height: 2.5vh;
+}
+
+.task input {
+    margin-left: calc((215/1920) * 100vw);
+    width: calc((33/1920) * 100vw);
+}
+
+.status {
+    display: none;
+}
+
+.status + label {
+    position: relative;
+    display: inline-block;
+    width: calc((21/1920) * 100vw);
+    height: 2.315vh;
+    background-color: #CAA1E4;
+    border: 2px solid #5A189A;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-left: calc((215/1920) * 100vw);
+}
+
+.status:checked + label {
+    background-color: #CAA1E4;
+}
+
+.status + label::after {
+    content: "";
+    position: absolute;
+    top: calc((5/1080) * 47.44vw);
+    left: calc((2.3/1920) * 100vw);
+    width: calc((14/1920) * 100vw);
+    height: calc((7/1080) * 47.44vw);
+    border-left: calc((2/1920) * 100vw) solid #5A189A;
+    border-bottom: calc((2/1920) * 100vw) solid #5A189A;
+    transform: rotate(-45deg);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.status:checked + label::after {
+    opacity: 1;
+}
+
+.new-task , .task-info, .task-change{
+    width: calc((475/1920) * 100vw);
+    height: 66.204vh;
+    margin-top: 5.37vh;
+    margin-left: 7.604vw;
+}
+
+.new-task-form-name, .task-info-name, .task-change-form-name {
+    margin: 0 0 2.963vh 0;
+    text-align: center;
+    color: #5A189A;
+    font-size: 4.63vh;
+}
+
+.new-task-title, .new-task-description, .new-task-reward, .new-task-deadline, .task-change-title,
+.task-change-description, .task-change-reward, .task-change-deadline{
+    width: calc((475/1920) * 100vw);
+}
+
+.new-task-title input, .new-task-description textarea, .new-task-reward input, .new-task-deadline input,
+.task-change-title input, .task-change-description textarea,
+.task-change-reward input, .task-change-deadline input{
+    border-top: 0;
+    border-bottom: 0;
+    border-left: 2px solid #7251B5;
+    border-right: 2px solid #7251B5;
+    background-color: rgb(198, 171, 215);
+    width: calc((458/1920) * 100vw);
+    border-radius: 8px;
+    font-family: "Ruluko", sans-serif;
+    font-size: 2.315vh;
+    height: 5.926vh;
+    margin-bottom: 1.019vh;
+    padding-left: calc((17/1920) * 100vw);
+    color: #E8E8E8;
+}
+
+.new-task-description textarea, .task-change-description textarea {
+    height: 26.852vh;
+    padding-top: 3.056vh;
+    margin-bottom: 0.55vh;
+}
+
+.new-task-title input::placeholder, .new-task-description textarea::placeholder, .new-task-reward input::placeholder, .new-task-deadline input::placeholder,
+.task-change-title input::placeholder, .task-change-description textarea::placeholder, .task-change-reward input::placeholder, .task-change-deadline input::placeholder {
+    color: #E8E8E8;
+}
+
+.new-task-deadline input, .task-change-deadline input {
+    padding-right: calc((17/1920) * 100vw);
+    width: calc((441/1920) * 100vw);
+    margin-bottom: 3.148vh;
+}
+
+.add-task, .change-info {
+    width: calc((480/1920) * 100vw);
+    background-color: #5A189A;
+    color: #FFFFFF;
+    border-radius: 15px;
+    border: 0;
+    font-family: "Ruluko", sans-serif;
+    height: 6.667vh;
+    font-size: 2.593vh;
+}
+
+.task-info-title, .task-info-description, .task-info-reward, .task-info-deadline {
+    width: calc((475/1920) * 100vw);
+}
+
+.task-info-deadline {
+    margin-bottom: 3.148vh;
+}
+
+.task-info-title p, .task-info-description p, .task-info-reward p, .task-info-deadline p {
+    border-top: 0;
+    border-bottom: 0;
+    border-left: 2px solid #7251B5;
+    border-right: 2px solid #7251B5;
+    background-color: #CAA1E4;
+    width: calc((458/1920) * 100vw);
+    border-radius: 8px;
+    font-family: "Ruluko", sans-serif;
+    font-size: 2.315vh;
+    height: 6vh;
+    margin-top: 0;
+    margin-bottom: 1vh;
+    padding-left: calc((17/1920) * 100vw);
+    color: #4E1686;
+    display: flex;
+    align-items: center;
+}
+
+.task-info-description p {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 0;
+    height: 26.852vh;
+    padding-top: 3.056vh;
+    margin-bottom: 1vh;
+}
+
+.save-change-task, .delete-change-task {
+    width: 8.177vw;
+    height: 6.667vh;
+    border-radius: 15px;
+    border: 1px solid black;
+    font-family: "Ruluko", sans-serif;
+    font-size: 2.593vh;
+    color: #FFFFFF;
+}
+
+.save-change-task {
+    margin-right: 1.37vw;
+    background-color: #5A189A;
+}
+
+.delete-change-task {
+    background-color: #9A1820;
+}
+
+.task-change a {
+    margin-left: 1.823vw;
+    text-decoration: none;
+    color: #5A189A;
+    font-size: 2.593vh;
+}
+
+.no-tasks {
+    color: rgb(90, 24, 154);
+    font-family: Ruluko, sans-serif;
+    font-size: 3.5vh;
+    width: calc((646/1920) * 100vw);
+    text-align: center;
+}
+
+.cancel-task-info {
+    display: flex;
+    width: calc((480/1920) * 100vw);
+    justify-content: center;
+    font-size: 2.593vh;
+    margin-top: 2vh;
+    text-decoration: none;
+}
