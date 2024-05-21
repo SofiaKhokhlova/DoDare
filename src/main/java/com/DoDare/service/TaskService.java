@@ -74,4 +74,18 @@ public class TaskService {
         Optional<Task> optionalTask = taskRepository.findByIdAndUser(taskId, user);
         optionalTask.ifPresent(taskRepository::delete);
     }
+
+    public Long completeTask(Long taskId, String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        User user = optionalUser.get();
+        Optional<Task> optionalTask = taskRepository.findByIdAndUser(taskId, user);
+        if (optionalTask.isPresent()) {
+            Task task = optionalTask.get();
+            task.setStatus(1);
+            taskRepository.save(task);
+            return (long) task.getReward();
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task not found");
+        }
+    }
 }

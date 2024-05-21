@@ -47,4 +47,10 @@ public class TaskController {
         taskService.deleteTask(taskId, userDetails.getUsername());
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/complete/{taskId}")
+    public ResponseEntity<Long> completeTask(@PathVariable Long taskId, @AuthenticationPrincipal UserDetails userDetails) {
+        Long points = taskService.completeTask(taskId, userDetails.getUsername());
+        return ResponseEntity.ok(points);
+    }
 }
