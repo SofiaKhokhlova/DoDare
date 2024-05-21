@@ -3,7 +3,7 @@ package com.DoDare.dto;
 import lombok.Data;
 
 @Data
-public class CharacterDto {
+public class CharacterDTO {
     private Long id;
     private Long userId;
     private Long hatId;

@@ -1,6 +1,6 @@
 package com.DoDare.config;
 
-import com.DoDare.dto.ErrorDto;
+import com.DoDare.dto.ErrorDTO;
 import com.DoDare.exceptions.AppException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,9 +12,9 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(value = {AppException.class})
     @ResponseBody
-    public ResponseEntity<ErrorDto> handleException(AppException ex) {
+    public ResponseEntity<ErrorDTO> handleException(AppException ex) {
         return ResponseEntity.status(ex.getCode())
-                .body(ErrorDto.builder().message(ex.getMessage()).build());
+                .body(ErrorDTO.builder().message(ex.getMessage()).build());
     }
 
 }
