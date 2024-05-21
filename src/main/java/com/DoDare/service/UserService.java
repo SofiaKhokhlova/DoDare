@@ -26,6 +26,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final CharacterService characterService;
 
     public User registerUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -60,7 +61,10 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(CharBuffer.wrap(userDto.getPassword())));
 
         User savedUser = userRepository.save(user);
+        UserDTO savedUserDTO = userMapper.toUserDto(savedUser);
 
-        return userMapper.toUserDto(user);
+        characterService.createCharacter(savedUserDTO);
+
+        return savedUserDTO;
     }
 }

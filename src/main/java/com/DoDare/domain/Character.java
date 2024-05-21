@@ -17,7 +17,7 @@ public class Character {
 
     @ManyToOne
     @JoinColumn(name = "head", nullable = false)
-    private Item hat;
+    private Item head;
 
     @ManyToOne
     @JoinColumn(name = "body", nullable = false)
