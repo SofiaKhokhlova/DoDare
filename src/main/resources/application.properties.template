@@ -11,3 +11,6 @@ spring.datasource.username=
 spring.datasource.password=
 
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+custom.items-images-dir=E:\\University\\DoDare\\images-storage
+custom.base-image-url=http://localhost:8080/images

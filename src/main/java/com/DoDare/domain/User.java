@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "users")
 @Getter
@@ -31,6 +33,17 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private Long points;
+
+    @OneToOne(mappedBy = "user")
+    private Character character;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_item",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "item_id")
+    )
+    private Set<Item> availableItems;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -61,5 +74,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 
 }
