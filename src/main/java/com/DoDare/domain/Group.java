@@ -15,7 +15,7 @@ public class Group {
 
     private String name;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "ref_admin_user")
     private User adminUser;
 

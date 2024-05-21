@@ -30,63 +30,63 @@ public class GroupService {
     private final GroupMapper groupMapper;
     private final UserGroupMapper userGroupMapper;
 
-    public GroupDTO createGroup(GroupDTO groupDTO) {
+    public GroupDTO createGroup(GroupDTO groupDTO, String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
         Group group = groupMapper.groupDTOToGroup(groupDTO);
+        group.setAdminUser(optionalUser.get());
         Group savedGroup = groupRepository.save(group);
 
-        UserGroupDTO userGroupDTO = new UserGroupDTO();
-        userGroupDTO.setUserId(savedGroup.getAdminUser().getId());
-        userGroupDTO.setGroupId(savedGroup.getId());
-        userGroupDTO.setPoints(0);
-        addUserToGroup(userGroupDTO);
+        addUserToGroup(savedGroup.getAdminUser().getId(), savedGroup.getId());
 
         return groupMapper.groupToGroupDTO(savedGroup);
     }
 
-    public void addUserToGroup(UserGroupDTO userGroupDTO) {
-        User user = userRepository.findById(userGroupDTO.getUserId())
+    private void addUserToGroup(Long userId, Long groupId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Group group = groupRepository.findById(userGroupDTO.getGroupId())
+        Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found"));
 
-        Optional<UserGroup> optionalUserGroup = userGroupRepository.findByUserIdAndGroupId(userGroupDTO.getUserId(), userGroupDTO.getGroupId());
+        Optional<UserGroup> optionalUserGroup = userGroupRepository.findByUserIdAndGroupId(userId, groupId);
         if (optionalUserGroup.isPresent()) {
             throw new RuntimeException("User already in the group");
         }
 
+        UserGroupDTO userGroupDTO = new UserGroupDTO();
+        userGroupDTO.setUserId(userId);
+        userGroupDTO.setGroupId(groupId);
+        userGroupDTO.setPoints(0);
         UserGroup userGroup = userGroupMapper.userGroupDTOToUserGroup(userGroupDTO);
 
         userGroupRepository.save(userGroup);
     }
 
-    public Optional<UserGroupDTO> getUserGroup(Long userId, Long groupId) {
-        Optional<UserGroup> optionalUserGroup = userGroupRepository.findByUserIdAndGroupId(userId, groupId);
+    public Optional<UserGroupDTO> getUserGroup(Long groupId, String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        Optional<UserGroup> optionalUserGroup = userGroupRepository.findByUserIdAndGroupId(optionalUser.get().getId(), groupId);
         return optionalUserGroup.map(userGroupMapper::userGroupToUserGroupDTO);
     }
 
-    public List<GroupDTO> getAllGroupsForUser(Long userId) {
-        List<UserGroup> userGroups = userGroupRepository.findByUserId(userId).orElse(Collections.emptyList());
+    public List<GroupDTO> getAllGroupsForUser(String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        List<UserGroup> userGroups = userGroupRepository.findByUserId(optionalUser.get().getId()).orElse(Collections.emptyList());
         return userGroups.stream()
                 .map(UserGroup::getGroup)
                 .map(groupMapper::groupToGroupDTO)
                 .collect(Collectors.toList());
     }
 
-    public List<UserGroupDTO> getUserGroupsForUser(Long userId) {
-        List<UserGroup> userGroups = userGroupRepository.findByUserId(userId).orElse(Collections.emptyList());
-        return userGroups.stream()
-                .map(userGroupMapper::userGroupToUserGroupDTO)
-                .collect(Collectors.toList());
-    }
-
-    public Optional<GroupDTO> getGroup(Long groupId) {
-        return groupRepository.findById(groupId)
+    public Optional<GroupDTO> getGroup(Long groupId, String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        Optional<UserGroup> optionalUserGroup = userGroupRepository.findByUserIdAndGroupId(optionalUser.get().getId(), groupId);
+        return groupRepository.findByUserGroupsContains(Collections.singletonList(optionalUserGroup.orElse(null)))
                 .map(groupMapper::groupToGroupDTO);
     }
 
-    public GroupDTO updateGroup(Long groupId, GroupDTO groupDTO) {
-        Optional<Group> optionalGroup = groupRepository.findById(groupId);
+    public GroupDTO updateGroup(Long groupId, GroupDTO groupDTO, String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        Optional<Group> optionalGroup = groupRepository.findByAdminUserAndId(optionalUser.get(), groupId);
         if (optionalGroup.isPresent()) {
             Group group = optionalGroup.get();
             groupMapper.updateGroupFromDTO(groupDTO, group);
@@ -98,8 +98,10 @@ public class GroupService {
         }
     }
 
-    public void deleteGroup(Long groupId) {
-        groupRepository.deleteById(groupId);
+    public void deleteGroup(Long groupId, String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        Optional<Group> optionalGroup = groupRepository.findByAdminUserAndId(optionalUser.get(), groupId);
+        optionalGroup.ifPresent(groupRepository::delete);
     }
 
 }
