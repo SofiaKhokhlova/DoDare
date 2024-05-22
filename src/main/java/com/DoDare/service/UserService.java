@@ -31,11 +31,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final CharacterService characterService;
     private final ItemService itemService;
-
-    public User registerUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
-    }
+    private final InventoryService inventoryService;
 
     public UserDTO findByEmail(String email) {
         User user = userRepository.findByEmail(email)
@@ -68,6 +64,8 @@ public class UserService {
         UserDTO savedUserDTO = userMapper.toUserDto(savedUser);
 
         characterService.createCharacter(savedUserDTO);
+
+        inventoryService.addDefaultItems(savedUser.getId());
 
         return savedUserDTO;
     }

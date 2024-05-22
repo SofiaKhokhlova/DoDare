@@ -53,31 +53,49 @@ public class InventoryService {
                 .collect(Collectors.toList()));
     }
 
-     public Optional<ItemDTO> addToUserInventory(Long userId, Long itemId) {
+    public Optional<ItemDTO> addToUserInventory(Long userId, Long itemId) {
+        System.out.println("##### ADD ITEM");
         Optional<User> userOptional = userRepository
                 .findById(userId);
         if (userOptional.isEmpty()) {
+            System.out.println("##### NO USER");
             return Optional.empty();
         }
         User user = userOptional.get();
 
         Optional<Item> itemOptional = itemRepository.findById(itemId);
         if (itemOptional.isEmpty()) {
+            System.out.println("##### NO ITEM");
             return Optional.empty();
         }
         Item item = itemOptional.get();
 
-        int initialAmountOfItems = user.getAvailableItems().size();
+//        if (user.getAvailableItems() != null) {
+//            int initialAmountOfItems = user.getAvailableItems().size();
+//            user.getAvailableItems().add(item);
+//            int amountOfItemsAfterAdding = user.getAvailableItems().size();
+//
+//            if (initialAmountOfItems == amountOfItemsAfterAdding) {
+//                System.out.println("##### ITEM ALREADY POSSESSED");
+//                return Optional.empty();
+//            }
+//        }
+
+//        if (user.getAvailableItems().contains(item)) {
+//            return Optional.empty();
+//        }
         user.getAvailableItems().add(item);
-        int amountOfItemsAfterAdding = user.getAvailableItems().size();
-        if (initialAmountOfItems == amountOfItemsAfterAdding) {
-            return Optional.empty();
-        }
 
         return Optional.of(itemMapper.itemToItemDto(item));
     }
 
-     public boolean doesPossessItem(Long userId, Long itemId) {
+    public void addDefaultItems(Long userId) {
+        addToUserInventory(userId, CharacterService.defaultHeadId);
+        addToUserInventory(userId, CharacterService.defaultBodyId);
+        addToUserInventory(userId, CharacterService.defaultLegsId);
+    }
+
+    public boolean doesPossessItem(Long userId, Long itemId) {
         Optional<Item> itemOptional = itemRepository.findById(itemId);
         Optional<User> userOptional = userRepository.findById(userId);
         if (itemOptional.isEmpty() || userOptional.isEmpty()) {
