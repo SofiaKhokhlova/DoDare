@@ -104,8 +104,16 @@ public class GroupTaskService {
         UserTaskStatus userTaskStatus = userTaskStatusRepository.findByUserAndTask(user, task)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User task not found"));
 
+        if(userTaskStatus.getStatus() == 1) return userTaskStatusMapper.userTaskStatusToUserTaskStatusDTO(userTaskStatus);
+
         userTaskStatus.setStatus(1);
         UserTaskStatus savedUserTaskStatus = userTaskStatusRepository.save(userTaskStatus);
+
+        UserGroup userGroup = userGroupRepository.findByUserIdAndGroupId(user.getId(), task.getGroup().getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User group not found"));
+        userGroup.setPoints(userGroup.getPoints() + task.getReward());
+        userGroupRepository.save(userGroup);
+
         return userTaskStatusMapper.userTaskStatusToUserTaskStatusDTO(savedUserTaskStatus);
     }
 
