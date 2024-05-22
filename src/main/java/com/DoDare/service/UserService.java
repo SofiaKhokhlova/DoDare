@@ -67,4 +67,42 @@ public class UserService {
 
         return savedUserDTO;
     }
+
+    public boolean addPoints(Long userId, Long points) {
+        if (points < 0) {
+//            throw new IllegalArgumentException("addPoints is designed to increase amount of points, " +
+//                    "and the argument is negative");
+            return false;
+        }
+
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isEmpty()) {
+            return false;
+        }
+        User user = userOptional.get();
+        user.setPoints(user.getPoints() + points);
+        userRepository.save(user);
+        return true;
+    }
+
+    public boolean takePoints(Long userId, Long points) {
+        if (points < 0) {
+//            throw new IllegalArgumentException("addPoints is designed to increase amount of points, " +
+//                    "and the argument is negative");
+            return false;
+        }
+
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isEmpty()) {
+            return false;
+        }
+
+        User user = userOptional.get();
+        if (user.getPoints() < points) {
+            return false;
+        }
+        user.setPoints(user.getPoints() - points);
+        userRepository.save(user);
+        return true;
+    }
 }

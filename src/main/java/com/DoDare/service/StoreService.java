@@ -29,18 +29,31 @@ public class StoreService {
     private final ItemMapper itemMapper;
     private final UserMapper userMapper;
     private final InventoryService inventoryService;
-
+    private final UserService userService;
 
     public Optional<ItemDTO> buyItem(String userEmail, Long itemId) {
-        Optional<UserDTO> userDTOOptional = userRepository
-                .findByEmail(userEmail)
-                .map(userMapper::toUserDto);
-        if (userDTOOptional.isEmpty()) {
+        Optional<User> userOptional = userRepository
+                .findByEmail(userEmail);
+        if (userOptional.isEmpty()) {
             return Optional.empty();
         }
-        UserDTO userDTO = userDTOOptional.get();
-        // TODO: also must decrease the amount of money
-        return inventoryService.addToUserInventory(userDTO.getId(), itemId);
+
+        Optional<Item> itemOptional = itemRepository.findById(itemId);
+        if (itemOptional.isEmpty()) {
+            return Optional.empty();
+        }
+
+        User user = userOptional.get();
+        Item item = itemOptional.get();
+
+        Optional<ItemDTO> addedItem = Optional.empty();
+        if (userService.takePoints(user.getId(), (long)item.getPrice())) {
+            addedItem = inventoryService.addToUserInventory(user.getId(), itemId);
+            if (addedItem.isEmpty()) {
+                userService.addPoints(user.getId(), (long)item.getPrice());
+            }
+        }
+        return addedItem;
     }
 
     public List<ItemDTO> getItems() {

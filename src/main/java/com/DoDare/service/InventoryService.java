@@ -67,7 +67,12 @@ public class InventoryService {
         }
         Item item = itemOptional.get();
 
+        int initialAmountOfItems = user.getAvailableItems().size();
         user.getAvailableItems().add(item);
+        int amountOfItemsAfterAdding = user.getAvailableItems().size();
+        if (initialAmountOfItems == amountOfItemsAfterAdding) {
+            return Optional.empty();
+        }
 
         return Optional.of(itemMapper.itemToItemDto(item));
     }
