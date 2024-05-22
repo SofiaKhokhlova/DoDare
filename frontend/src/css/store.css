@@ -1,0 +1,161 @@
+.store-component {
+    height: 100%;
+    width: 100%;
+    display: -ms-flexbox;
+}
+
+.store-title {
+    display: grid;
+    justify-content: center;
+    margin-top: 7.13vh;
+    align-items: end;
+    font-size: 4.63vh;
+    color: #5A189A;
+}
+
+.store-items {
+    height: 59.722vh;
+    width: 71.667vw;
+    margin-left: 6vw;
+    margin-top: 2vh;
+}
+
+.store-items-name{
+    font-size: 3.704vh;
+    color: #5A189A;
+    margin-left: 1.042vw;
+    margin-bottom: 1.574vh;
+}
+
+.store-items-container{
+    width: 100%;
+    height: 12.963vh;
+    margin-bottom: 4.167vh;
+    display: flex;
+    overflow-x: auto;
+}
+
+.store-items-container::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.store-items-container:hover::-webkit-scrollbar {
+    width: calc((7 / 1920) * 100vw);
+    height: calc((7 / 1920) * 100vw);
+}
+
+.store-items-container:hover::-webkit-scrollbar-track {
+    background: #C6ABD7;
+    border-radius: 8px;
+}
+
+.store-items-container:hover::-webkit-scrollbar-thumb {
+    background-color: #7251B5;
+    border-radius: 8px;
+}
+
+.store-item {
+    height: 11.5vh;
+    width: 5.49vw;
+    border: 3px solid #5A189A;
+    border-radius: 31.25% / 31.25%;
+    flex: 0 0 auto;
+}
+
+.item-price-container {
+    margin-top: 9vh;
+    margin-left: 2.8vw;
+    display: flex;
+    z-index: 2;
+}
+
+.item-price {
+    font-size: 1.852vh;
+    color: #5A189A;
+    margin-right: 0.156vw;
+}
+
+.point-price {
+    margin-top: 0.278vh;
+    height: 1.53vh;
+    width: 0.885vw;
+}
+
+.item-preview {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 12.037vh 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+                "title title"
+                "character item-data";
+}
+
+.item-preview-title {
+    grid-area: title;
+    width: 82.448vw;
+    display: grid;
+    margin-left: 40%;
+    align-items: end;
+    font-size: 4.63vh;
+    color: #5A189A;
+}
+
+.item-character-preview {
+    grid-area: character;
+    height: 56vh;
+    width: 19vw;
+    border: 5px solid #5A189A;
+    border-radius: 10% / 6.6%;
+    margin-top: 7.685vh;
+    margin-left: 10vw;
+}
+
+.item-data {
+    margin-top: 7.2vh;
+}
+
+.buttons-preview {
+    display: flex;
+    margin-top: 8vh;
+}
+
+.item-data-name {
+    font-size: 4.63vh;
+    color: #5A189A;
+    margin-bottom: 1.019vh;
+}
+
+.item-cost {
+    width: 1.563vw;
+    height: 3.148vh;
+}
+
+.item-data-description {
+    font-size: 3.704vh;
+    color: #5A189A;
+    margin-bottom: 4.5vh;
+}
+
+.acquire-button {
+    width: 15vw;
+    height: 6.667vh;
+    background-color: #5A189A;
+    color: #FFFFFF;
+    font-family: "Ruluko", sans-serif;
+    font-size: 2.593vh;
+    border-radius: 5.21% / 20.83%;
+    border: 0;
+}
+
+.cancel-preview {
+    height: 6.667vh;
+    margin-left: 3.036vw;
+    display: flex;
+    align-items: center;
+    font-size: 2.593vh;
+    text-decoration: none;
+    color: #5A189A;
+}
