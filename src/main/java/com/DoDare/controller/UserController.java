@@ -18,9 +18,9 @@ public class UserController {
     // for testing purposes only
     @PostMapping("/addPoints")
     public ResponseEntity<String> addItemToUser(
-            @RequestParam("userId") Long userID,
+            @RequestParam("userId") Long userId,
             @RequestParam("points") Long points) {
-        boolean success = userService.addPoints(userID, points);
+        boolean success = userService.addPoints(userId, points);
         if (success) {
             return ResponseEntity.ok("Success");
         }

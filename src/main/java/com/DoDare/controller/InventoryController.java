@@ -44,7 +44,6 @@ public class InventoryController {
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
-
     // used only for development
     @PostMapping("/addItemToUser/{userId}/{itemId}")
     public ResponseEntity<ItemDTO> addItemToUser(
@@ -54,6 +53,7 @@ public class InventoryController {
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
+
 
 
 }

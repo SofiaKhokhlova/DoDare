@@ -76,4 +76,16 @@ public class InventoryService {
 
         return Optional.of(itemMapper.itemToItemDto(item));
     }
+
+     public boolean doesPossessItem(Long userId, Long itemId) {
+        Optional<Item> itemOptional = itemRepository.findById(itemId);
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (itemOptional.isEmpty() || userOptional.isEmpty()) {
+            return false;
+        }
+        Item item = itemOptional.get();
+        User user = userOptional.get();
+
+        return user.getAvailableItems().contains(item);
+    }
 }

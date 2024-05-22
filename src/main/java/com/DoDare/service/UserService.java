@@ -1,11 +1,13 @@
 package com.DoDare.service;
 
+import com.DoDare.domain.Item;
 import com.DoDare.domain.User;
 import com.DoDare.dto.CredentialsDTO;
 import com.DoDare.dto.SignUpDTO;
 import com.DoDare.dto.UserDTO;
 import com.DoDare.exceptions.AppException;
 import com.DoDare.mappers.UserMapper;
+import com.DoDare.repo.ItemRepository;
 import com.DoDare.repo.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +25,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
 
+    private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final CharacterService characterService;
+    private final ItemService itemService;
 
     public User registerUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -105,4 +109,6 @@ public class UserService {
         userRepository.save(user);
         return true;
     }
+
+
 }
