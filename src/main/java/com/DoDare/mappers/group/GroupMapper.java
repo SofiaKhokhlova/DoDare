@@ -1,9 +1,8 @@
-package com.DoDare.mappers;
+package com.DoDare.mappers.group;
 
-import com.DoDare.domain.Group;
-import com.DoDare.dto.GroupDTO;
+import com.DoDare.domain.group.Group;
+import com.DoDare.dto.group.GroupDTO;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")

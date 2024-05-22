@@ -1,8 +1,8 @@
-package com.DoDare.controller;
+package com.DoDare.controller.group;
 
-import com.DoDare.dto.GroupDTO;
-import com.DoDare.dto.UserGroupDTO;
-import com.DoDare.service.GroupService;
+import com.DoDare.dto.group.GroupDTO;
+import com.DoDare.dto.group.UserGroupDTO;
+import com.DoDare.service.group.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

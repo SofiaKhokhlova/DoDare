@@ -1,11 +1,11 @@
-package com.DoDare.controller;
+package com.DoDare.controller.group;
 
-import com.DoDare.domain.Group;
-import com.DoDare.domain.GroupInviteToken;
+import com.DoDare.domain.group.Group;
+import com.DoDare.domain.group.GroupInviteToken;
 import com.DoDare.domain.User;
-import com.DoDare.repo.GroupInviteTokenRepository;
+import com.DoDare.repo.group.GroupInviteTokenRepository;
 import com.DoDare.repo.UserRepository;
-import com.DoDare.service.GroupService;
+import com.DoDare.service.group.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

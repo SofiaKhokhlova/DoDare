@@ -1,8 +1,8 @@
-package com.DoDare.repo;
+package com.DoDare.repo.group;
 
-import com.DoDare.domain.Group;
+import com.DoDare.domain.group.Group;
 import com.DoDare.domain.User;
-import com.DoDare.domain.UserGroup;
+import com.DoDare.domain.group.UserGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

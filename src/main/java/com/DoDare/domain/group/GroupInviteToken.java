@@ -1,4 +1,4 @@
-package com.DoDare.domain;
+package com.DoDare.domain.group;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

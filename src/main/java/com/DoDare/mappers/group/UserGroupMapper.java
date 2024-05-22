@@ -1,10 +1,9 @@
-package com.DoDare.mappers;
+package com.DoDare.mappers.group;
 
-import com.DoDare.domain.UserGroup;
-import com.DoDare.dto.UserGroupDTO;
+import com.DoDare.domain.group.UserGroup;
+import com.DoDare.dto.group.UserGroupDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface UserGroupMapper {

@@ -1,5 +1,6 @@
 package com.DoDare.domain;
 
+import com.DoDare.domain.group.Group;
 import lombok.Data;
 import jakarta.persistence.*;
 
@@ -30,6 +31,10 @@ public class Task {
     private LocalDateTime deadline;
 
     @ManyToOne
-    @JoinColumn(name = "ref_user", nullable = false)
+    @JoinColumn(name = "ref_user")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "ref_group")
+    private Group group;
 }

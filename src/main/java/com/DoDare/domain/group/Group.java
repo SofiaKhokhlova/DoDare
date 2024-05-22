@@ -1,7 +1,10 @@
-package com.DoDare.domain;
+package com.DoDare.domain.group;
 
+import com.DoDare.domain.Task;
+import com.DoDare.domain.User;
 import lombok.Data;
 import jakarta.persistence.*;
+
 import java.util.List;
 
 @Data
@@ -21,4 +24,7 @@ public class Group {
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserGroup> userGroups;
+
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> tasks;
 }

@@ -1,16 +1,16 @@
-package com.DoDare.service;
+package com.DoDare.service.group;
 
-import com.DoDare.domain.Group;
-import com.DoDare.domain.GroupInviteToken;
+import com.DoDare.domain.group.Group;
+import com.DoDare.domain.group.GroupInviteToken;
 import com.DoDare.domain.User;
-import com.DoDare.domain.UserGroup;
-import com.DoDare.dto.GroupDTO;
-import com.DoDare.dto.UserGroupDTO;
-import com.DoDare.mappers.GroupMapper;
-import com.DoDare.mappers.UserGroupMapper;
-import com.DoDare.repo.GroupInviteTokenRepository;
-import com.DoDare.repo.GroupRepository;
-import com.DoDare.repo.UserGroupRepository;
+import com.DoDare.domain.group.UserGroup;
+import com.DoDare.dto.group.GroupDTO;
+import com.DoDare.dto.group.UserGroupDTO;
+import com.DoDare.mappers.group.GroupMapper;
+import com.DoDare.mappers.group.UserGroupMapper;
+import com.DoDare.repo.group.GroupInviteTokenRepository;
+import com.DoDare.repo.group.GroupRepository;
+import com.DoDare.repo.group.UserGroupRepository;
 import com.DoDare.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

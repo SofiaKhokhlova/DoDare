@@ -1,5 +1,6 @@
-package com.DoDare.domain;
+package com.DoDare.domain.group;
 
+import com.DoDare.domain.User;
 import jakarta.persistence.*;
 import lombok.Data;
 

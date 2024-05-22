@@ -1,4 +1,4 @@
-package com.DoDare.dto;
+package com.DoDare.dto.group;
 
 import lombok.Data;
 
