@@ -7,5 +7,5 @@ public class UserTaskStatusDTO {
     private Long id;
     private Long userId;
     private Long taskId;
-    private boolean completed;
+    private int status;
 }

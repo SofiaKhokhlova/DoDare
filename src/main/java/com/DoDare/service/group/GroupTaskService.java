@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 import com.DoDare.domain.Task;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,25 +61,36 @@ public class GroupTaskService {
     }
 
     public TaskDTO updateTaskInGroup(Long groupId, Long taskId, TaskDTO taskDTO, String email) {
-        Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group not found with id: " + groupId));
+        User user = userRepository.findByEmail(email).get();
+        Group group = groupRepository.findByAdminUserAndId(user, groupId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group not found"));
         Task task = taskRepository.findByIdAndGroup(taskId, group)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task not found with id: " + taskId));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task not found"));
         taskMapper.updateTaskFromDTO(taskDTO, task);
         return taskMapper.taskToTaskDTO(taskRepository.save(task));
     }
 
     public void deleteTaskFromGroup(Long groupId, Long taskId, String email) {
-        Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group not found with id: " + groupId));
+        User user = userRepository.findByEmail(email).get();
+        Group group = groupRepository.findByAdminUserAndId(user, groupId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group not found"));
         Task task = taskRepository.findByIdAndGroup(taskId, group)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task not found with id: " + taskId));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task not found"));
+
+        List<UserTaskStatus> allUserTasks = userTaskStatusRepository.findAllByTask(task)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group users tasks not found"));
+
+        userTaskStatusRepository.deleteAll(allUserTasks);
+
         taskRepository.delete(task);
     }
 
     public List<TaskDTO> getTasksForGroup(Long groupId, String email) {
-        Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group not found with id: " + groupId));
+        User user = userRepository.findByEmail(email).get();
+        Optional<UserGroup> optionalUserGroup = userGroupRepository.findByUserIdAndGroupId(user.getId(), groupId);
+        Group group = groupRepository.findByUserGroupsContains(Collections.singletonList(optionalUserGroup.orElse(null)))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group not found"));
+
         List<Task> tasks = taskRepository.findByGroup(group);
         return tasks.stream()
                 .map(taskMapper::taskToTaskDTO)
@@ -85,24 +98,24 @@ public class GroupTaskService {
     }
 
     public UserTaskStatusDTO markTaskAsCompletedForUser(Long taskId, String email) {
+        User user = userRepository.findByEmail(email).get();
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task not found with id: " + taskId));
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found with email: " + email));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task not found"));
         UserTaskStatus userTaskStatus = userTaskStatusRepository.findByUserAndTask(user, task)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User task not found"));
+
         userTaskStatus.setStatus(1);
         UserTaskStatus savedUserTaskStatus = userTaskStatusRepository.save(userTaskStatus);
         return userTaskStatusMapper.userTaskStatusToUserTaskStatusDTO(savedUserTaskStatus);
     }
 
     public UserTaskStatusDTO getUserTaskStatus(Long taskId, String email) {
+        User user = userRepository.findByEmail(email).get();
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task not found with id: " + taskId));
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found with email: " + email));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task not found"));
         UserTaskStatus userTaskStatus = userTaskStatusRepository.findByUserAndTask(user, task)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User task status not found"));
+
         return userTaskStatusMapper.userTaskStatusToUserTaskStatusDTO(userTaskStatus);
     }
 }

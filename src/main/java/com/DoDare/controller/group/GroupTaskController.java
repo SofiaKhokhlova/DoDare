@@ -19,33 +19,39 @@ public class GroupTaskController {
     private final GroupTaskService groupTaskService;
 
     @PostMapping("/{groupId}")
-    public TaskDTO addTaskToGroup(@PathVariable Long groupId, @RequestBody TaskDTO taskDTO, @AuthenticationPrincipal UserDetails userDetails) {
+    public TaskDTO addTaskToGroup(@PathVariable Long groupId, @RequestBody TaskDTO taskDTO,
+                                  @AuthenticationPrincipal UserDetails userDetails) {
         return groupTaskService.addTaskToGroup(groupId, taskDTO, userDetails.getUsername());
     }
 
     @PutMapping("/{groupId}/{taskId}")
-    public TaskDTO updateTaskInGroup(@PathVariable Long groupId, @PathVariable Long taskId, @RequestBody TaskDTO taskDTO, @AuthenticationPrincipal UserDetails userDetails) {
+    public TaskDTO updateTaskInGroup(@PathVariable Long groupId, @PathVariable Long taskId, @RequestBody TaskDTO taskDTO,
+                                     @AuthenticationPrincipal UserDetails userDetails) {
         return groupTaskService.updateTaskInGroup(groupId, taskId, taskDTO, userDetails.getUsername());
     }
 
     @DeleteMapping("/{groupId}/{taskId}")
-    public ResponseEntity<Void> deleteTaskFromGroup(@PathVariable Long groupId, @PathVariable Long taskId, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Void> deleteTaskFromGroup(@PathVariable Long groupId, @PathVariable Long taskId,
+                                                    @AuthenticationPrincipal UserDetails userDetails) {
         groupTaskService.deleteTaskFromGroup(groupId, taskId, userDetails.getUsername());
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{groupId}")
-    public List<TaskDTO> getTasksForGroup(@PathVariable Long groupId, @AuthenticationPrincipal UserDetails userDetails) {
+    public List<TaskDTO> getTasksForGroup(@PathVariable Long groupId,
+                                          @AuthenticationPrincipal UserDetails userDetails) {
         return groupTaskService.getTasksForGroup(groupId, userDetails.getUsername());
     }
 
     @PutMapping("/{taskId}/status")
-    public UserTaskStatusDTO markTaskAsCompletedForUser(@PathVariable Long taskId, @AuthenticationPrincipal UserDetails userDetails) {
+    public UserTaskStatusDTO markTaskAsCompletedForUser(@PathVariable Long taskId,
+                                                        @AuthenticationPrincipal UserDetails userDetails) {
         return groupTaskService.markTaskAsCompletedForUser(taskId, userDetails.getUsername());
     }
 
     @GetMapping("/{taskId}/status")
-    public UserTaskStatusDTO getUserTaskStatus(@PathVariable Long taskId, @AuthenticationPrincipal UserDetails userDetails) {
+    public UserTaskStatusDTO getUserTaskStatus(@PathVariable Long taskId,
+                                               @AuthenticationPrincipal UserDetails userDetails) {
         return groupTaskService.getUserTaskStatus(taskId, userDetails.getUsername());
     }
 }
