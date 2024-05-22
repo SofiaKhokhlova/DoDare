@@ -1,14 +1,18 @@
 package com.DoDare.service;
 
 import com.DoDare.domain.Item;
+import com.DoDare.domain.User;
+import com.DoDare.dto.UserDTO;
+import com.DoDare.enums.ItemType;
 import com.DoDare.mappers.ItemMapper;
+import com.DoDare.mappers.UserMapper;
 import com.DoDare.repo.ItemRepository;
+import com.DoDare.repo.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.DoDare.dto.ItemDto;
+import com.DoDare.dto.ItemDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -16,8 +20,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 
 // D.Yarkin:
@@ -32,7 +39,9 @@ import java.util.regex.Pattern;
 public class ItemService {
 
     private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
     private final ItemMapper itemMapper;
+    private final UserMapper userMapper;
 
     private boolean deleteImageFile(String imageFileName) {
         String imageFilePath = PropertyService.getItemsImagesDir() + File.separator + imageFileName;
@@ -76,7 +85,7 @@ public class ItemService {
         return Optional.of(fullFilePath);
     }
 
-    public Optional<ItemDto> createItem(MultipartFile image, ItemDto itemDto) {
+    public Optional<ItemDTO> createItem(MultipartFile image, ItemDTO itemDto) {
         Optional<String> savedImagePathOptional = saveItemImage(image);
         return savedImagePathOptional.flatMap((String filePath) -> {
             itemDto.setFileName(extractFileName(filePath));
@@ -92,7 +101,7 @@ public class ItemService {
         itemRepository.deleteById(itemId);
     }
 
-    public Optional<ItemDto> getItem(Long id) {
+    public Optional<ItemDTO> getItem(Long id) {
         return itemRepository
                 .findById(id)
                 .flatMap((Item item) -> Optional.of(itemMapper.itemToItemDto(item)));
@@ -102,15 +111,15 @@ public class ItemService {
     //  here the problem may appear: if two items use the same image
     //  then updating one of them will lead to incorrect file path
     //  in another one. The same issue appears in deleteItem()
-    public Optional<ItemDto> updateItemImage(Long taskId, MultipartFile image) {
-        Optional<ItemDto> itemDtoOptional = itemRepository
+    public Optional<ItemDTO> updateItemImage(Long taskId, MultipartFile image) {
+        Optional<ItemDTO> itemDtoOptional = itemRepository
                 .findById(taskId)
                 .flatMap((Item item) -> Optional.of(itemMapper.itemToItemDto(item)));
         if (itemDtoOptional.isEmpty()) {
             return Optional.empty();
         }
 
-        ItemDto itemDto = itemDtoOptional.get();
+        ItemDTO itemDto = itemDtoOptional.get();
         deleteImageFile(itemDto.getFileName());
 
         Optional<String> filePathOptional = saveItemImage(image);
@@ -125,13 +134,13 @@ public class ItemService {
         Item item = itemMapper.itemDtoToItem(itemDto);
         Item savedItem = itemRepository.save(item);
 
-        ItemDto savedItemDto = itemMapper.itemToItemDto(savedItem);
+        ItemDTO savedItemDto = itemMapper.itemToItemDto(savedItem);
 
         return Optional.of(savedItemDto);
     }
 
-    public Optional<ItemDto> updateItemInfo(Long itemId, ItemDto newItemDto) {
-        Optional<ItemDto> oldItemDtoOptional = itemRepository
+    public Optional<ItemDTO> updateItemInfo(Long itemId, ItemDTO newItemDto) {
+        Optional<ItemDTO> oldItemDtoOptional = itemRepository
                 .findById(itemId)
                 .map(itemMapper::itemToItemDto);
         if (oldItemDtoOptional.isEmpty()) {
@@ -143,7 +152,7 @@ public class ItemService {
         Item newItem = itemMapper.itemDtoToItem(newItemDto);
         Item savedItem = itemRepository.save(newItem);
 
-        ItemDto savedItemDto = itemMapper.itemToItemDto(savedItem);
+        ItemDTO savedItemDto = itemMapper.itemToItemDto(savedItem);
         return Optional.of(savedItemDto);
     }
 }

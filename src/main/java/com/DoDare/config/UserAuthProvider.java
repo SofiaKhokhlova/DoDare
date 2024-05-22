@@ -1,7 +1,6 @@
 package com.DoDare.config;
 
 import com.DoDare.domain.User;
-import com.DoDare.dto.UserDTO;
 import com.DoDare.mappers.UserMapper;
 import com.DoDare.service.UserService;
 import com.auth0.jwt.JWT;
@@ -50,7 +49,7 @@ public class UserAuthProvider {
 
         DecodedJWT decoded = verifier.verify(token);
 
-        User user = userMapper.UserDtotoUser(userService.findByEmail(decoded.getIssuer()));
+        User user = userMapper.userDtoToUser(userService.findByEmail(decoded.getIssuer()));
 
         return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
     }
