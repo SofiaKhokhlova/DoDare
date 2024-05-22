@@ -1,8 +1,13 @@
 package com.DoDare.service;
 
 import com.DoDare.domain.Item;
+import com.DoDare.domain.User;
+import com.DoDare.dto.UserDTO;
+import com.DoDare.enums.ItemType;
 import com.DoDare.mappers.ItemMapper;
+import com.DoDare.mappers.UserMapper;
 import com.DoDare.repo.ItemRepository;
+import com.DoDare.repo.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +20,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 
 // D.Yarkin:
@@ -31,7 +39,9 @@ import java.util.regex.Pattern;
 public class ItemService {
 
     private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
     private final ItemMapper itemMapper;
+    private final UserMapper userMapper;
 
     private boolean deleteImageFile(String imageFileName) {
         String imageFilePath = PropertyService.getItemsImagesDir() + File.separator + imageFileName;
