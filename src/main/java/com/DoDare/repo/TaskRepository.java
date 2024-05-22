@@ -1,5 +1,6 @@
 package com.DoDare.repo;
 
+import com.DoDare.domain.group.Group;
 import com.DoDare.domain.Task;
 import com.DoDare.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,8 @@ import java.util.Optional;
 public interface TaskRepository extends JpaRepository<Task, Long> {
     Optional<List<Task>> findByUser_Id(Long userId);
     Optional<Task> findByIdAndUser(Long id, User user);
+
+    Optional<Task> findByIdAndGroup(Long taskId, Group group);
+
+    List<Task> findByGroup(Group group);
 }
