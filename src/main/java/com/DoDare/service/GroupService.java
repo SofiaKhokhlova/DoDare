@@ -1,12 +1,14 @@
 package com.DoDare.service;
 
 import com.DoDare.domain.Group;
+import com.DoDare.domain.GroupInviteToken;
 import com.DoDare.domain.User;
 import com.DoDare.domain.UserGroup;
 import com.DoDare.dto.GroupDTO;
 import com.DoDare.dto.UserGroupDTO;
 import com.DoDare.mappers.GroupMapper;
 import com.DoDare.mappers.UserGroupMapper;
+import com.DoDare.repo.GroupInviteTokenRepository;
 import com.DoDare.repo.GroupRepository;
 import com.DoDare.repo.UserGroupRepository;
 import com.DoDare.repo.UserRepository;
@@ -14,7 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +33,7 @@ public class GroupService {
     private final UserGroupRepository userGroupRepository;
     private final GroupMapper groupMapper;
     private final UserGroupMapper userGroupMapper;
+    private final GroupInviteTokenRepository groupInviteTokenRepository;
 
     public GroupDTO createGroup(GroupDTO groupDTO, String email) {
         Optional<User> optionalUser = userRepository.findByEmail(email);
@@ -41,7 +46,7 @@ public class GroupService {
         return groupMapper.groupToGroupDTO(savedGroup);
     }
 
-    private void addUserToGroup(Long userId, Long groupId) {
+    public void addUserToGroup(Long userId, Long groupId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -86,22 +91,34 @@ public class GroupService {
 
     public GroupDTO updateGroup(Long groupId, GroupDTO groupDTO, String email) {
         Optional<User> optionalUser = userRepository.findByEmail(email);
-        Optional<Group> optionalGroup = groupRepository.findByAdminUserAndId(optionalUser.get(), groupId);
-        if (optionalGroup.isPresent()) {
-            Group group = optionalGroup.get();
-            groupMapper.updateGroupFromDTO(groupDTO, group);
-            group.setId(groupId);
-            Group savedGroup = groupRepository.save(group);
-            return groupMapper.groupToGroupDTO(savedGroup);
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group not found");
-        }
+        Group group = groupRepository.findByAdminUserAndId(optionalUser.get(), groupId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group not found"));
+        groupMapper.updateGroupFromDTO(groupDTO, group);
+        group.setId(groupId);
+        Group savedGroup = groupRepository.save(group);
+        return groupMapper.groupToGroupDTO(savedGroup);
     }
 
     public void deleteGroup(Long groupId, String email) {
         Optional<User> optionalUser = userRepository.findByEmail(email);
         Optional<Group> optionalGroup = groupRepository.findByAdminUserAndId(optionalUser.get(), groupId);
         optionalGroup.ifPresent(groupRepository::delete);
+    }
+
+    public String generateGroupInviteLink(Long groupId, int expirationDays, String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        Optional<UserGroup> optionalUserGroup = userGroupRepository.findByUserIdAndGroupId(optionalUser.get().getId(), groupId);
+        Group group = groupRepository.findByUserGroupsContains(Collections.singletonList(optionalUserGroup.orElse(null)))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group not found"));
+
+        GroupInviteToken inviteToken = new GroupInviteToken();
+        inviteToken.setGroup(group);
+        inviteToken.setExpirationDate(LocalDateTime.now().plusDays(expirationDays));
+
+        GroupInviteToken savedToken = groupInviteTokenRepository.save(inviteToken);
+
+        // Build the invite link using the saved token
+        return ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/join-group?token=" + savedToken.getToken();
     }
 
 }
