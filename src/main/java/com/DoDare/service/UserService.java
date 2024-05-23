@@ -32,6 +32,7 @@ public class UserService {
     private final CharacterService characterService;
     private final ItemService itemService;
     private final InventoryService inventoryService;
+    private final StatisticsService statisticsService;
 
     public UserDTO findByEmail(String email) {
         User user = userRepository.findByEmail(email)
@@ -64,6 +65,7 @@ public class UserService {
         UserDTO savedUserDTO = userMapper.toUserDto(savedUser);
 
         characterService.createCharacter(savedUserDTO);
+        statisticsService.createUserStatistics(savedUser);
 
         inventoryService.addDefaultItems(savedUser.getId());
 
