@@ -2,10 +2,14 @@ package com.DoDare.controller;
 
 import com.DoDare.dto.ItemDTO;
 import com.DoDare.service.ItemService;
+import com.DoDare.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.*;
 
 import java.util.Optional;
 
@@ -15,11 +19,19 @@ import java.util.Optional;
 public class ItemController {
 
     private final ItemService itemService;
+    private final UserService userService;
+
 
     @PostMapping("/create")
     public ResponseEntity<ItemDTO> createItem(
             @RequestPart("image") MultipartFile image,
-            @RequestPart("data") ItemDTO itemDto) {
+            @RequestPart("data") ItemDTO itemDto,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        if (!userService.isUserManager(username)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         Optional<ItemDTO> createdTaskOptional = itemService.createItem(image, itemDto);
         return createdTaskOptional
                 .map(ResponseEntity::ok)
@@ -40,7 +52,13 @@ public class ItemController {
     @PutMapping("/updateImage/{itemId}")
     public ResponseEntity<ItemDTO> updateItemImage(
             @PathVariable Long itemId,
-            @RequestPart("image") MultipartFile image) {
+            @RequestPart("image") MultipartFile image,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        if (!userService.isUserManager(username)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         Optional<ItemDTO> itemDtoOptional = itemService.updateItemImage(itemId, image);
         return itemDtoOptional
                 .map(ResponseEntity::ok)
@@ -51,7 +69,13 @@ public class ItemController {
     @PutMapping("/updateInfo/{itemId}")
     public ResponseEntity<ItemDTO> updateItemInfo(
             @PathVariable Long itemId,
-            @RequestBody ItemDTO itemDto) {
+            @RequestBody ItemDTO itemDto,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        if (!userService.isUserManager(username)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         Optional<ItemDTO> itemDtoOptional = itemService.updateItemInfo(itemId, itemDto);
         return itemDtoOptional
                 .map(ResponseEntity::ok)
@@ -60,7 +84,14 @@ public class ItemController {
     }
 
     @DeleteMapping("/delete/{itemId}")
-    public ResponseEntity<Void> deleteItem(@PathVariable Long itemId) {
+    public ResponseEntity<Void> deleteItem(
+            @PathVariable Long itemId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        if (!userService.isUserManager(username)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         itemService.deleteItem(itemId);
         return ResponseEntity.ok().build();
     }
