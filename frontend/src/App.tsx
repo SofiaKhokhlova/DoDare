@@ -4,6 +4,7 @@ import {BrowserRouter, Routes, Route} from "react-router-dom";
 import SignIn from './components/SignIn.tsx';
 import SignUp from './components/SignUp.tsx';
 import Main from './components/Main.tsx';
+import { PointsContext } from './context/PointsContext.tsx';
 
 class App extends React.Component {
     constructor(props: any) {
@@ -31,18 +32,20 @@ class App extends React.Component {
         const token = this.state;
         return (
           <>
-            <BrowserRouter>
-            <Routes>
-              <Route path='/' element = {<AboutPage />}></Route>
-              <Route path='/sign-in' element = {<SignIn />}></Route>
-              <Route  path='/sign-up' element = {<SignUp />}></Route>
-                {token ? (
-                    <Route path="/user/*" element={<Main />} />
-                ) : (
-                    <Route path='/' element = {<AboutPage />} />
-                )}
-            </Routes>
-            </BrowserRouter>
+            <PointsContext>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path='/' element = {<AboutPage />}></Route>
+                        <Route path='/sign-in' element = {<SignIn />}></Route>
+                        <Route  path='/sign-up' element = {<SignUp />}></Route>
+                        {token ? (
+                            <Route path="/user/*" element={<Main />} />
+                        ) : (
+                            <Route path='/' element = {<AboutPage />} />
+                        )}
+                    </Routes>
+                </BrowserRouter>
+            </PointsContext>
           </>
         );
   }

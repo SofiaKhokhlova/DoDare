@@ -6,9 +6,11 @@ import GroupsComponent from "./Groups.tsx";
 import StoreComponent from "./Store.tsx";
 import StatsComponent from "./Stats.tsx";
 import InventoryComponent from "./Inventory.tsx";
+import {userDetails} from "../service/UserService.ts";
+import { useAppContext } from '../context/PointsContext.tsx';
 
 function Main() {
-    const [points, setPoints] = useState(0);
+    const { points, updatePoints } = useAppContext();
     const nav = useNavigate();
     const userName = localStorage.getItem('userName');
     const location = useLocation();
@@ -22,6 +24,17 @@ function Main() {
         if (location.pathname === "/user")
             nav("/user/my-tasks", {replace: true});
     }, [nav, location.pathname]);
+
+    useEffect(() => {
+        userDetails(localStorage.getItem("accessToken"))
+            .then(response => {
+                const { id, name, email, token, points } = response.data;
+                updatePoints(points);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }, []);
 
     const handleLogOut = () => {
         localStorage.clear();

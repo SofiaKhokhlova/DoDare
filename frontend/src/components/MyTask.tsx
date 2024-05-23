@@ -1,8 +1,12 @@
 import {ChangeEvent, MouseEventHandler, useEffect, useState} from "react";
 import '../css/myTask.css';
-import {createTask, deleteTask, getAllTasks, updateTask} from "../service/TasksService.ts";
+import {completeTask, createTask, deleteTask, getAllTasks, updateTask} from "../service/TasksService.ts";
+import { useAppContext } from '../context/PointsContext.tsx';
+
 
 function MyTask () {
+    const { points, updatePoints } = useAppContext();
+
     type TaskList = {
         id: number;
         title: string;
@@ -30,13 +34,14 @@ function MyTask () {
     useEffect(() => {
         getAllTasks(localStorage.getItem("accessToken"))
             .then(response => {
+                console.log(localStorage.getItem("accessToken"));
                 const sortedTasks = sortTasks(response.data);
                 setTasks(sortedTasks);
             })
             .catch(error => {
                 console.error(error);
             })
-    }, []);
+    }, [updatePoints]);
 
     const [selectedTask, setSelectedTask] = useState<TaskList | null>(null);
     const [visibility, setVisibility] = useState('NewTask');
@@ -162,21 +167,15 @@ function MyTask () {
     };
 
     const handleTaskStatus = (taskId: number) => {
-        const taskToUpdate = tasks.find(task => task.id === taskId);
-        if (!taskToUpdate) return;
-
-        const newStatus = taskToUpdate.status === 0 ? 1 : 0;
-
-        updateTask(taskId, { ...taskToUpdate, status: newStatus }, localStorage.getItem("accessToken"))
+        console.log(taskId);
+        completeTask(taskId, localStorage.getItem("accessToken"))
             .then(response => {
-                setTasks(prevTasks => {
-                    const updatedTasks = prevTasks.map(task => task.id === taskId ? response.data : task);
-                    return sortTasks(updatedTasks);
-                });
+                updatePoints(response.data);
+
             })
             .catch(error => {
-                console.error(error);
-            });
+                console.log(error);
+            })
     };
 
     const handelCancelChangingTask: MouseEventHandler<HTMLAnchorElement> = (event) => {
