@@ -69,4 +69,11 @@ public class GroupController {
         String inviteLink = groupService.generateGroupInviteLink(groupId, expirationDays, userDetails.getUsername());
         return ResponseEntity.ok(inviteLink);
     }
+
+    @DeleteMapping("/{groupId}/{userId}")
+    public ResponseEntity<Void> deleteUserFromGroup(@PathVariable Long groupId, @PathVariable Long userId,
+                                                      @AuthenticationPrincipal UserDetails userDetails) {
+        groupService.deleteUser(groupId, userId, userDetails.getUsername());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

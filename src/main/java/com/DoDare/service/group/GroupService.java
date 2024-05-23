@@ -4,6 +4,7 @@ import com.DoDare.domain.group.Group;
 import com.DoDare.domain.group.GroupInviteToken;
 import com.DoDare.domain.User;
 import com.DoDare.domain.group.UserGroup;
+import com.DoDare.domain.group.UserTaskStatus;
 import com.DoDare.dto.group.GroupDTO;
 import com.DoDare.dto.group.UserGroupDTO;
 import com.DoDare.mappers.group.GroupMapper;
@@ -12,6 +13,7 @@ import com.DoDare.repo.group.GroupInviteTokenRepository;
 import com.DoDare.repo.group.GroupRepository;
 import com.DoDare.repo.group.UserGroupRepository;
 import com.DoDare.repo.UserRepository;
+import com.DoDare.repo.group.UserTaskStatusRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,7 @@ public class GroupService {
     private final GroupMapper groupMapper;
     private final UserGroupMapper userGroupMapper;
     private final GroupInviteTokenRepository groupInviteTokenRepository;
+    private final UserTaskStatusRepository userTaskStatusRepository;
 
     public GroupDTO createGroup(GroupDTO groupDTO, String email) {
         Optional<User> optionalUser = userRepository.findByEmail(email);
@@ -119,6 +122,18 @@ public class GroupService {
 
         // Build the invite link using the saved token
         return ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/join-group?token=" + savedToken.getToken();
+    }
+
+    public void deleteUser(Long groupId, Long userId, String email) {
+        User user = userRepository.findByEmail(email).get();
+        Group group = groupRepository.findByAdminUserAndId(user, groupId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group not found"));
+        Optional<UserGroup> optionalUserGroup = userGroupRepository.findByUserIdAndGroupId(userId, groupId);
+        optionalUserGroup.ifPresent(userGroupRepository::delete);
+        List<UserTaskStatus> userTasks = userTaskStatusRepository.findAllByUserId(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group users tasks not found"));
+
+        userTaskStatusRepository.deleteAll(userTasks);
     }
 
 }
