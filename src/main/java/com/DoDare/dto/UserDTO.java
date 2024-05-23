@@ -1,5 +1,6 @@
 package com.DoDare.dto;
 
+import com.DoDare.enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +16,5 @@ public class UserDTO {
     private String email;
     private String token;
     private Long points;
+    private UserRole role;
 }

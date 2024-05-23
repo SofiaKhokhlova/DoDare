@@ -5,6 +5,7 @@ import com.DoDare.domain.User;
 import com.DoDare.dto.CredentialsDTO;
 import com.DoDare.dto.SignUpDTO;
 import com.DoDare.dto.UserDTO;
+import com.DoDare.enums.UserRole;
 import com.DoDare.exceptions.AppException;
 import com.DoDare.mappers.UserMapper;
 import com.DoDare.repo.ItemRepository;
@@ -39,16 +40,6 @@ public class UserService {
         return userMapper.toUserDto(user);
     }
 
-    public UserDTO login(CredentialsDTO credentialsDto) {
-        User user = userRepository.findByEmail(credentialsDto.getEmail())
-                .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
-        if (passwordEncoder.matches(CharBuffer.wrap(credentialsDto.getPassword()), user.getPassword())) {
-            return userMapper.toUserDto(user);
-        }
-
-        throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
-    }
-
     public UserDTO register(SignUpDTO userDto) {
         Optional<User> optionalUser = userRepository.findByEmail(userDto.getEmail());
 
@@ -59,6 +50,7 @@ public class UserService {
         User user = userMapper.signUpToUser(userDto);
 
         user.setPassword(passwordEncoder.encode(CharBuffer.wrap(userDto.getPassword())));
+        user.setRole(UserRole.BASIC_USER);
 
         User savedUser = userRepository.save(user);
         UserDTO savedUserDTO = userMapper.toUserDto(savedUser);
@@ -70,10 +62,18 @@ public class UserService {
         return savedUserDTO;
     }
 
+    public UserDTO login(CredentialsDTO credentialsDto) {
+        User user = userRepository.findByEmail(credentialsDto.getEmail())
+                .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
+        if (passwordEncoder.matches(CharBuffer.wrap(credentialsDto.getPassword()), user.getPassword())) {
+            return userMapper.toUserDto(user);
+        }
+
+        throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
+    }
+
     public boolean addPoints(Long userId, Long points) {
         if (points < 0) {
-//            throw new IllegalArgumentException("addPoints is designed to increase amount of points, " +
-//                    "and the argument is negative");
             return false;
         }
 
@@ -89,8 +89,6 @@ public class UserService {
 
     public boolean takePoints(Long userId, Long points) {
         if (points < 0) {
-//            throw new IllegalArgumentException("addPoints is designed to increase amount of points, " +
-//                    "and the argument is negative");
             return false;
         }
 
@@ -108,5 +106,20 @@ public class UserService {
         return true;
     }
 
+    public boolean isUserManager(String email) {
+        UserDTO requesterDTO = findByEmail(email);
+        return (requesterDTO.getRole() == UserRole.MANAGER);
+    }
+
+    public Optional<UserDTO> changeUserRole(Long targetUserId, UserRole newRole) {
+        Optional<User> targetUserOptional = userRepository.findById(targetUserId);
+        if (targetUserOptional.isEmpty()) {
+            return Optional.empty();
+        }
+        User targetUser = targetUserOptional.get();
+        targetUser.setRole(newRole);
+        UserDTO savedUserDTO = userMapper.toUserDto(userRepository.save(targetUser));
+        return Optional.of(savedUserDTO);
+    }
 
 }

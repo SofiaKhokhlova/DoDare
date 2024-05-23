@@ -1,5 +1,6 @@
 package com.DoDare.domain;
 
+import com.DoDare.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,6 +38,10 @@ public class User implements UserDetails {
 
     @OneToOne(mappedBy = "user")
     private Character character;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    private UserRole role;
 
     @ManyToMany
     @JoinTable(
