@@ -250,7 +250,7 @@ function MyTask () {
                                 type="text"
                                 placeholder="Reward"
                                 name="reward"
-                                value={newTask.reward}
+                                value={newTask.reward === 0 ? "" : newTask.reward}
                                 onChange={handleInputChange}
                             />
                         </div>

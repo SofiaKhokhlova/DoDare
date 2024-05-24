@@ -150,7 +150,7 @@
 }
 
 .user-name input::placeholder, .email input::placeholder, .password-up input::placeholder, .confirm-password input::placeholder {
-    color: rgba(255, 255, 255, 0.56);
+    color: #5A189A;
 }
 
 .user-name input, .email input, .password-up input, .confirm-password input, .submit-sign-up {
