@@ -25,12 +25,13 @@ public class ItemController {
     @PostMapping("/create")
     public ResponseEntity<ItemDTO> createItem(
             @RequestPart("image") MultipartFile image,
-            @RequestPart("data") ItemDTO itemDto,
-            @AuthenticationPrincipal UserDetails userDetails) {
-        String username = userDetails.getUsername();
+            @RequestPart("data") ItemDTO itemDto/*,
+            @AuthenticationPrincipal UserDetails userDetails*/) {
+        /*String username = userDetails.getUsername();
         if (!userService.isUserManager(username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
+        */
 
         Optional<ItemDTO> createdTaskOptional = itemService.createItem(image, itemDto);
         return createdTaskOptional
