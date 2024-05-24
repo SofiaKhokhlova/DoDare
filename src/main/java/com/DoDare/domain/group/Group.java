@@ -27,4 +27,8 @@ public class Group {
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks;
+
+    public int getUsersCount() {
+        return userGroups.size();
+    }
 }
