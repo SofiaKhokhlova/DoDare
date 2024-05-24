@@ -5,6 +5,7 @@ import com.DoDare.domain.User;
 import lombok.Data;
 import jakarta.persistence.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -23,7 +24,7 @@ public class Group {
     private User adminUser;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserGroup> userGroups;
+    private List<UserGroup> userGroups = Collections.emptyList();
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks;
