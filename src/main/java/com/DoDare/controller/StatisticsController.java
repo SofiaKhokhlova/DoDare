@@ -1,6 +1,7 @@
 package com.DoDare.controller;
 
 import com.DoDare.domain.Statistics;
+import com.DoDare.dto.StatisticsDTO;
 import com.DoDare.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,7 +17,7 @@ public class StatisticsController {
     private final StatisticsService statisticsService;
 
     @GetMapping
-    public Statistics getUserStatistics(@AuthenticationPrincipal UserDetails userDetails) {
+    public StatisticsDTO getUserStatistics(@AuthenticationPrincipal UserDetails userDetails) {
         return statisticsService.getUserStatistics(userDetails.getUsername());
     }
 

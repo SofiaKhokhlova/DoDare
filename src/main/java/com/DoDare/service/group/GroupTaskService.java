@@ -2,6 +2,7 @@ package com.DoDare.service.group;
 
 import com.DoDare.domain.group.Group;
 import com.DoDare.domain.User;
+import com.DoDare.domain.group.GroupStatistics;
 import com.DoDare.domain.group.UserGroup;
 import com.DoDare.domain.group.UserTaskStatus;
 import com.DoDare.dto.TaskDTO;
@@ -35,6 +36,7 @@ public class GroupTaskService {
     private final TaskMapper taskMapper;
     private final UserTaskStatusMapper userTaskStatusMapper;
     private final UserRepository userRepository;
+    private final GroupStatisticsService groupStatisticsService;
 
     public TaskDTO addTaskToGroup(Long groupId, TaskDTO taskDTO, String email) {
         User user = userRepository.findByEmail(email).get();

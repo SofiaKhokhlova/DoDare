@@ -2,6 +2,8 @@ package com.DoDare.service;
 
 import com.DoDare.domain.Statistics;
 import com.DoDare.domain.User;
+import com.DoDare.dto.StatisticsDTO;
+import com.DoDare.mappers.StatisticsMapper;
 import com.DoDare.repo.StatisticsRepository;
 import com.DoDare.repo.UserRepository;
 import jakarta.transaction.Transactional;
@@ -19,12 +21,13 @@ public class StatisticsService {
 
     private final StatisticsRepository statisticsRepository;
     private final UserRepository userRepository;
+    private final StatisticsMapper statisticsMapper;
 
-
-    public Statistics getUserStatistics(String email) {
+    public StatisticsDTO getUserStatistics(String email) {
         User user = userRepository.findByEmail(email).get();
-        return statisticsRepository.findByUser(user)
+        Statistics statistics = statisticsRepository.findByUser(user)
                 .orElseGet(() -> createUserStatistics(user));
+        return statisticsMapper.userStatisticsToUserStatisticsDTO(statistics);
     }
 
     public Statistics createUserStatistics(User user) {

@@ -3,6 +3,7 @@ package com.DoDare.service.group;
 import com.DoDare.domain.group.Group;
 import com.DoDare.domain.group.GroupInviteToken;
 import com.DoDare.domain.User;
+import com.DoDare.domain.group.GroupStatistics;
 import com.DoDare.domain.group.UserGroup;
 import com.DoDare.dto.group.GroupDTO;
 import com.DoDare.dto.group.UserGroupDTO;
@@ -34,6 +35,7 @@ public class GroupService {
     private final GroupMapper groupMapper;
     private final UserGroupMapper userGroupMapper;
     private final GroupInviteTokenRepository groupInviteTokenRepository;
+    private final GroupStatisticsService groupStatisticsService;
 
     public GroupDTO createGroup(GroupDTO groupDTO, String email) {
         Optional<User> optionalUser = userRepository.findByEmail(email);
@@ -41,6 +43,7 @@ public class GroupService {
         group.setAdminUser(optionalUser.get());
         Group savedGroup = groupRepository.save(group);
 
+        groupStatisticsService.createGroupStatistics(savedGroup);
         addUserToGroup(savedGroup.getAdminUser().getId(), savedGroup.getId());
 
         return groupMapper.groupToGroupDTO(savedGroup);
