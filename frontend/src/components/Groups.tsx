@@ -1,18 +1,31 @@
 import "../css/groups.css";
-import {ChangeEvent, MouseEventHandler, useState} from "react";
+import {ChangeEvent, MouseEventHandler, useEffect, useState} from "react";
+import {createGroup, getAllUserGroups} from "../service/GroupsServise.tsx";
 
 function GroupsComponent () {
     type Group = {
         id: number;
-        title: string;
-        numberOfParticipants: number;
+        name: string;
+        usersCount: number;
     };
 
-    const [groups, setGroups] = useState<Group[] | null>(null);
+    const [groups, setGroups] = useState<Group[]>([]);
+    
+    useEffect(() => {
+        getAllUserGroups(localStorage.getItem("accessToken"))
+            .then(response => {
+                console.log(response.data);
+                setGroups(response.data);
+            })
+            .catch(error => {
+                console.error(error);
+            })
+    }, [setGroups]);
+    
     const [newGroup, setNewGroup] = useState<Group>({
         id: 0,
-        title: "",
-        numberOfParticipants: 0
+        name: "",
+        usersCount: 1
     });
     const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
     const [visibility, setVisibility] = useState("NewGroup");
@@ -25,7 +38,7 @@ function GroupsComponent () {
             const group = groups.find((group) => group.id === groupId);
             if (group){
                 setSelectedGroup(group);
-                console.log(group.title);
+                console.log(group.name);
                 setVisibility("Group");
             }
         }
@@ -41,19 +54,21 @@ function GroupsComponent () {
 
     const handleCreateGroup: MouseEventHandler<HTMLButtonElement> = (event) => {
         event.preventDefault();
-        if (newGroup.title) {
-            const updatedGroup: Group = {
-                id: Math.floor(Math.random() * (20 - 1 + 1)) + 1,
-                title: newGroup.title,
-                numberOfParticipants: 1
-            };
+        if (newGroup.name) {
+            createGroup(newGroup, localStorage.getItem("accessToken"))
+                .then(response => {
+                    console.log(response.data);
+                })
+                .catch(error => {
+                    console.error(error);
+                })
 
-            setGroups((prevGroups) => (prevGroups ? [...prevGroups, updatedGroup] : [updatedGroup]));
+            setGroups(groups);
 
             setNewGroup({
                 id: 0,
-                title: "",
-                numberOfParticipants: 0
+                name: "",
+                usersCount: 1
             })
         } else {
             alert("Please, write title for a new group!");
@@ -90,10 +105,10 @@ function GroupsComponent () {
                                      className="group"
                                      onClick={() => handleGroupClick(group.id)}
                                      style={{backgroundColor: selectedGroup && selectedGroup.id === group.id ? '#C588EA' : '#CAA1E4'}}>
-                                    <p className="group-title">{group.title}</p>
+                                    <p className="group-title">{group.name}</p>
                                     <div className="participants-container">
                                         <img src="/group-participants%204.svg" alt="participants img"/>
-                                        <p className="group-participants">{group.numberOfParticipants}</p>
+                                        <p className="group-participants">{group.usersCount}</p>
                                     </div>
                                 </div>
                             ))
@@ -108,8 +123,8 @@ function GroupsComponent () {
                             <input
                                 type="text"
                                 placeholder="Title"
-                                name="title"
-                                value={newGroup.title}
+                                name="name"
+                                value={newGroup.name}
                                 onChange={handleInputChange}
                             />
                             <button className="create-group" onClick={handleCreateGroup}>Create group</button>
@@ -120,7 +135,7 @@ function GroupsComponent () {
                 {visibility === "Group" &&
                     <div className="group-info-part">
                         <p className="group-info-title">
-                            {selectedGroup.title}
+                            {selectedGroup.name}
                         </p>
                         <div className="group-info-participants">
                             <div className="admin">
@@ -199,7 +214,7 @@ function GroupsComponent () {
             </div>}
 
             {visibilityGroupsOrGroupInfo === "GroupInfo" && <div className="group-detailed-info">
-                <p className="group-name">{selectedGroup.title}</p>
+                <p className="group-name">{selectedGroup.name}</p>
                 <div className="info-part">
                     <div className="buttons-group-info">
                         <button className="group-info-button">Invite friend</button>
