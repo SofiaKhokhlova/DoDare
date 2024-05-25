@@ -7,4 +7,5 @@ public class UserGroupDTO {
     private int points;
     private Long userId;
     private Long groupId;
+    private String username;
 }

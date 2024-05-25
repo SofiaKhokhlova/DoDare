@@ -32,6 +32,12 @@ public class GroupController {
         return new ResponseEntity<>(groups, HttpStatus.OK);
     }
 
+    @GetMapping("/users/{groupId}")
+    public ResponseEntity<List<UserGroupDTO>> getAllUsersForGroup(@PathVariable Long groupId, @AuthenticationPrincipal UserDetails userDetails) {
+        List<UserGroupDTO> users = groupService.getAllUsersForGroup(groupId, userDetails.getUsername());
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
     @GetMapping("/usergroup/{groupId}")
     public ResponseEntity<UserGroupDTO> getUserGroup(@PathVariable Long groupId,
                                                      @AuthenticationPrincipal UserDetails userDetails) {

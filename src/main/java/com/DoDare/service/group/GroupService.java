@@ -136,4 +136,12 @@ public class GroupService {
         userTaskStatusRepository.deleteAll(userTasks);
     }
 
+    public List<UserGroupDTO> getAllUsersForGroup(Long groupId, String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        Optional<UserGroup> optionalUserGroup = userGroupRepository.findByUserIdAndGroupId(optionalUser.get().getId(), groupId);
+        Group group = groupRepository.findByUserGroupsContains(Collections.singletonList(optionalUserGroup.orElse(null)))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group not found"));
+
+        return userGroupMapper.userGroupsToUserGroupDTOs(group.getUserGroups());
+    }
 }
