@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface UserTaskStatusRepository extends JpaRepository<UserTaskStatus, Long> {
     Optional<UserTaskStatus> findByUserAndTask(User user, Task task);
     Optional<List<UserTaskStatus>> findAllByTask(Task task);
+    Optional<List<UserTaskStatus>> findAllByUserId(Long userId);
 }

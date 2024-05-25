@@ -32,6 +32,12 @@ public class GroupController {
         return new ResponseEntity<>(groups, HttpStatus.OK);
     }
 
+    @GetMapping("/users/{groupId}")
+    public ResponseEntity<List<UserGroupDTO>> getAllUsersForGroup(@PathVariable Long groupId, @AuthenticationPrincipal UserDetails userDetails) {
+        List<UserGroupDTO> users = groupService.getAllUsersForGroup(groupId, userDetails.getUsername());
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
     @GetMapping("/usergroup/{groupId}")
     public ResponseEntity<UserGroupDTO> getUserGroup(@PathVariable Long groupId,
                                                      @AuthenticationPrincipal UserDetails userDetails) {
@@ -68,5 +74,12 @@ public class GroupController {
                                                           @AuthenticationPrincipal UserDetails userDetails) {
         String inviteLink = groupService.generateGroupInviteLink(groupId, expirationDays, userDetails.getUsername());
         return ResponseEntity.ok(inviteLink);
+    }
+
+    @DeleteMapping("/{groupId}/{userId}")
+    public ResponseEntity<Void> deleteUserFromGroup(@PathVariable Long groupId, @PathVariable Long userId,
+                                                      @AuthenticationPrincipal UserDetails userDetails) {
+        groupService.deleteUser(groupId, userId, userDetails.getUsername());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
