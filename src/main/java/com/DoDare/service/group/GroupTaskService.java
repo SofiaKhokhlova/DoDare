@@ -51,7 +51,7 @@ public class GroupTaskService {
         for (UserGroup userGroup : allGroupUsers) {
             UserTaskStatusDTO userTaskStatusDTO = new UserTaskStatusDTO();
             userTaskStatusDTO.setTaskId(savedTask.getId());
-            userTaskStatusDTO.setUserId(userGroup.getId());
+            userTaskStatusDTO.setUserId(userGroup.getUser().getId());
             UserTaskStatus userTaskStatus = userTaskStatusMapper.userTaskStatusDTOToUserTaskStatus(userTaskStatusDTO);
 
             userTaskStatusRepository.save(userTaskStatus);
