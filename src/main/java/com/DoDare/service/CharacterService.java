@@ -12,6 +12,7 @@ import com.DoDare.repo.ItemRepository;
 import com.DoDare.repo.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -32,9 +33,16 @@ public class CharacterService {
     // these items MUST already exist before registration a new user
     // TODO: add these items to the every new user's inventory on registration
     // TODO: move this values to some config file
+
+    @Setter
     static Long defaultHeadId = 1L;
+
+    @Setter
     static Long defaultBodyId = 2L;
+
+    @Setter
     static Long defaultLegsId = 3L;
+
 
 
     // should be used only while registering a new user
