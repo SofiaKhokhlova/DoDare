@@ -188,6 +188,22 @@ p {
 .group-info-task {
     height: 28.426vh;
     margin-bottom: 4.722vh;
+    width: 28.906vw;
+    overflow-y: auto;
+}
+
+.group-info-task::-webkit-scrollbar {
+    width: calc((7/1920) * 100vw);
+}
+
+.group-info-task::-webkit-scrollbar-track {
+    background: #C6ABD7;
+    border-radius: 8px;
+}
+
+.group-info-task::-webkit-scrollbar-thumb {
+    background-color: #7251B5;
+    border-radius: 8px;
 }
 
 .task-container {
@@ -505,4 +521,85 @@ p {
 
 .status:checked + label::after {
     opacity: 1;
+}
+
+.no-group-tasks {
+    height: 100%;
+    width: 100%;
+    font-size: 3.241vh;
+    color: #5A189A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.change-group-info {
+    display: -ms-flexbox;
+    width: 100%;
+    margin-left: 8.073vw;
+}
+
+.change-group-name {
+    font-size: 4.63vh;
+    color: #5A189A;
+    margin-left: 10%;
+}
+
+.change-title {
+    font-size: 3.241vh;
+    color: #5A189A;
+    margin-top: 1.852vh;
+    margin-bottom: 0.926vh;
+}
+
+.change-group-title {
+    width: calc((475/1920) * 100vw);
+    height: 5.926vh;
+}
+
+.change-group-title input {
+    border-top: 0;
+    border-bottom: 0;
+    border-left: 2px solid #7251B5;
+    border-right: 2px solid #7251B5;
+    background-color: rgb(198, 171, 215);
+    width: calc((458/1920) * 100vw);
+    border-radius: 8px;
+    font-family: "Ruluko", sans-serif;
+    font-size: 2.315vh;
+    height: 5.926vh;
+    margin-bottom: 1.019vh;
+    padding-left: calc((17/1920) * 100vw);
+    color: #5A189A;
+}
+
+.change-group-buttons {
+    width: 100%;
+    margin-top: 3.148vh;
+}
+
+.save-change-group, .delete-group {
+    width: 8.177vw;
+    height: 6.667vh;
+    border-radius: 9.55% / 20.83%;
+    border: 1px solid black;
+    font-family: "Ruluko", sans-serif;
+    font-size: 2.593vh;
+    color: #FFFFFF;
+}
+
+.save-change-group {
+    margin-right: 1.37vw;
+    background-color: #5A189A;
+}
+
+.delete-group {
+    background-color: #9A1820;
+}
+
+.change-group-buttons a {
+    margin-left: 1.823vw;
+    text-decoration: none;
+    color: #5A189A;
+    font-size: 2.593vh;
 }
