@@ -65,3 +65,6 @@ src/main/resources/application.properties
 
 # imagees
 images-storage/*
+!images-storage/default_head.png
+!images-storage/default_body.png
+!images-storage/default_legs.png

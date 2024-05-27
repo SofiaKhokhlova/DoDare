@@ -95,6 +95,11 @@ public class ItemService {
         }).flatMap((Item item) -> Optional.of(itemMapper.itemToItemDto(item)));
     }
 
+    public ItemDTO createItemFromExistingFile(ItemDTO itemDTO) {
+        Item savedItem = itemRepository.save(itemMapper.itemDtoToItem(itemDTO));
+        return itemMapper.itemToItemDto(savedItem);
+    }
+
     public void deleteItem(Long itemId) {
         // TODO: also delete corresponding file
         // TODO: check if deletion was successful
