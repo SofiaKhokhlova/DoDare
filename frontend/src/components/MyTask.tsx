@@ -167,7 +167,6 @@ function MyTask () {
     };
 
     const handleTaskStatus = (taskId: number) => {
-        console.log(taskId);
         completeTask(taskId, localStorage.getItem("accessToken"))
             .then(response => {
                 updatePoints(response.data);

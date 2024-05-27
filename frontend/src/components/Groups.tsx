@@ -1,10 +1,11 @@
 import "../css/groups.css";
 import {ChangeEvent, MouseEventHandler, useEffect, useState} from "react";
 import {
-    createGroup, createNewGroupTask, deleteGroup, deleteTask,
+    completeGroupTask,
+    createGroup, createNewGroupTask, deleteGroup, deleteTask, generateInviteToken,
     getAllGroupParticipants,
     getAllUserGroups,
-    getAllUserGroupTasks, updateGroup,
+    getAllUserGroupTasks, joinGroupWithInviteToken, updateGroup,
     updateTask
 } from "../service/GroupsServise.ts";
 
@@ -20,6 +21,7 @@ function GroupsComponent () {
         points: number;
         userId: number;
         groupId: number;
+        username: string;
     };
 
     type Task = {
@@ -34,6 +36,7 @@ function GroupsComponent () {
     const [groups, setGroups] = useState<Group[]>([]);
 
     const [updateGroupsList, setUpdateGroupsList] = useState<boolean>(false);
+    const [inputInviteToken, setInputInviteToken] = useState("");
 
     const token = localStorage.getItem("accessToken");
     const userIdStr = localStorage.getItem("userId");
@@ -55,10 +58,12 @@ function GroupsComponent () {
         getAllUserGroups(token)
             .then(response => {
                 setGroups(response.data);
+                console.log("groups:");
+                console.log(response.data);
             })
             .catch(error => {
                 console.error(error);
-            })
+            });
     }, [updateGroupsList]);
     
     const [newGroup, setNewGroup] = useState<Group>({
@@ -69,10 +74,14 @@ function GroupsComponent () {
     });
 
     const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
+
     const [visibility, setVisibility] = useState("NewGroup");
     const [visibilityGroupsOrGroupInfo, setVisibilityGroupsOrGroupInfo] = useState("UserGroups");
-    const [visibilityInfoPart, setVisibilityInfoPart] = useState("NewTask");
+    const [visibilityJoinGroup, setVisibilityJoinGroup] = useState(false);
+    const [visibilityInviteFriend, setVisibilityInviteFriend] = useState(false);
+
     const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+    const [inviteToken, setInviteToken] = useState("");
     const [groupParticipants, setGroupParticipants] = useState<Participant[]>([]);
     const [userGroupTasks, setUserGroupTasks] = useState<Task[]>([]);
     const [changedTask, setChangedTask] = useState<Task | null>(null);
@@ -83,6 +92,8 @@ function GroupsComponent () {
         reward: 0,
         deadline: ""
     });
+
+    const [visibilityInfoPart, setVisibilityInfoPart] = useState( "NewTask");
 
     useEffect(() => {
         if (selectedTask) {
@@ -103,10 +114,13 @@ function GroupsComponent () {
             const group = groups.find((group) => group.id === groupId);
             if (group){
                 setSelectedGroup(group);
+                console.log(selectedGroup);
 
                 getAllGroupParticipants(groupId, token)
                     .then(response => {
-                        setGroupParticipants(response.data);
+                        const groupUsers = response.data;
+                        setGroupParticipants(groupUsers);
+                        console.log(response.data);
                     })
                     .catch(error => {
                         console.log(error);
@@ -124,13 +138,6 @@ function GroupsComponent () {
             }
         }
     };
-
-    useEffect(() => {
-        if(selectedGroup){
-            console.log("tasks has been changed");
-            console.log("participants has been changed");
-        }
-    }, [groupParticipants, userGroupTasks]);
 
     useEffect(() => {
         if(selectedGroup)
@@ -177,6 +184,21 @@ function GroupsComponent () {
             alert("Please, write title for a new group!");
         }
     };
+
+    const handleJoinGroupVisible = () => {
+      setVisibilityJoinGroup(true);
+    };
+
+    const handleInviteFriendVisible = () => {
+        generateInviteToken(selectedGroup.id, token)
+            .then(response => {
+                setInviteToken(response.data)
+                setVisibilityInviteFriend(true);
+            })
+            .catch(error => {
+                console.error(error);
+            })
+    }
 
     const handleCancelInfo: MouseEventHandler<HTMLAnchorElement> = (event) => {
         event.preventDefault();
@@ -327,6 +349,10 @@ function GroupsComponent () {
             });
     };
 
+    const handleInputInviteToken = (event: ChangeEvent<HTMLInputElement>) => {
+        setInputInviteToken(event.target.value);
+    };
+
     const handleChangeGroupInfo = () => {
         setVisibilityInfoPart("ChangeGroupInfo");
     };
@@ -335,6 +361,55 @@ function GroupsComponent () {
         event.preventDefault();
         setVisibilityInfoPart('NewTask');
     };
+
+    const handleSubmitJoinGroup = () => {
+        joinGroupWithInviteToken(inputInviteToken, token)
+            .then(() => {
+                setVisibilityJoinGroup(false);
+                setUpdateGroupsList(prev => !prev);
+            })
+            .catch(error => {
+                console.error(error);
+                alert("Entered invitation token is incorrect");
+                setVisibilityJoinGroup(false);
+            })
+    };
+
+    /*const handleTaskStatus = (taskId: number) => {
+        completeGroupTask(taskId, token)
+    };*/
+
+    const handleSubmitCopyInviteToken = () => {
+        navigator.clipboard.writeText(inviteToken)
+            .then(() => {
+                alert('Token copied to clipboard!');
+            })
+            .catch((error) => {
+                console.error('Failed to copy token: ', error);
+            });
+        setVisibilityInviteFriend(false);
+    };
+
+    useEffect(() => {
+        if(selectedGroup){
+            console.log("something changes");
+            console.log(userGroupTasks);
+        }
+    }, [groupParticipants, userGroupTasks]);
+
+    useEffect(() => {
+        if(selectedGroup){
+            console.log("selected group:");
+            console.log(selectedGroup);
+        }
+    }, [selectedGroup]);
+
+    useEffect(() => {
+        if(selectedGroup){
+            if(userId !== selectedGroup.adminUserId)
+                setVisibilityInfoPart("BasicUserCapabilities");
+        }
+    }, [selectedGroup]);
 
     return(
         <>
@@ -378,6 +453,8 @@ function GroupsComponent () {
                             <button className="create-group" onClick={handleCreateGroup}>Create group</button>
                         </form>
                     </div>
+
+                    <button className="join-group-button" onClick={handleJoinGroupVisible}>Join the group</button>
                 </div>}
 
                 {visibility === "Group" &&
@@ -387,12 +464,14 @@ function GroupsComponent () {
                         </p>
                         <div className="group-info-participants">
                             {groupParticipants.length > 0 ? (
-                                groupParticipants.map(participant => (
-                                    <div key={participant.userId} className="participant">
-                                        <p className="participant-name">User {participant.userId}</p>
-                                        <img src="/point.png" alt="points" className="point-img"/>
+                                groupParticipants.map((participant) => (
+                                    <div key={participant.userId} className="participant-info" style={{
+                                        marginBottom: participant.userId === groupParticipants[groupParticipants.length - 1].userId ? "0" : "1.574vh"
+                                    }}>
+                                        <p className="participant-name-info" >{participant.username}</p>
+                                        <img src="/point.png" alt="points" className="point-img-info"/>
                                         <p className="participant-points">{participant.points}</p>
-                                        <img src={participant.userId === selectedGroup.adminUserId ? "/group-admin.svg" : "/regular-participant.png"} alt="" className="user-icon"/>
+                                        <img src={participant.userId === selectedGroup.adminUserId ? "/group-admin.svg" : "/regular-participant.png"} alt="" className="user-icon-info"/>
                                     </div>
                                 ))
                             ) : (
@@ -414,6 +493,7 @@ function GroupsComponent () {
                                             id="group-task"
                                             className='status-task-info'
                                             type="checkbox"
+                                            /*disabled={true}*/
                                         />
                                         <label htmlFor="group-task">
                                         </label>
@@ -426,13 +506,24 @@ function GroupsComponent () {
                         <button className="detailed-info" onClick={handleDetailedGroupInfo}>Detailed information</button>
                         <a href="" className="cancel-info" onClick={handleCancelInfo}>Cancel</a>
                     </div>}
+
+                {visibilityJoinGroup && <div className="join-group-dialog">
+                    <div className="join-group-block">
+                        <p>Enter the invite token</p>
+                        <input type="text" value={inputInviteToken} name="invite-token" placeholder="token" onChange={handleInputInviteToken}/>
+                        <button className="submit-join-group" onClick={handleSubmitJoinGroup}>Join</button>
+                    </div>
+                </div>}
+
             </div>}
 
             {visibilityGroupsOrGroupInfo === "GroupInfo" && <div className="group-detailed-info">
                 <p className="group-name">{selectedGroup.name}</p>
                 <div className="info-part">
-                    <div className="buttons-group-info">
-                        <button className="group-info-button">Invite friend</button>
+                    <div className="buttons-group-info" style={{
+                        display: userId === selectedGroup.adminUserId ? "flex" : "none"
+                    }}>
+                        <button className="group-info-button" onClick={handleInviteFriendVisible}>Invite friend</button>
                         <button className="group-info-button" onClick={handleChangeGroupInfo}>Change info</button>
                         <button className="group-info-button">Statistics</button>
                     </div>
@@ -440,14 +531,20 @@ function GroupsComponent () {
                     <div className="group-participants-container">
                         <p className="info-title">Participants</p>
                         <div className="participants-overflow">
-                            {Array.from({ length: 5 }).map((_, index) => (
-                                <div key={index} className="participant">
-                                    <p className="participant-name">user_name</p>
-                                    <img src="/point.png" alt="" className="participant-points"/>
-                                    <p className="total-points">15</p>
-                                    <img src={index === 0 ? "/group-admin.svg" : "/regular-participant.png"} alt="" className="user-icon"/>
-                                </div>
-                            ))}
+                            {groupParticipants.length > 0 ? (
+                                groupParticipants.map(participant => (
+                                    <div key={participant.userId} className="participant" style={{
+                                        marginBottom: participant.userId === groupParticipants[groupParticipants.length - 1].userId ? "0" : "1.574vh"
+                                    }}>
+                                        <p className="participant-name">{participant.username}</p>
+                                        <img src="/point.png" alt="points" className="task-point-img"/>
+                                        <p className="total-points">{participant.points}</p>
+                                        <img src={participant.userId === selectedGroup.adminUserId ? "/group-admin.svg" : "/regular-participant.png"} alt="" className="user-icon"/>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>No participants found.</p>
+                            )}
                         </div>
                     </div>
 
@@ -485,7 +582,15 @@ function GroupsComponent () {
                 </div>
 
                 <div className="dynamic-part">
-                    {visibilityInfoPart === "NewTask" && <div className="new-group-task">
+
+                    {visibilityInfoPart === "BasicUserCapabilities" && <div className="basic-buttons">
+                        <button className="group-info-button-basic" onClick={handleInviteFriendVisible}>Invite friend</button>
+                        <button className="group-info-button-basic">Statistics</button>
+                    </div>}
+
+                    {visibilityInfoPart === "NewTask" && <div className="new-group-task" style={{
+                        display: userId === selectedGroup.adminUserId ? "flex" : "none"
+                    }}>
                         <p className="new-task-form-name">New task</p>
                         <form className="new-task-form" style={{
                             marginLeft: "7.9vw"
@@ -531,11 +636,12 @@ function GroupsComponent () {
 
                     { visibilityInfoPart === 'TaskInfo' && <div className="task-info" style={{
                         marginTop: "0",
-                        marginLeft: "8.073vw"
+                        marginLeft: "8.073vw",
+                        display: userId === selectedGroup.adminUserId ? "flex" : "none"
                     }}>
                         <p className="task-info-name">Information</p>
                         <div className="task-info-title">
-                            <p>{selectedTask.title}</p>
+                            <p>{selectedTask.title}  {selectedTask.id}</p>
                         </div>
                         <div className="task-info-description">
                             <p>{selectedTask.description}</p>
@@ -552,7 +658,8 @@ function GroupsComponent () {
 
                     { visibilityInfoPart === 'TaskChange' && <div className="task-change" style={{
                         marginTop: "0",
-                        marginLeft: "8.073vw"
+                        marginLeft: "8.073vw",
+                        display: userId === selectedGroup.adminUserId ? "flex" : "none"
                     }}>
                         <p className="task-change-form-name">Change Task</p>
                         <form className="task-change-form">
@@ -597,7 +704,9 @@ function GroupsComponent () {
                         </form>
                     </div> }
 
-                    {visibilityInfoPart === "ChangeGroupInfo" && <div className="change-group-info">
+                    {visibilityInfoPart === "ChangeGroupInfo" && <div className="change-group-info" style={{
+                        display: userId === selectedGroup.adminUserId ? "flex" : "none"
+                    }}>
                         <p className="change-group-name">Change group info</p>
                         <p className="change-title">Change title</p>
                         <div className="change-group-title">
@@ -616,6 +725,22 @@ function GroupsComponent () {
                         </div>
                     </div>}
                 </div>
+
+                {visibilityInviteFriend && <div className="invite-friend-dialog">
+                    <div className="invite-friend-block">
+                        <p style={{ width: "100%", textAlign: "center" }}>
+                            Your invitation token has been generated
+                            <br/>copy and share with a friends
+                        </p>
+                        <div className="token-and-button">
+                            <input type="text" value={inviteToken} className="invite-token"/>
+                            <button className="submit-copy-token" onClick={handleSubmitCopyInviteToken}>
+                                <img src="/copy-lcon.svg" alt="" className="copy-icon" />
+                            </button>
+                        </div>
+                    </div>
+                </div>}
+
             </div>}
         </>
     );

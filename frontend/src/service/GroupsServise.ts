@@ -13,7 +13,7 @@ export const getAllUserGroups = (token: any) => axios.get("http://localhost:8080
     },
 });
 
-export const getAllGroupParticipants = (groupId: number, token: any) => axios.get(`http://localhost:8080/api/groups/usergroup/${groupId}`, {
+export const getAllGroupParticipants = (groupId: number, token: any) => axios.get(`http://localhost:8080/api/groups/users/${groupId}`, {
     headers: {
         "Authorization": `Bearer ${token}`,
     },
@@ -65,6 +65,25 @@ export const updateGroup = (groupId: number, group: any, token: any) => axios.pu
 });
 
 export const deleteGroup = (groupId: number, token: any) => axios.delete(`http://localhost:8080/api/groups/${groupId}`, {
+    headers: {
+        "Authorization": `Bearer ${token}`,
+    },
+});
+
+export const completeGroupTask = (taskId: number, token: any) => axios.put(`http://localhost:8080/api/group-tasks/${taskId}/status`, taskId, {
+    headers: {
+        "Authorization": `Bearer ${token}`,
+    },
+});
+
+export const generateInviteToken = (groupId: number, token: any) => axios.post(`http://localhost:8080/api/groups/${groupId}/invite`, groupId, {
+    headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+    },
+});
+
+export const joinGroupWithInviteToken = (inviteToken: any, token: any) => axios.post(`http://localhost:8080/join-group?token=${inviteToken}`, inviteToken, {
     headers: {
         "Authorization": `Bearer ${token}`,
     },

@@ -2,6 +2,7 @@
     height: 100%;
     width: 100%;
     display: inline-flex;
+    position: relative;
 }
 
 .groups-part {
@@ -139,42 +140,33 @@ p {
 }
 
 .group-info-participants {
-    height: 5.729vw;
+    height: 6.39vw;
+    width: 28.906vw;
+    overflow-y: auto;
 }
 
-.admin {
-    display: grid;
-    grid-template-columns: 14.063vw 1.823vw 1.823vw 1fr;
-    border-top: 0;
-    border-bottom: 0;
-    border-left: 2px solid #7251B5;
-    border-right: 2px solid #7251B5;
-    background-color: #CAA1E4;
-    width: 27.604vw;
+.group-info-participants::-webkit-scrollbar {
+    width: calc((7/1920) * 100vw);
+}
+
+.group-info-participants::-webkit-scrollbar-track {
+    background: #C6ABD7;
     border-radius: 8px;
-    height: 5.926vh;
-    color: #5A189A;
-    align-items: center;
-    margin-bottom: 1.296vh;
 }
 
-.admin p, .task-info-point{
+.group-info-participants::-webkit-scrollbar-thumb {
+    background-color: #7251B5;
+    border-radius: 8px;
+}
+
+.task-info-point{
     font-size: 2.315vh;
-}
-
-.admin .admin-name {
-    margin-left: 0.781vw;
+    margin-left: 0.3vw;
 }
 
 .point-img {
     height: 2.961vh;
     width: 1.6vw;
-}
-
-.admin .admin-img {
-    margin-left: 5.938vw;
-    height: 3.838vh;
-    width: 1.823vw;
 }
 
 .group-info-tasks {
@@ -303,6 +295,7 @@ p {
     grid-template-areas:
                 "title title"
                 "info-part dynamic-part";
+    position: relative;
 }
 
 .group-name {
@@ -354,7 +347,7 @@ p {
 }
 
 .participants-overflow {
-    height: 13.148vh;
+    height: 13.5vh;
     overflow-y: auto;
 }
 
@@ -374,7 +367,7 @@ p {
 
 .participant {
     display: grid;
-    grid-template-columns: 12.083vw 1.823vw 1.823vw 1fr;
+    grid-template-columns: 15.573vw 1.823vw 1.823vw 1fr;
     border-top: 0;
     border-bottom: 0;
     border-left: 2px solid #7251B5;
@@ -388,26 +381,67 @@ p {
     margin-bottom: 1.296vh;
 }
 
+.participant-info {
+    display: grid;
+    grid-template-columns: 12.083vw 1.823vw 1.823vw 1fr;
+    border-top: 0;
+    border-bottom: 0;
+    border-left: 2px solid #7251B5;
+    border-right: 2px solid #7251B5;
+    background-color: #CAA1E4;
+    border-radius: 8px;
+    height: 5.926vh;
+    color: #5A189A;
+    align-items: center;
+    margin-bottom: 1.296vh;
+    width: 27.604vw;
+}
+
 .participant-name {
     font-size: 2.315vh;
     margin-left: 0.99vw;
+    width: 15.573vw;
+}
+
+.participant-name-info {
+    width: 13.23vw;
+    margin-left: 0.833vw;
+    font-size: 2.315vh;
 }
 
 .participant-points {
-    margin-left: 3.5vw;
+    margin-left: 2.3vw;
     width: calc((27/1920) * 100vw);
     height: 2.5vh;
+    font-size: 2.315vh;
+}
+
+.point-img-info {
+    margin-left: 2vw;
+    height: 2.961vh;
+    width: 1.6vw;
 }
 
 .total-points {
-    margin-left: 3.456vw;
+    margin-left: -0.06vw;
     height: 2.961vh;
     width: 1.6vw;
     font-size: 2.315vh;
 }
 
+.task-point-img {
+    height: 2.5vh;
+    width: 1.406vw;
+}
+
 .user-icon {
-    margin-left: 15.177vw;
+    margin-left: 10.17vw;
+    height: 3.838vh;
+    width: 1.823vw;
+}
+
+.user-icon-info {
+    margin-left: 7.8vw;
     height: 3.838vh;
     width: 1.823vw;
 }
@@ -499,6 +533,7 @@ p {
     border-radius: 3px;
     cursor: pointer;
     margin-left: calc((215/1920) * 100vw);
+    z-index: 1;
 }
 
 .status:checked + label {
@@ -521,6 +556,7 @@ p {
 
 .status:checked + label::after {
     opacity: 1;
+    z-index: 1;
 }
 
 .no-group-tasks {
@@ -602,4 +638,150 @@ p {
     text-decoration: none;
     color: #5A189A;
     font-size: 2.593vh;
+}
+
+.join-group-button {
+    position: absolute;
+    width: calc((480/1920) * 100vw);
+    background-color: #5A189A;
+    color: #FFFFFF;
+    border-radius: 15px;
+    border: 0;
+    font-family: "Ruluko", sans-serif;
+    height: 6.667vh;
+    font-size: 2.593vh;
+    bottom: 13.611vh;
+}
+
+.join-group-dialog {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.join-group-block {
+    background-color: #7251B5;
+    padding: 20px;
+    border-radius: 8px;
+    width: 25.625vw;
+    z-index: 10;
+}
+
+.join-group-block p {
+    color: white;
+    font-size: 2.315vh;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 3vh;
+}
+
+.join-group-block input {
+    width: 19.115vw;
+    height: 3.981vh;
+    background-color: #C6ABD7;
+    border: 0;
+    border-radius: 8px;
+    color: white;
+}
+
+.join-group-block input::placeholder {
+    color: #FFFFFF;
+}
+
+.submit-join-group {
+    height: 4.3vh;
+    width: calc(2.108vw * 2.7);
+    background-color: #5A189A;
+    color: #FFFFFF;
+    border-radius: 8px;
+    border: 0;
+    font-family: "Ruluko", sans-serif;
+    font-size: 1.6vh;
+    margin-left: 0.5vw;
+}
+
+.invite-friend-dialog {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 4;
+}
+
+.invite-friend-block {
+    background-color: #7251B5;
+    padding: 25px;
+    border-radius: 8px;
+    z-index: 5;
+    display: flexbox;
+}
+
+.invite-friend-block p {
+    color: white;
+    font-size: 2.315vh;
+    margin-bottom: 3vh;
+}
+
+.token-and-button {
+    display: flex;
+}
+
+.invite-token {
+    width: 19.115vw;
+    height: 3.981vh;
+    background-color: #C6ABD7;
+    border: 0;
+    border-radius: 8px;
+    color: white;
+    padding-left: 1vw;
+    display: flex;
+    align-items: center;
+}
+
+.submit-copy-token {
+    width: 3.542vw;
+    background-color: #5A189A;
+    border-radius: 8px;
+    border: 0;
+    margin-left: 0.5vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.copy-icon {
+    width: 1.563vw;
+    height: 3.241vh;
+}
+
+.group-info-button-basic {
+    height: 5.926vh;
+    width: 24.688vw;
+    font-family: "Ruluko", sans-serif;
+    font-size: 2.593vh;
+    color: #FFFFFF;
+    background-color: #5A189A;
+    border: 0;
+    border-radius: 3.16% / 23.44%;
+    margin-bottom: 1.204vh;
+}
+
+.basic-buttons {
+    margin-top: 8.7vh;
+    margin-left: 9.167vw;
 }
