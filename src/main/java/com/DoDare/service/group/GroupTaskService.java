@@ -92,6 +92,12 @@ public class GroupTaskService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group not found"));
 
         List<Task> tasks = taskRepository.findByGroup(group);
+        for (Task task : tasks) {
+            UserTaskStatus userTaskStatus = userTaskStatusRepository.findByUserAndTask(user, task)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User task not found"));
+            task.setStatus(userTaskStatus.getStatus());
+        }
+
         return tasks.stream()
                 .map(taskMapper::taskToTaskDTO)
                 .collect(Collectors.toList());
