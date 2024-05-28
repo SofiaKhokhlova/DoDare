@@ -27,6 +27,8 @@
     border-radius: 10% / 6.6%;
     margin-top: 7.685vh;
     margin-left: 10vw;
+    display: flex;
+    justify-content: center;
 }
 
 .items-container {
@@ -85,4 +87,26 @@
 .item-img {
     height: 8.889vh;
     width: 4.792vw;
+}
+
+.head-img{
+    height: 18.311vh;
+    width: 9vw;
+}
+
+.body-img{
+    height: 11.294vh;
+    width: 9vw;
+}
+
+.legs-img{
+    height: 8.443vh;
+    width: 9vw;
+}
+
+.character-items {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 13%;
 }
