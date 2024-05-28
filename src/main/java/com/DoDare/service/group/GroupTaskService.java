@@ -110,7 +110,7 @@ public class GroupTaskService {
         UserTaskStatus userTaskStatus = userTaskStatusRepository.findByUserAndTask(user, task)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User task not found"));
 
-        if(userTaskStatus.getStatus() == 1) return userTaskStatusMapper.userTaskStatusToUserTaskStatusDTO(userTaskStatus);
+        if(userTaskStatus.getStatus() == 1) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task already done");
 
         userTaskStatus.setStatus(1);
         UserTaskStatus savedUserTaskStatus = userTaskStatusRepository.save(userTaskStatus);
