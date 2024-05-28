@@ -684,15 +684,6 @@ p {
     margin-bottom: 3vh;
 }
 
-.join-group-block input {
-    width: 19.115vw;
-    height: 3.981vh;
-    background-color: #C6ABD7;
-    border: 0;
-    border-radius: 8px;
-    color: white;
-}
-
 .join-group-block input::placeholder {
     color: #FFFFFF;
 }
@@ -786,4 +777,20 @@ p {
     margin-top: 8.7vh;
     margin-left: 9.167vw;
     border: 0;
+}
+
+.input-invite-token-wrap{
+    width: 100%;
+    height: 3.981vh;
+    display: flex;
+}
+
+.input-invite-token-wrap input {
+    padding-left: 0.885vw;
+    height: 100%;
+    width: 19.115vw;
+    background-color: #C6ABD7;
+    border: 0;
+    border-radius: 8px;
+    color: white;
 }

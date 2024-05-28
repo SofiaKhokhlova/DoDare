@@ -121,7 +121,7 @@ public class GroupService {
         GroupInviteToken savedToken = groupInviteTokenRepository.save(inviteToken);
 
         // Build the invite link using the saved token
-        return ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/join-group?token=" + savedToken.getToken();
+        return savedToken.getToken().toString();
     }
 
     public void deleteUser(Long groupId, Long userId, String email) {

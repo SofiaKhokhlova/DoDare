@@ -542,8 +542,11 @@ function GroupsComponent () {
                 {visibilityJoinGroup && <div className="join-group-dialog">
                     <div className="join-group-block">
                         <p>Enter the invite token</p>
-                        <input type="text" value={inputInviteToken} name="invite-token" placeholder="token" onChange={handleInputInviteToken}/>
-                        <button className="submit-join-group" onClick={handleSubmitJoinGroup}>Join</button>
+                        <div className="input-invite-token-wrap">
+                            <input type="text" value={inputInviteToken} name="invite-token" placeholder="token" onChange={handleInputInviteToken}/>
+                            <button className="submit-join-group" onClick={handleSubmitJoinGroup}>Join</button>
+                        </div>
+
                     </div>
                 </div>}
 

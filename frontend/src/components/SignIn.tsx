@@ -37,20 +37,16 @@ function SignIn() {
         if (!email.trim()) {
             errorsCopy.email = "Email is mandatory";
             isValid = false;
-        } else if (!email.includes("@")) {
-            errorsCopy.email = "Email must contain the @ symbol";
-            isValid = false;
-        } else {
+        }
+        else {
             errorsCopy.email = "";
         }
 
         if (!password.trim()) {
             errorsCopy.password = "Password is mandatory";
             isValid = false;
-        } else if (password.trim().length < 8 || password.trim().length > 30 || !/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
-            errorsCopy.password = "Password must be between 8 and 30 characters long and contain letters and numbers";
-            isValid = false;
-        } else {
+        }
+        else {
             errorsCopy.password = "";
         }
 
@@ -69,6 +65,7 @@ function SignIn() {
                 })
                 .catch(error => {
                     console.error(error);
+                    alert("Email or login does not match, please check your details again.");
                 });
         }
     }
