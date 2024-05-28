@@ -81,6 +81,8 @@ public class TaskService {
         Optional<Task> optionalTask = taskRepository.findByIdAndUser(taskId, user);
         if (optionalTask.isPresent()) {
             Task task = optionalTask.get();
+            if(task.getStatus() == 1) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task already done");
+
             task.setStatus(1);
             taskRepository.save(task);
             return (long) task.getReward();
