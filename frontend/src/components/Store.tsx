@@ -1,8 +1,29 @@
 import "../css/store.css";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {getAllItemsInInventory} from "../service/InventoryService.ts";
 
 function StoreComponent () {
+
+    const token = localStorage.getItem("accessToken");
+    const userIdStr = localStorage.getItem("userId");
+    const userIdForInventory = parseInt(userIdStr ?? "0");
+
+    type StoreItem = {
+        id: number;
+        name: string;
+        description: string;
+        fileName: string;
+        type: string;
+        price: number;
+        imageUrl: string;
+    };
+
+    const [headStoreItems, setHeadStoreItems] = useState<StoreItem[]>([]);
+    const [bodyStoreItems, setBodyStoreItems] = useState<StoreItem[]>([]);
+    const [legsStoreItems, setLegsStoreItems] = useState<StoreItem[]>([]);
+
+
     const [isVisible, setIsVisible] = useState("Store");
     const nav = useNavigate();
 
@@ -17,6 +38,8 @@ function StoreComponent () {
     const handleCancelPreview = () => {
         nav("/user/store");
     }
+
+
 
     return(
         <>

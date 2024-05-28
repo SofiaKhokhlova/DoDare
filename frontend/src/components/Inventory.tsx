@@ -38,7 +38,6 @@ function InventoryComponent () {
                 const headItemsResponse = items.filter(item => item.type === "HEAD");
                 const bodyItemsResponse = items.filter(item => item.type === "BODY");
                 const legsItemsResponse = items.filter(item => item.type === "LEGS");
-                console.log(headItemsResponse[0].fileName);
 
                 setHeadItems(headItemsResponse);
                 setBodyItems(bodyItemsResponse);
