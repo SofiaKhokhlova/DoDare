@@ -332,6 +332,7 @@ p {
     color: #FFFFFF;
     background-color: #5A189A;
     border-radius: 6.15% / 17.77%;
+    border: 0;
 }
 
 .info-title {
@@ -784,4 +785,5 @@ p {
 .basic-buttons {
     margin-top: 8.7vh;
     margin-left: 9.167vw;
+    border: 0;
 }

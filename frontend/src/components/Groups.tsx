@@ -244,7 +244,6 @@ function GroupsComponent () {
         if (newTask.title && newTask.description && newTask.deadline && newTask.reward > 0) {
             createNewGroupTask(selectedGroup.id, newTask, token)
                 .then(response => {
-                    console.log(response.data);
                     const updatedTasks = sortTasks([...userGroupTasks, response.data]);
                     setUserGroupTasks(updatedTasks);
                     setNewTask({
@@ -375,9 +374,39 @@ function GroupsComponent () {
             })
     };
 
-    /*const handleTaskStatus = (taskId: number) => {
-        completeGroupTask(taskId, token)
-    };*/
+    const handleTaskStatus = (groupTaskId: any) => {
+        completeGroupTask(groupTaskId, token)
+            .then(response => {
+                const { id, userId, taskId, status } = response.data;
+
+                setUserGroupTasks(prevTasks => {
+                    let pointReward = 0;
+                    const updatedTasks = prevTasks.map(task => {
+                        if (task.id === taskId) {
+                            pointReward = task.reward;
+                            return { ...task, status: status };
+                        }
+                        return task;
+                    });
+
+                    setGroupParticipants(prevParticipants => {
+                        const updatedParticipants = prevParticipants.map(participant => {
+                            if (participant.userId === userId) {
+                                return { ...participant, points: participant.points + pointReward };
+                            }
+                            return participant;
+                        });
+
+                        return [...updatedParticipants];
+                    });
+
+                    return sortTasks(updatedTasks);
+                });
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    };
 
     const handleSubmitCopyInviteToken = () => {
         navigator.clipboard.writeText(inviteToken)
@@ -393,7 +422,7 @@ function GroupsComponent () {
     useEffect(() => {
         if(selectedGroup){
             console.log("something changes");
-            console.log(userGroupTasks);
+            console.log(groupParticipants);
         }
     }, [groupParticipants, userGroupTasks]);
 
@@ -482,7 +511,9 @@ function GroupsComponent () {
                         <div className="group-info-task">
                             {userGroupTasks.length > 0 ? (
                                 userGroupTasks.map(task => (
-                                    <div key={task.id} className="task-container">
+                                    <div key={task.id} className="task-container" style={{
+                                        marginBottom: task.id === userGroupTasks[userGroupTasks.length - 1].id ? "0" : "1.574vh"
+                                    }}>
                                         <div className="task-info-title-deadline">
                                             <p className="title-info">{task.title}</p>
                                             <p className="deadline-info">available till: {task.deadline}</p>
@@ -493,7 +524,8 @@ function GroupsComponent () {
                                             id="group-task"
                                             className='status-task-info'
                                             type="checkbox"
-                                            /*disabled={true}*/
+                                            checked={task.status === 1}
+                                            disabled={true}
                                         />
                                         <label htmlFor="group-task">
                                         </label>
@@ -554,7 +586,8 @@ function GroupsComponent () {
                             {userGroupTasks.length > 0 ? (
                                 userGroupTasks.map(task => (
                                     <div key={task.id} className="group-task" style={{
-                                        marginBottom: task.id === userGroupTasks[userGroupTasks.length - 1].id ? "0" : "1.574vh"
+                                        marginBottom: task.id === userGroupTasks[userGroupTasks.length - 1].id ? "0" : "1.574vh",
+                                        backgroundColor: selectedTask && selectedTask.id === task.id ? '#C588EA' : '#CAA1E4'
                                     }} onClick={() => handleTaskClick(task.id)}>
                                         <div className="title-deadline">
                                             <p className="task-title">{task.title}</p>
@@ -568,8 +601,9 @@ function GroupsComponent () {
                                                 className='status'
                                                 type="checkbox"
                                                 checked={task.status === 1}
+                                                onChange={() => handleTaskStatus(task.id)}
                                             />
-                                            <label htmlFor={`taskCheckbox_${task.id}`}>
+                                            <label htmlFor={`taskCheckbox_${task.id}`} style={{backgroundColor: selectedTask && selectedTask.id === task.id ? '#C588EA' : '#CAA1E4'}}>
                                             </label>
                                         </div>
                                     </div>
@@ -589,7 +623,7 @@ function GroupsComponent () {
                     </div>}
 
                     {visibilityInfoPart === "NewTask" && <div className="new-group-task" style={{
-                        display: userId === selectedGroup.adminUserId ? "flex" : "none"
+                        display: userId === selectedGroup.adminUserId ? "flexbox" : "none"
                     }}>
                         <p className="new-task-form-name">New task</p>
                         <form className="new-task-form" style={{
@@ -637,11 +671,11 @@ function GroupsComponent () {
                     { visibilityInfoPart === 'TaskInfo' && <div className="task-info" style={{
                         marginTop: "0",
                         marginLeft: "8.073vw",
-                        display: userId === selectedGroup.adminUserId ? "flex" : "none"
+                        display: userId === selectedGroup.adminUserId ? "flexbox" : "none"
                     }}>
                         <p className="task-info-name">Information</p>
                         <div className="task-info-title">
-                            <p>{selectedTask.title}  {selectedTask.id}</p>
+                            <p>{selectedTask.title}</p>
                         </div>
                         <div className="task-info-description">
                             <p>{selectedTask.description}</p>
@@ -659,7 +693,7 @@ function GroupsComponent () {
                     { visibilityInfoPart === 'TaskChange' && <div className="task-change" style={{
                         marginTop: "0",
                         marginLeft: "8.073vw",
-                        display: userId === selectedGroup.adminUserId ? "flex" : "none"
+                        display: userId === selectedGroup.adminUserId ? "flexbox" : "none"
                     }}>
                         <p className="task-change-form-name">Change Task</p>
                         <form className="task-change-form">
@@ -705,7 +739,7 @@ function GroupsComponent () {
                     </div> }
 
                     {visibilityInfoPart === "ChangeGroupInfo" && <div className="change-group-info" style={{
-                        display: userId === selectedGroup.adminUserId ? "flex" : "none"
+                        display: userId === selectedGroup.adminUserId ? "-ms-flexbox" : "none"
                     }}>
                         <p className="change-group-name">Change group info</p>
                         <p className="change-title">Change title</p>

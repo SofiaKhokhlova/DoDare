@@ -87,7 +87,6 @@ function MyTask () {
         }));
     };
 
-
     const handleAddTask: MouseEventHandler<HTMLButtonElement> = (event) => {
         event.preventDefault();
         if (newTask.title && newTask.description && newTask.deadline && newTask.reward > 0) {
@@ -201,7 +200,8 @@ function MyTask () {
                             </p>)
                             :(tasks.map((task) => (
                             <div key={task.id} className="task" onClick={() => {handleTaskClick(task.id)}}
-                                 style={{backgroundColor: selectedTask && selectedTask.id === task.id ? '#C588EA' : '#CAA1E4'}}>
+                                 style={{backgroundColor: selectedTask && selectedTask.id === task.id ? '#C588EA' : '#CAA1E4',
+                                        marginBottom: task.id === tasks[tasks.length - 1].id ? "0" : "1.574vh"}}>
                                 <div className="title-deadline">
                                     <p className="task-title">{task.title}</p>
                                     <p className="task-deadline">available till: {task.deadline}</p>
