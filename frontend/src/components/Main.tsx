@@ -10,7 +10,7 @@ import {userDetails} from "../service/UserService.ts";
 import { useAppContext } from '../context/PointsContext.tsx';
 
 function Main() {
-    const { points, updatePoints } = useAppContext();
+    const { points, updatePoints, buyItem } = useAppContext();
     const nav = useNavigate();
     const userName = localStorage.getItem('userName');
     const location = useLocation();

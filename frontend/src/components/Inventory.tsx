@@ -1,6 +1,6 @@
 import "../css/inventory.css";
 import {useEffect, useState} from "react";
-import {getAllItemsInInventory, getItemsForCharacter} from "../service/InventoryService.ts";
+import {equipItemOnCharacter, getAllItemsInInventory, getItemsForCharacter} from "../service/InventoryService.ts";
 
 function InventoryComponent () {
     const token = localStorage.getItem("accessToken");
@@ -48,40 +48,69 @@ function InventoryComponent () {
             });
     }, []);
 
-    useEffect(() => {
-        getItemsForCharacter(userIdForInventory)
+    const handleEquipItem = (itemId: number, type: string) => {
+        equipItemOnCharacter(itemId, token)
             .then(response => {
-                const {id, userId, headId, bodyId, legsId} = response.data;
+                if (response.statusText === "Success") {
+                    let itemToEquip: Item | undefined;
 
-                const headCharacter = headItems.find((head) => head.id == headId);
-                const bodyCharacter = bodyItems.find((body) => body.id == bodyId);
-                const legsCharacter = legsItems.find((legs) => legs.id == legsId);
+                    if (type === "HEAD") {
+                        itemToEquip = headItems.find(item => item.id === itemId);
+                    } else if (type === "BODY") {
+                        itemToEquip = bodyItems.find(item => item.id === itemId);
+                    } else if (type === "LEGS") {
+                        itemToEquip = legsItems.find(item => item.id === itemId);
+                    }
 
-                if (headCharacter && bodyCharacter && legsCharacter) {
-                    setCharacter({head: headCharacter, body: bodyCharacter, legs: legsCharacter});
+                    if (itemToEquip) {
+                        setCharacter(prevCharacter => ({
+                            ...prevCharacter,
+                            [type.toLowerCase()]: itemToEquip,
+                        }));
+                    }
                 }
             })
             .catch(error => {
                 console.error(error);
-            })
-    }, []);
+            });
+    };
+
+    async function fetchCharacter() {
+        try {
+            const response = await getItemsForCharacter(userIdForInventory);
+            const {id, userId, headId, bodyId, legsId} = response.data;
+
+            const headCharacter = headItems.find((head) => head.id == headId);
+            const bodyCharacter = bodyItems.find((body) => body.id == bodyId);
+            const legsCharacter = legsItems.find((legs) => legs.id == legsId);
+
+            if (headCharacter && bodyCharacter && legsCharacter) {
+                setCharacter({head: headCharacter, body: bodyCharacter, legs: legsCharacter});
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    fetchCharacter();
 
     return(
         <>
             <div className="inventory-component">
                 <p className="inventory-title">Your inventory</p>
                 <div className="character-block">
-                    <div className="character-items">
+                    {character ? (<div className="character-items">
                         <img src={character.head.imageUrl} alt="" className="head-img"/>
                         <img src={character.body.imageUrl} alt="" className="body-img"/>
                         <img src={character.legs.imageUrl} alt="" className="legs-img"/>
-                    </div>
+                    </div>) :
+                        (<p>character doesn't exist</p>)}
                 </div>
                 <div className="items-container">
                     <p className="item-title">Head</p>
                     <div className="item-content">
                         {headItems.map((item) => (
-                            <div key={item.id} className="item">
+                            <div key={item.id} className="item" onClick={() => handleEquipItem(item.id, "HEAD")}>
                                 <img src={`${item.imageUrl}`} alt="head" className="item-img"/>
                             </div>
                         ))}
@@ -89,7 +118,7 @@ function InventoryComponent () {
                     <p className="item-title">Body</p>
                     <div className="item-content">
                         {bodyItems.map((item) => (
-                            <div key={item.id} className="item">
+                            <div key={item.id} className="item" onClick={() => handleEquipItem(item.id, "BODY")}>
                                 <img src={`${item.imageUrl}`} alt="" className="item-img"/>
                             </div>
                         ))}
@@ -97,7 +126,7 @@ function InventoryComponent () {
                     <p className="item-title">Legs</p>
                     <div className="item-content">
                         {legsItems.map((item) => (
-                            <div key={item.id} className="item">
+                            <div key={item.id} className="item" onClick={() => handleEquipItem(item.id, "LEGS")}>
                                 <img src={`${item.imageUrl}`} alt="" className="item-img"/>
                             </div>
                         ))}
