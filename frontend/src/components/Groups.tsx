@@ -375,6 +375,18 @@ function GroupsComponent () {
     };
 
     const handleTaskStatus = (groupTaskId: any) => {
+        const compareDateTask = userGroupTasks.find((task) => task.id === groupTaskId);
+        if(compareDateTask) {
+            if(compareDateTask.status === 1){
+                alert("You have already completed this task.");
+                return;
+            }
+            if(new Date()>new Date(compareDateTask.deadline.replace(" ", "T"))){
+                alert("You missed the deadline, so you can't mark this task as completed.");
+                return;
+            }
+        }
+
         completeGroupTask(groupTaskId, token)
             .then(response => {
                 const { id, userId, taskId, status } = response.data;
