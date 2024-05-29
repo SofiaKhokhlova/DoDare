@@ -110,22 +110,23 @@ function StoreComponent () {
         nav("/user/store");
     };
 
-    async function fetchItemsForStore() {
-        try {
-            const response = await getAllStoreItems();
-            const items: StoreItem[] = response.data;
+    useEffect(() => {
+        getAllStoreItems()
+            .then(response => {
+                const items: StoreItem[] = response.data;
 
-            const headItemsResponse = items.filter(item => item.type === "HEAD");
-            const bodyItemsResponse = items.filter(item => item.type === "BODY");
-            const legsItemsResponse = items.filter(item => item.type === "LEGS");
+                const headItemsResponse = items.filter(item => item.type === "HEAD");
+                const bodyItemsResponse = items.filter(item => item.type === "BODY");
+                const legsItemsResponse = items.filter(item => item.type === "LEGS");
 
-            setHeadStoreItems(headItemsResponse);
-            setBodyStoreItems(bodyItemsResponse);
-            setLegsStoreItems(legsItemsResponse);
-        } catch (error) {
-            console.log(error);
-        }
-    }
+                setHeadStoreItems(headItemsResponse);
+                setBodyStoreItems(bodyItemsResponse);
+                setLegsStoreItems(legsItemsResponse);
+            })
+            .catch(error => {
+                console.error(error);
+            })
+    }, [])
 
     useEffect(() => {
         if(selectedItem)
@@ -182,8 +183,6 @@ function StoreComponent () {
             console.log("preview character: ")
             console.log(previewCharacter);
     },[previewCharacter]);
-
-    fetchItemsForStore();
 
     return(
         <>

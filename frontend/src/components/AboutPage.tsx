@@ -18,14 +18,6 @@ function AboutPage() {
         nav('/');
     }
 
-	const [message, setMessage] = useState('');
-	useEffect(() => {
-        fetch('http://localhost:8080/hello')
-            .then(response => response.text())
-            .then(message => setMessage(message))
-            .catch(err => console.error('Error fetching data:', err));
-    }, []);
-
     return (
         <div id="main-page">
             <div className="header-main">
@@ -50,7 +42,6 @@ function AboutPage() {
                         on track to achieve their goals. To use the app,
                         you need a desire to improve your life by setting
                         and achieving new goals every day.</p>
-						<p>{message}</p>
                 </div>
                 <div className="characters">
                     <img src="/character1.png" className="character1" alt="char1"/>

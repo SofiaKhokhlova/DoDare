@@ -1,10 +1,9 @@
 import '../css/main.css';
-import {useState, useEffect} from 'react';
+import {useEffect} from 'react';
 import {Link, Navigate, Route, Routes, useLocation, useNavigate} from "react-router-dom";
 import MyTask from "./MyTask.tsx";
 import GroupsComponent from "./Groups.tsx";
 import StoreComponent from "./Store.tsx";
-import StatsComponent from "./Stats.tsx";
 import InventoryComponent from "./Inventory.tsx";
 import {userDetails} from "../service/UserService.ts";
 import { useAppContext } from '../context/PointsContext.tsx';
@@ -84,14 +83,6 @@ function Main() {
                             <img src="/store-icon.png" alt="store" />
                             <Link to={"store"}>Store</Link>
                         </div>
-                        <div className="stats"
-                             style={{
-                                 border: selectedSection === 'stats' ? `2px solid #FFFF` : "transparent",
-                                 borderRadius: selectedSection === 'stats' ? `30px` : "transparent",
-                                 height: selectedSection === 'stats' ? '4.722vh': '5.093vh'}}>
-                            <img src="/stats-icon.png" alt="stats" />
-                            <Link to={"stats"}>Statistics</Link>
-                        </div>
                         <div className="inventory"
                              style={{
                                  border: selectedSection === 'inventory' ? `2px solid #FFFF` : "transparent",
@@ -111,7 +102,6 @@ function Main() {
                         <Route path="my-tasks" element={<MyTask />} />
                         <Route path="groups" element={<GroupsComponent />} />
                         <Route path="store" element={<StoreComponent />} />
-                        <Route path="stats" element={<StatsComponent />} />
                         <Route path="inventory" element={<InventoryComponent />} />
                         <Route path="/" element={<Navigate to="my-task" replace />} />
                     </Routes>

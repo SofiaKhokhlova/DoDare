@@ -56,12 +56,19 @@ function SignIn() {
             const user = {email, password};
             login(user)
                 .then(response => {
-                    const { id, name, email, token } = response.data;
+                    const { id, name, email, token, role } = response.data;
                     localStorage.setItem('userId', id);
                     localStorage.setItem('userName', name);
                     localStorage.setItem('userEmail', email);
                     localStorage.setItem('accessToken', token);
-                    nav('/user');
+                    localStorage.setItem("userRole", role);
+
+                    if(role === "BASIC_USER"){
+                        nav('/user');
+                    }
+                    else if (role === "MANAGER") {
+                        nav("/update-store");
+                    }
                 })
                 .catch(error => {
                     console.error(error);

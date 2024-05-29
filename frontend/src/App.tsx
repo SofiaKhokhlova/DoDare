@@ -5,6 +5,7 @@ import SignIn from './components/SignIn.tsx';
 import SignUp from './components/SignUp.tsx';
 import Main from './components/Main.tsx';
 import { PointsContext } from './context/PointsContext.tsx';
+import StoreManagement from "./components/StoreManagement.tsx";
 
 class App extends React.Component {
     constructor(props: any) {
@@ -38,6 +39,7 @@ class App extends React.Component {
                         <Route path='/' element = {<AboutPage />}></Route>
                         <Route path='/sign-in' element = {<SignIn />}></Route>
                         <Route  path='/sign-up' element = {<SignUp />}></Route>
+                        <Route path='//update-store' element={<StoreManagement />}></Route>
                         {token ? (
                             <Route path="/user/*" element={<Main />} />
                         ) : (

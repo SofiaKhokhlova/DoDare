@@ -572,7 +572,6 @@ function GroupsComponent () {
                     }}>
                         <button className="group-info-button" onClick={handleInviteFriendVisible}>Invite friend</button>
                         <button className="group-info-button" onClick={handleChangeGroupInfo}>Change info</button>
-                        <button className="group-info-button">Statistics</button>
                     </div>
 
                     <div className="group-participants-container">
@@ -634,7 +633,6 @@ function GroupsComponent () {
 
                     {visibilityInfoPart === "BasicUserCapabilities" && <div className="basic-buttons">
                         <button className="group-info-button-basic" onClick={handleInviteFriendVisible}>Invite friend</button>
-                        <button className="group-info-button-basic">Statistics</button>
                     </div>}
 
                     {visibilityInfoPart === "NewTask" && <div className="new-group-task" style={{

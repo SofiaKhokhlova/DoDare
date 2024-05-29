@@ -1,0 +1,92 @@
+.store-manage {
+    background-color: #5A189A;
+    font-family: "Ruluko", sans-serif;
+    display: flexbox;
+    justify-content: center;
+    margin: 0;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    z-index: 0;
+}
+
+.store-manage::after{
+    content: ' ';
+    background-image: url('/background.png');
+    opacity: 0.15;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.header-store-manager{
+    top: 2.963vh;
+    position: relative;
+    background-color: #7251B5;
+    display: flex;
+    justify-content: space-around;
+    height: 12.87vh;
+    width: 92.604vw;
+    margin-left: 3.698vw;
+    margin-right: 3.698vw;
+    align-items: center;
+    border-radius: 81px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
+    font-size: 2.778vh;
+}
+
+.header-logo-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 31.823vw;
+    padding-right: 3.125vw;
+}
+
+.header-logo-title img {
+    height: 12.87vh;
+    width: 6.25vw;
+    margin-right: calc((30/1920) * 100vw);
+}
+
+.header-logo-title p {
+    font-family: "Stylish", serif;
+    font-weight: 200;
+    font-size: 4.63vh;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.store-manager-items{
+    background-color: #CAA1E4;
+    height: 69vh;
+    width: 78.125vw;
+    display: flex;
+    margin-left: 11%;
+    margin-top: 3%;
+    border-radius: 40px;
+}
+
+.store-items-content {
+    height: 59.722vh;
+    width: 71.7vw;
+    margin-left: 4.5%;
+    margin-top: 1%;
+}
+
+.header-store-manager button {
+    width: 15vw;
+    height: 6.667vh;
+    background-color: #5A189A;
+    color: #FFFFFF;
+    font-family: "Ruluko", sans-serif;
+    font-size: 2.593vh;
+    border-radius: 40px;
+    border: 0;
+}
