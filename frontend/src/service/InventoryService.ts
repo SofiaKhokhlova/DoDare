@@ -7,3 +7,9 @@ export const getAllItemsInInventory = (token: any) => axios.get("http://localhos
 });
 
 export const getItemsForCharacter = (userId: number) => axios.get(`http://localhost:8080/api/character/getCharacter?userId=${userId}`);
+
+export const equipItemOnCharacter = (itemId: number, token: any) => axios.post(`http://localhost:8080/api/character/equipItem?itemId=${itemId}`, itemId, {
+    headers: {
+        'Authorization': `Bearer ${token}`
+    }
+});

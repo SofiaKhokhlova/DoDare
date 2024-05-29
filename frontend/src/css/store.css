@@ -15,7 +15,7 @@
 
 .store-items {
     height: 59.722vh;
-    width: 71.667vw;
+    width: 71.7vw;
     margin-left: 6vw;
     margin-top: 2vh;
 }
@@ -61,13 +61,17 @@
     border: 3px solid #5A189A;
     border-radius: 31.25% / 31.25%;
     flex: 0 0 auto;
+    position: relative;
+    display: flex;
+    justify-content: center;
 }
 
 .item-price-container {
-    margin-top: 9vh;
-    margin-left: 2.8vw;
     display: flex;
+    position: absolute;
     z-index: 2;
+    bottom: 0.3vh;
+    right: 0.7vw;
 }
 
 .item-price {
@@ -111,6 +115,8 @@
     border-radius: 10% / 6.6%;
     margin-top: 7.685vh;
     margin-left: 10vw;
+    display: flex;
+    justify-content: center;
 }
 
 .item-data {
@@ -158,4 +164,29 @@
     font-size: 2.593vh;
     text-decoration: none;
     color: #5A189A;
+}
+
+.store-item-head-img {
+    z-index: 1;
+    position: absolute;
+    height: 8.553vh;
+    width: 4.688vw;
+}
+
+.store-item-body-img {
+    margin-top: 25%;
+    margin-left: 10%;
+    z-index: 1;
+    position: absolute;
+    height: 6vh;
+    width: 4.688vw;
+}
+
+.store-item-legs-img {
+    margin-top: 27%;
+    margin-left: 5%;
+    z-index: 1;
+    position: absolute;
+    height: 5vh;
+    width: 4.688vw;
 }
