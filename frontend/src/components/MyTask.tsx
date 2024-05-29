@@ -166,6 +166,18 @@ function MyTask () {
     };
 
     const handleTaskStatus = (taskId: number) => {
+        const compareDateTask = tasks.find((task) => task.id === taskId);
+        if(compareDateTask) {
+            if(compareDateTask.status === 1){
+                alert("You have already completed this task.");
+                return;
+            }
+            if(new Date()>new Date(compareDateTask.deadline.replace(" ", "T"))){
+                alert("You missed the deadline, so you can't mark this task as completed.");
+                return;
+            }
+        }
+
         completeTask(taskId, localStorage.getItem("accessToken"))
             .then(response => {
                 updatePoints(response.data);
