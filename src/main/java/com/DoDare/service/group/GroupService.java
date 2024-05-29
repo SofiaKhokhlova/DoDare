@@ -1,5 +1,6 @@
 package com.DoDare.service.group;
 
+import com.DoDare.domain.Task;
 import com.DoDare.domain.group.Group;
 import com.DoDare.domain.group.GroupInviteToken;
 import com.DoDare.domain.User;
@@ -7,8 +8,12 @@ import com.DoDare.domain.group.UserGroup;
 import com.DoDare.domain.group.UserTaskStatus;
 import com.DoDare.dto.group.GroupDTO;
 import com.DoDare.dto.group.UserGroupDTO;
+import com.DoDare.dto.group.UserTaskStatusDTO;
+import com.DoDare.mappers.TaskMapper;
 import com.DoDare.mappers.group.GroupMapper;
 import com.DoDare.mappers.group.UserGroupMapper;
+import com.DoDare.mappers.group.UserTaskStatusMapper;
+import com.DoDare.repo.TaskRepository;
 import com.DoDare.repo.group.GroupInviteTokenRepository;
 import com.DoDare.repo.group.GroupRepository;
 import com.DoDare.repo.group.UserGroupRepository;
@@ -37,6 +42,8 @@ public class GroupService {
     private final UserGroupMapper userGroupMapper;
     private final GroupInviteTokenRepository groupInviteTokenRepository;
     private final UserTaskStatusRepository userTaskStatusRepository;
+    private final TaskRepository taskRepository;
+    private final UserTaskStatusMapper userTaskStatusMapper;
 
     public GroupDTO createGroup(GroupDTO groupDTO, String email) {
         Optional<User> optionalUser = userRepository.findByEmail(email);
@@ -66,6 +73,17 @@ public class GroupService {
         userGroupDTO.setGroupId(groupId);
         userGroupDTO.setPoints(0);
         UserGroup userGroup = userGroupMapper.userGroupDTOToUserGroup(userGroupDTO);
+
+        List<Task> taskList = taskRepository.findByGroup(group);
+
+        for (Task task : taskList) {
+            UserTaskStatusDTO userTaskStatusDTO = new UserTaskStatusDTO();
+            userTaskStatusDTO.setTaskId(task.getId());
+            userTaskStatusDTO.setUserId(userId);
+            UserTaskStatus userTaskStatus = userTaskStatusMapper.userTaskStatusDTOToUserTaskStatus(userTaskStatusDTO);
+
+            userTaskStatusRepository.save(userTaskStatus);
+        }
 
         userGroupRepository.save(userGroup);
     }
@@ -121,7 +139,7 @@ public class GroupService {
         GroupInviteToken savedToken = groupInviteTokenRepository.save(inviteToken);
 
         // Build the invite link using the saved token
-        return ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/join-group?token=" + savedToken.getToken();
+        return savedToken.getToken().toString();
     }
 
     public void deleteUser(Long groupId, Long userId, String email) {

@@ -158,7 +158,7 @@
     height: 5.926vh;
     margin-bottom: 1.019vh;
     padding-left: calc((17/1920) * 100vw);
-    color: #E8E8E8;
+    color: #5A189A;
 }
 
 .new-task-description textarea, .task-change-description textarea {
@@ -169,7 +169,7 @@
 
 .new-task-title input::placeholder, .new-task-description textarea::placeholder, .new-task-reward input::placeholder, .new-task-deadline input::placeholder,
 .task-change-title input::placeholder, .task-change-description textarea::placeholder, .task-change-reward input::placeholder, .task-change-deadline input::placeholder {
-    color: #E8E8E8;
+    color: #5A189A;
 }
 
 .new-task-deadline input, .task-change-deadline input {

@@ -37,3 +37,9 @@ export const deleteTask = (taskId: number, token: any) => axios.delete(`http://l
         'Authorization': `Bearer ${token}`
     }
 });
+
+export const completeTask = (taskId: number, token: any) => axios.put(`http://localhost:8080/api/tasks/complete/${taskId}`, taskId,{
+    headers: {
+        'Authorization': `Bearer ${token}`
+    },
+});

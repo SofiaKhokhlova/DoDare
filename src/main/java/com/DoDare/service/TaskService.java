@@ -84,6 +84,8 @@ public class TaskService {
             if(task.getStatus() == 1) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task already done");
 
             task.setStatus(1);
+            user.setPoints(user.getPoints() + task.getReward());
+            userRepository.save(user);
             taskRepository.save(task);
             return (long) task.getReward();
         } else {

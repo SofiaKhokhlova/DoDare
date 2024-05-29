@@ -1,0 +1,99 @@
+.stats-component {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-rows: 12.037vh 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+                "title title"
+                "stats achievements";
+}
+
+.stats-title {
+    grid-area: title;
+    width: 82.448vw;
+    display: grid;
+    margin-left: 31%;
+    align-items: end;
+    font-size: 4.63vh;
+    color: #5A189A;
+}
+
+.stats-part {
+    grid-area: stats;
+    height: 51.747vh;
+    width: 31.458vw;
+    margin-top: 7.685vh;
+    margin-left: 5.104vw;
+}
+
+.stats-element {
+    width: 31.458vw;
+    height: 14.771vh;
+    background-color: #CAA1E4;
+    margin-bottom: 2.478vh;
+    border: 1px solid #5A189A;
+    border-radius: 2.48% / 9.4%;
+}
+
+.stats-element-name, .stats-element-number {
+    width: 100%;
+    font-size: 4.167vh;
+    text-align: center;
+    margin-top: 1.852vh;
+}
+
+.stats-element-name {
+}
+
+.stats-element-number {
+    margin-top: 0.926vh;
+    font-family: "Barlow Semi Condensed", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    color: black;
+}
+
+.achievement-part {
+    margin-top: 7.685vh;
+    margin-left: 1.042vw;
+    grid-area: achievements;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 2%;
+    max-width: 35.156vw;
+    max-height: calc(4 * 10.7vh + 3 * 2.522vh);
+    overflow-y: auto;
+}
+
+.achievement-part::-webkit-scrollbar {
+    width: calc((7/1920) * 100vw);
+}
+
+.achievement-part::-webkit-scrollbar-track {
+    background: #C6ABD7;
+    border-radius: 8px;
+}
+
+.achievement-part::-webkit-scrollbar-thumb {
+    background-color: #7251B5;
+    border-radius: 8px;
+}
+
+.achievement-element {
+    height: 11vh;
+    width: 5.4vw;
+    border: 3px solid #5A189A;
+    border-radius: 35% / 36%;
+}
+
+.achievement-element .done {
+    margin-top: 0.7vh;
+    margin-left: 66%;
+    width: 1.5vw;
+    height: 3vh;
+    z-index: 2;
+}
+
+

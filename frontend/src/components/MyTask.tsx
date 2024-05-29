@@ -1,8 +1,12 @@
 import {ChangeEvent, MouseEventHandler, useEffect, useState} from "react";
 import '../css/myTask.css';
-import {createTask, deleteTask, getAllTasks, updateTask} from "../service/TasksService.ts";
+import {completeTask, createTask, deleteTask, getAllTasks, updateTask} from "../service/TasksService.ts";
+import { useAppContext } from '../context/PointsContext.tsx';
+
 
 function MyTask () {
+    const { points, updatePoints } = useAppContext();
+
     type TaskList = {
         id: number;
         title: string;
@@ -37,7 +41,7 @@ function MyTask () {
             .catch(error => {
                 console.error(error);
             })
-    }, []);
+    }, [updatePoints]);
 
     const [selectedTask, setSelectedTask] = useState<TaskList | null>(null);
     const [visibility, setVisibility] = useState('NewTask');
@@ -82,7 +86,6 @@ function MyTask () {
             [name]: value
         }));
     };
-
 
     const handleAddTask: MouseEventHandler<HTMLButtonElement> = (event) => {
         event.preventDefault();
@@ -163,22 +166,14 @@ function MyTask () {
     };
 
     const handleTaskStatus = (taskId: number) => {
-        const taskToUpdate = tasks.find(task => task.id === taskId);
-        if (!taskToUpdate) return;
-
-        const newStatus = taskToUpdate.status === 0 ? 1 : 0;
-
-        updateTask(taskId, { ...taskToUpdate, status: newStatus }, localStorage.getItem("accessToken"))
+        completeTask(taskId, localStorage.getItem("accessToken"))
             .then(response => {
-                console.log(response.data);
-                setTasks(prevTasks => {
-                    const updatedTasks = prevTasks.map(task => task.id === taskId ? response.data : task);
-                    return sortTasks(updatedTasks);
-                });
+                updatePoints(response.data);
+
             })
             .catch(error => {
-                console.error(error);
-            });
+                console.log(error);
+            })
     };
 
     const handelCancelChangingTask: MouseEventHandler<HTMLAnchorElement> = (event) => {
@@ -205,7 +200,8 @@ function MyTask () {
                             </p>)
                             :(tasks.map((task) => (
                             <div key={task.id} className="task" onClick={() => {handleTaskClick(task.id)}}
-                                 style={{backgroundColor: selectedTask && selectedTask.id === task.id ? '#C588EA' : '#CAA1E4'}}>
+                                 style={{backgroundColor: selectedTask && selectedTask.id === task.id ? '#C588EA' : '#CAA1E4',
+                                        marginBottom: task.id === tasks[tasks.length - 1].id ? "0" : "1.574vh"}}>
                                 <div className="title-deadline">
                                     <p className="task-title">{task.title}</p>
                                     <p className="task-deadline">available till: {task.deadline}</p>
@@ -253,7 +249,7 @@ function MyTask () {
                                 type="text"
                                 placeholder="Reward"
                                 name="reward"
-                                value={newTask.reward}
+                                value={newTask.reward === 0 ? "" : newTask.reward}
                                 onChange={handleInputChange}
                             />
                         </div>

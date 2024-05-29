@@ -24,7 +24,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CharacterService {
 
-    private final CharacterMapper characterMapper;
+    private final Charac runterMapper characterMapper;
     private final CharacterRepository characterRepository;
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
