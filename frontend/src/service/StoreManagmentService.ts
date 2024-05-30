@@ -1,17 +1,15 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import FormDataNode from 'form-data';
-import fs from 'fs';
 
-const addItemToStore = (data: any, image: string) => {
-    const formData = new FormDataNode();
 
+export const addItemToStore = (data: any, image: string) => {
+    const formData = new FormData();
+
+    formData.append('image', new Blob([image], {type: "text/plain"}), image);
     formData.append('data', JSON.stringify(data));
 
-    formData.append('image', fs.createReadStream(image));
-
-    const config: AxiosRequestConfig<FormDataNode> = {
+    const config: AxiosRequestConfig<FormData> = {
         headers: {
-            ...formData.getHeaders()
+            /*'Content-Type': 'multipart/form-data',*/
         }
     };
 

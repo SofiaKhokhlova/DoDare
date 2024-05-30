@@ -1,7 +1,9 @@
 import "../css/storeManagement.css";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {getAllStoreItems} from "../service/StoreService.ts";
 import {useNavigate} from "react-router-dom";
+import {addItemToStore} from "../service/StoreManagmentService.ts";
+import axios from "axios";
 
 function StoreManagement() {
     type StoreItem = {
@@ -14,16 +16,15 @@ function StoreManagement() {
         imageUrl: string;
     };
 
-    /*type NewItem = {
+    type NewItem = {
         name: string;
         description: string;
-        type: string;
+        type: number;
         price: number;
     };
 
-    const [fileName, setFileName] = useState("");
-    const [newItem, setNewItem] = useState<NewItem | null>(null);*/
-
+    const [image, setImage] = useState<File | null>(null);
+    const [newItem, setNewItem] = useState<NewItem>({ name: '', description: '', type: -1, price: 0 });
     const [headStoreItems, setHeadStoreItems] = useState<StoreItem[]>([]);
     const [bodyStoreItems, setBodyStoreItems] = useState<StoreItem[]>([]);
     const [legsStoreItems, setLegsStoreItems] = useState<StoreItem[]>([]);
@@ -32,33 +33,77 @@ function StoreManagement() {
     const nav = useNavigate();
 
 
-    async function fetchItemsForStore() {
-        try {
-            const response = await getAllStoreItems();
-            const items: StoreItem[] = response.data;
+    useState(() => {
+        getAllStoreItems()
+            .then(response => {
+                const items: StoreItem[] = response.data;
 
-            const headItemsResponse = items.filter(item => item.type === "HEAD");
-            const bodyItemsResponse = items.filter(item => item.type === "BODY");
-            const legsItemsResponse = items.filter(item => item.type === "LEGS");
+                const headItemsResponse = items.filter(item => item.type === "HEAD");
+                const bodyItemsResponse = items.filter(item => item.type === "BODY");
+                const legsItemsResponse = items.filter(item => item.type === "LEGS");
 
-            setHeadStoreItems(headItemsResponse);
-            setBodyStoreItems(bodyItemsResponse);
-            setLegsStoreItems(legsItemsResponse);
-        } catch (error) {
-            console.log(error);
-        }
-    }
+                setHeadStoreItems(headItemsResponse);
+                setBodyStoreItems(bodyItemsResponse);
+                setLegsStoreItems(legsItemsResponse);
+            })
+            .catch(error => {
+                console.error(error);
+            })
+    })
 
     const handleLogOut = () => {
         localStorage.clear();
         nav('/');
     };
 
-    const handleAddNewItem = () => {
-      setIsVisible("NewItemForm");
+    const handleAddNewItem = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setIsVisible("NewItemForm");
     };
 
-    fetchItemsForStore();
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setNewItem(currentItem => ({
+            ...currentItem,
+            [name]: name === "price" || name === "type" ? parseInt(value) : value
+        }));
+    };
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            setImage(event.target.files[0]);
+        }
+    };
+
+    const handleSubmit = async () => {
+        if (!image) {
+            alert("Please select an image.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('image', image, image.name);
+        formData.append('data', new Blob([JSON.stringify(newItem)], { type: "application/json" }));
+
+        try {
+            const response = await axios.post("http://localhost:8080/api/items/create", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
+            });
+            console.log('Item created successfully', response.data);
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.error('Axios error', error.message);
+            } else {
+                console.error('Unexpected error', error);
+            }
+        }
+        alert("Item successfully added");
+        setNewItem({ name: '', description: '', type: -1, price: 0 });
+        nav("/update-store");
+    };
+
 
     return(<>
         <div className="store-manage">
@@ -68,10 +113,13 @@ function StoreManagement() {
                     <img src="/logo.png" alt="logo"/>
                     <p>DODARE</p>
                 </div>
-                <button onClick={handleAddNewItem}>Add new item</button>
+                <button onClick={(event) => handleAddNewItem(event)}>Add new item</button>
             </div>
 
-            <div className="store-manager-items">
+            <div className="store-manager-items" style={{
+                width: isVisible === "NewItemForm" ? "30.729vw" : "78.125vw",
+                marginLeft: isVisible === "StoreItems" ? "11%" : "35%"
+            }}>
                 {isVisible === "StoreItems" &&
                         <div className="store-items-content">
                             <p className="store-items-name">Hats</p>
@@ -120,49 +168,58 @@ function StoreManagement() {
 
                 {isVisible === "NewItemForm" && <div className="new-item-form">
                     <p>New item</p>
-                    {/*<form>
+                    <form onSubmit={handleSubmit}>
                         <div className="input-item">
                             <input
                                 type="text"
                                 name="name"
-                                placeholder="name"
+                                placeholder="Name"
                                 value={newItem.name}
+                                onChange={handleInputChange}
                             />
                         </div>
-                            <div className="input-item">
-                                <input
-                                    type="text"
-                                    name="description"
-                                    placeholder="description"
-                                    value={newItem.description}
-                                />
-                            </div>
-                            <div className="input-item">
-                                <input
-                                    type="text"
-                                    name="type"
-                                    placeholder="type(head, body or legs)"
-                                    value={newItem.type}
-                                />
-                            </div>
-                            <div className="input-item">
-                                <input
-                                    type="text"
-                                    name="price"
-                                    placeholder="price"
-                                    value={newItem.price}
-                                />
-                            </div>
-                            <div className="input-item">
-                                <input
-                                    type="file"
-                                    name="image"
-                                    accept="image/png, image/jpeg"
-                                    value={fileName}
-                                />
-                            </div>
-                        <button></button>
-                    </form>*/}
+                        <div className="input-item">
+                            <input
+                                type="text"
+                                name="description"
+                                placeholder="Description"
+                                value={newItem.description}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div className="input-item">
+                            <input
+                                type="text"
+                                name="type"
+                                placeholder="Type (head, body, or legs)"
+                                value={newItem.type !== -1 ? newItem.type : ""}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div className="input-item">
+                            <input
+                                type="number"
+                                name="price"
+                                placeholder="Price"
+                                value={newItem.price !== 0 ? newItem.price : ""}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div className="input-item-img">
+                            <input
+                                type="file"
+                                id="file-input"
+                                name="image"
+                                accept="image/png, image/jpeg"
+                                onChange={handleFileChange}
+                                style={{ display: 'none' }}
+                            />
+                            <label htmlFor="file-input">
+                                {image?.name ? image.name : "Choose the file"}
+                            </label>
+                        </div>
+                        <button type="submit">Add new item</button>
+                    </form>
                 </div>}
             </div>
             </div>

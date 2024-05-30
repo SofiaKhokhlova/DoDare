@@ -247,7 +247,7 @@ function StoreComponent () {
                 {selectedItem ? (<div className="item-data">
                     <p className="item-data-name">Name:</p>
                     <p className="item-data-description">{selectedItem[selectedItem.length - 1].name}</p>
-                    <p className="item-data-name">Type:</p>
+                    <p className="item-data-name">Description:</p>
                     <p className="item-data-description">{selectedItem[selectedItem.length - 1].description}</p>
                     <p className="item-data-name">Price</p>
                     <p className="item-data-description">{selectedItem[selectedItem.length - 1].price}

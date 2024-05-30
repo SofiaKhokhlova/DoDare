@@ -66,9 +66,7 @@
 .store-manager-items{
     background-color: #CAA1E4;
     height: 69vh;
-    width: 78.125vw;
     display: flex;
-    margin-left: 11%;
     margin-top: 3%;
     border-radius: 40px;
 }
@@ -89,4 +87,86 @@
     font-size: 2.593vh;
     border-radius: 40px;
     border: 0;
+}
+
+.new-item-form {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 4vh 1fr;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.new-item-form p {
+    font-size: 4vh;
+    color: #5A189A;
+    height: 4vh;
+    text-align: center;
+    margin-top: 10%;
+}
+
+.new-item-form form {
+    display: grid;
+    justify-content: center;
+    margin-top: 3%;
+}
+
+.input-item input {
+    border-top: 0;
+    border-bottom: 0;
+    height: 5.278vh;
+    width: 20vw;
+    border-left: 2px solid #7251B5;
+    border-right: 2px solid #7251B5;
+    background-color: rgb(166, 128, 196);
+    padding-left: calc((30/1920) * 100vw);
+    margin-bottom: 2.963vh;
+    border-radius: 8px;
+    color: #5A189A;
+    font-size: 1.852vh;
+    font-family: "Ruluko", sans-serif;
+}
+
+.input-item input::placeholder {
+    color: #5A189A;
+}
+
+.input-item-img input[type="file"] {
+    display: none;
+}
+
+.input-item-img {
+    background-color: rgb(166, 128, 196);
+    border-radius: 8px;
+    border-left: 2px solid #7251B5;
+    border-right: 2px solid #7251B5;
+    height: 5.278vh;
+    padding-left: calc((30/1920) * 100vw);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-bottom: 2.963vh;
+    font-family: "Ruluko", sans-serif;
+    font-size: 1.852vh;
+}
+
+.input-item-img label {
+    width: 100%;
+    color: #5A189A;
+    cursor: pointer;
+}
+
+.new-item-form form button {
+    border-top: 0;
+    border-bottom: 0;
+    height: 5.278vh;
+    width: 21.875vw;
+    background-color: #5A189A;
+    margin-top: 5%;
+    border-radius: 8px;
+    color: #FFFFFF;
+    font-size: 1.852vh;
+    font-family: "Ruluko", sans-serif;
 }
