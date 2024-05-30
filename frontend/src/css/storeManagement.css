@@ -133,6 +133,30 @@
     color: #5A189A;
 }
 
+.input-item select {
+    border-top: 0;
+    border-bottom: 0;
+    height: 5.278vh;
+    width: 20vw;
+    border-left: 2px solid #7251B5;
+    border-right: 2px solid #7251B5;
+    background-color: rgb(166, 128, 196);
+    padding-left: calc((30 / 1920) * 100vw);
+    margin-bottom: 2.963vh;
+    border-radius: 8px;
+    color: #5A189A;
+    font-size: 1.852vh;
+    font-family: "Ruluko", sans-serif;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: calc((30 / 1920) * 100vw);
+}
+
+.input-item select::-ms-expand {
+    display: none;
+}
+
 .input-item-img input[type="file"] {
     display: none;
 }

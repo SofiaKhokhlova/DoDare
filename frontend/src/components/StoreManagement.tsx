@@ -69,6 +69,11 @@ function StoreManagement() {
         }));
     };
 
+    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedValue = event.target.value;
+        setNewItem({ ...newItem, type: selectedValue });
+    };
+
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
             setImage(event.target.files[0]);
@@ -188,13 +193,16 @@ function StoreManagement() {
                             />
                         </div>
                         <div className="input-item">
-                            <input
-                                type="text"
+                            <select
                                 name="type"
-                                placeholder="Type (head, body, or legs)"
                                 value={newItem.type !== -1 ? newItem.type : ""}
-                                onChange={handleInputChange}
-                            />
+                                onChange={handleSelectChange}
+                            >
+                                <option value="" disabled={true}>Select Type</option>
+                                <option value="0">Head</option>
+                                <option value="1">Body</option>
+                                <option value="2">Legs</option>
+                            </select>
                         </div>
                         <div className="input-item">
                             <input
